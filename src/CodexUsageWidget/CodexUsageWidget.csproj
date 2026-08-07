@@ -9,6 +9,7 @@
     <AssemblyName>CodexUsageWidget</AssemblyName>
     <RootNamespace>CodexUsageWidget</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\CodexUsageWidget.ico</ApplicationIcon>
     <Version>1.2.2</Version>
     <Authors>Ognjen Marinković</Authors>
     <Company>ognjeeen</Company>

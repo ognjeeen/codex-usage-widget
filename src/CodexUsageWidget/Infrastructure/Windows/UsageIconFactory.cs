@@ -1,6 +1,4 @@
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace CodexUsageWidget.Infrastructure.Windows;
@@ -11,11 +9,13 @@ internal static class UsageIconFactory
     {
         using var bitmap = new System.Drawing.Bitmap(64, 64);
         using var graphics = System.Drawing.Graphics.FromImage(bitmap);
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-        graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+        graphics.CompositingQuality = CompositingQuality.HighQuality;
+        graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+        graphics.SmoothingMode = SmoothingMode.HighQuality;
 
         var indicatorColor = remainingPercent switch
         {
+            null => System.Drawing.Color.FromArgb(151, 163, 182),
             <= 10 => System.Drawing.Color.FromArgb(240, 112, 112),
             <= 25 => System.Drawing.Color.FromArgb(240, 179, 94),
             _ => System.Drawing.Color.FromArgb(101, 216, 146)
@@ -23,34 +23,43 @@ internal static class UsageIconFactory
 
         using var backgroundBrush = new System.Drawing.SolidBrush(
             System.Drawing.Color.FromArgb(22, 29, 39));
-        using var borderPen = new System.Drawing.Pen(indicatorColor, 6f);
-        graphics.FillEllipse(backgroundBrush, 3, 3, 58, 58);
-        graphics.DrawEllipse(borderPen, 6, 6, 52, 52);
+        graphics.FillEllipse(backgroundBrush, 1, 1, 62, 62);
 
-        DrawPercentage(graphics, remainingPercent);
+        DrawTerminalPrompt(graphics);
+        DrawStatusIndicator(graphics, indicatorColor);
         return CloneIcon(bitmap);
     }
 
-    private static void DrawPercentage(System.Drawing.Graphics graphics, double? remainingPercent)
+    private static void DrawTerminalPrompt(System.Drawing.Graphics graphics)
     {
-        var text = remainingPercent is null
-            ? "?"
-            : Math.Round(Math.Clamp(remainingPercent.Value, 0d, 100d))
-                .ToString("0", CultureInfo.InvariantCulture);
-        var fontSize = text.Length >= 3 ? 18f : 24f;
-        using var font = new System.Drawing.Font(
-            "Segoe UI",
-            fontSize,
-            System.Drawing.FontStyle.Bold,
-            System.Drawing.GraphicsUnit.Pixel);
-        using var textBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
-        var textSize = graphics.MeasureString(text, font);
-        graphics.DrawString(
-            text,
-            font,
-            textBrush,
-            (64f - textSize.Width) / 2f,
-            (64f - textSize.Height) / 2f - 1f);
+        using var promptPen = new System.Drawing.Pen(
+            System.Drawing.Color.FromArgb(246, 248, 252),
+            7f)
+        {
+            StartCap = LineCap.Round,
+            EndCap = LineCap.Round,
+            LineJoin = LineJoin.Round
+        };
+
+        graphics.DrawLines(
+            promptPen,
+            [
+                new System.Drawing.PointF(19f, 18f),
+                new System.Drawing.PointF(34f, 32f),
+                new System.Drawing.PointF(19f, 46f)
+            ]);
+    }
+
+    private static void DrawStatusIndicator(
+        System.Drawing.Graphics graphics,
+        System.Drawing.Color indicatorColor)
+    {
+        using var outlineBrush = new System.Drawing.SolidBrush(
+            System.Drawing.Color.FromArgb(22, 29, 39));
+        using var indicatorBrush = new System.Drawing.SolidBrush(indicatorColor);
+
+        graphics.FillEllipse(outlineBrush, 37, 37, 26, 26);
+        graphics.FillEllipse(indicatorBrush, 41, 41, 18, 18);
     }
 
     private static System.Drawing.Icon CloneIcon(System.Drawing.Bitmap bitmap)
