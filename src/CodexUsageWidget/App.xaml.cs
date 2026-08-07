@@ -86,6 +86,15 @@ public partial class App : System.Windows.Application, IDisposable
         base.OnExit(e);
     }
 
+    protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+    {
+        base.OnSessionEnding(e);
+        if (!e.Cancel && MainWindow is MainWindow window)
+        {
+            window.NotifySessionEnding();
+        }
+    }
+
     public void Dispose()
     {
         if (_disposed)

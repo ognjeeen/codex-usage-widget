@@ -26,12 +26,13 @@ public partial class MainWindow : Window
     private readonly TrayIconService _trayIcon;
     private readonly TaskbarLabelWindow _taskbarLabel = new();
     private readonly WidgetVisibilityController _widgetVisibility;
+    private readonly MainWindowCloseState _closeState = new();
     private WidgetDisplayMode _displayMode;
     private WidgetDensity _density;
     private UsageWidgetViewModel _viewModel = UsageWidgetViewModel.Loading();
     private bool _isRealActivityActive;
     private bool _isActivityPreviewEnabled;
-    private bool _allowClose;
+    private bool _shutdownStarted;
 
     public MainWindow(
         UsageMonitor usageMonitor,
@@ -323,24 +324,36 @@ public partial class MainWindow : Window
 
     private void ExitApplication()
     {
-        _allowClose = true;
+        _closeState.RequestExplicitExit();
         Close();
     }
 
+    internal void NotifySessionEnding() => _closeState.NotifySessionEnding();
+
     private void MainWindowOnClosing(object? sender, CancelEventArgs e)
     {
-        if (!_allowClose)
+        var closeAction = _closeState.GetCloseAction();
+        if (closeAction == MainWindowCloseAction.MinimizeToTaskbar)
         {
             e.Cancel = true;
             SetDisplayMode(WidgetDisplayMode.TaskbarIndicator);
             return;
         }
 
+        if (_shutdownStarted)
+        {
+            return;
+        }
+
+        _shutdownStarted = true;
         _taskbarLabel.HideLabel();
-        _taskbarLabel.Close();
+        _taskbarLabel.CloseLabel();
         _trayIcon.Dispose();
         _activityMonitor.DisposeAsync().AsTask().GetAwaiter().GetResult();
         _usageMonitor.DisposeAsync().AsTask().GetAwaiter().GetResult();
-        System.Windows.Application.Current.Shutdown();
+        if (closeAction == MainWindowCloseAction.CloseAndShutdownApplication)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

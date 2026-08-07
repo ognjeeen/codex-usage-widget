@@ -16,6 +16,7 @@ public partial class TaskbarLabelWindow : Window
     private IntPtr _windowHandle;
     private bool _labelRequested;
     private bool _isTaskActive;
+    private bool _isClosed;
     private int _visibilityUpdateQueued;
 
     public TaskbarLabelWindow()
@@ -40,7 +41,13 @@ public partial class TaskbarLabelWindow : Window
         _positionTimer.Tick += (_, _) => UpdateVisibilityAndPosition();
 
         _windowChangeWatcher = new WindowChangeWatcher(QueueVisibilityUpdate);
-        Closed += (_, _) => _windowChangeWatcher.Dispose();
+        Closed += (_, _) =>
+        {
+            _isClosed = true;
+            _labelRequested = false;
+            _positionTimer.Stop();
+            _windowChangeWatcher.Dispose();
+        };
     }
 
     public event EventHandler? OpenRequested;
@@ -75,7 +82,18 @@ public partial class TaskbarLabelWindow : Window
     {
         _labelRequested = false;
         _positionTimer.Stop();
-        Hide();
+        if (!_isClosed)
+        {
+            Hide();
+        }
+    }
+
+    public void CloseLabel()
+    {
+        if (!_isClosed)
+        {
+            Close();
+        }
     }
 
     public void SetActivityState(bool isActive)
@@ -115,7 +133,7 @@ public partial class TaskbarLabelWindow : Window
 
     private void UpdateVisibilityAndPosition()
     {
-        if (!_labelRequested || _windowHandle == IntPtr.Zero)
+        if (_isClosed || !_labelRequested || _windowHandle == IntPtr.Zero)
         {
             return;
         }
