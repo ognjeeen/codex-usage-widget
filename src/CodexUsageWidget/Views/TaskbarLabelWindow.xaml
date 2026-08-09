@@ -82,6 +82,15 @@
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem x:Name="StartWithWindowsMenuItem"
+                          Header="Start with Windows"
+                          IsCheckable="True"
+                          Click="StartWithWindowsMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 8,2 V 8 M 4.5,4.5 A 5,5 0 1 0 11.5,4.5"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="Exit" Click="ExitMenuItem_OnClick">
                     <MenuItem.Icon>

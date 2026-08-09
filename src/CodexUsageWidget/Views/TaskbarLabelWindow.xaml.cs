@@ -62,6 +62,8 @@ public partial class TaskbarLabelWindow : Window
 
     public event EventHandler? DesktopModeRequested;
 
+    public event EventHandler? StartupToggleRequested;
+
     public event EventHandler? ExitRequested;
 
     public bool IsPointerOver => IsMouseOver;
@@ -106,6 +108,8 @@ public partial class TaskbarLabelWindow : Window
         _isTaskActive = isActive;
         ActivityDots.IsActive = isActive;
     }
+
+    public void SetStartupEnabled(bool enabled) => StartWithWindowsMenuItem.IsChecked = enabled;
 
     public void UpdateUsage(double? remainingPercent, DateTimeOffset? resetsAt)
     {
@@ -191,6 +195,9 @@ public partial class TaskbarLabelWindow : Window
 
     private void DesktopModeMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         DesktopModeRequested?.Invoke(this, EventArgs.Empty);
+
+    private void StartWithWindowsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        StartupToggleRequested?.Invoke(this, EventArgs.Empty);
 
     private void ExitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);

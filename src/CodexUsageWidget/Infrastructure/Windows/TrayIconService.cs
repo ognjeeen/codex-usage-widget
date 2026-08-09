@@ -8,6 +8,7 @@ public sealed class TrayIconService : IDisposable
     private readonly Forms.NotifyIcon _notifyIcon;
     private readonly Forms.ToolStripMenuItem _desktopWidgetModeItem;
     private readonly Forms.ToolStripMenuItem _taskbarIndicatorModeItem;
+    private readonly Forms.ToolStripMenuItem _startWithWindowsItem;
     private System.Drawing.Icon _currentIcon;
     private bool _disposed;
 
@@ -34,6 +35,13 @@ public sealed class TrayIconService : IDisposable
         displayModeMenu.DropDownItems.Add(_desktopWidgetModeItem);
         displayModeMenu.DropDownItems.Add(_taskbarIndicatorModeItem);
         menu.Items.Add(displayModeMenu);
+        _startWithWindowsItem = new Forms.ToolStripMenuItem("Start with Windows")
+        {
+            CheckOnClick = true
+        };
+        _startWithWindowsItem.Click += (_, _) =>
+            StartupToggleRequested?.Invoke(this, EventArgs.Empty);
+        menu.Items.Add(_startWithWindowsItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add("Exit", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
 
@@ -58,6 +66,8 @@ public sealed class TrayIconService : IDisposable
 
     public event EventHandler? TaskbarModeRequested;
 
+    public event EventHandler? StartupToggleRequested;
+
     public event EventHandler? ExitRequested;
 
     public void SetDisplayMode(WidgetDisplayMode mode)
@@ -65,6 +75,8 @@ public sealed class TrayIconService : IDisposable
         _desktopWidgetModeItem.Checked = mode == WidgetDisplayMode.DesktopWidget;
         _taskbarIndicatorModeItem.Checked = mode == WidgetDisplayMode.TaskbarIndicator;
     }
+
+    public void SetStartupEnabled(bool enabled) => _startWithWindowsItem.Checked = enabled;
 
     public void UpdateUsage(double? remainingPercent)
     {

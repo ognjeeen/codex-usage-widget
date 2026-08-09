@@ -19,6 +19,7 @@ notifications.
 - Event-driven task activity animation through official local Codex lifecycle hooks
 - Immediate taskbar-label hiding while another app is fullscreen on the same monitor
 - Persistent desktop/taskbar display preference
+- Optional per-user start with Windows registration
 - Automatic refresh every two minutes and live server notifications
 - Single-instance protection to prevent overlapping labels
 - Per-monitor DPI support, local diagnostic logs, and graceful CLI reconnects
@@ -72,6 +73,11 @@ consumption because tokens do not map linearly to the remaining subscription per
 
 Use the `−` button to switch to taskbar mode. Right-click the taskbar label or tray
 icon to refresh, change display mode, or exit.
+
+Choose **Start with Windows** from either menu to register the current portable
+executable for the signed-in Windows user. The option does not require administrator
+rights, and turning it off removes the registration. If the portable folder moves,
+the path is refreshed the next time the widget is started manually.
 
 ## Live Codex activity dots
 

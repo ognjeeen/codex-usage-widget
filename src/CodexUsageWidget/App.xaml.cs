@@ -43,6 +43,12 @@ public partial class App : System.Windows.Application, IDisposable
             activityMonitor = new CodexActivityMonitor(new CodexActivityPipeSignalSource());
             var processPath = Environment.ProcessPath ??
                 throw new InvalidOperationException("Cannot determine the widget executable path.");
+            var startupRegistrationService = new StartupRegistrationService(processPath);
+            if (!startupRegistrationService.TryRefreshExecutablePathIfEnabled())
+            {
+                _logger.LogError("The Windows startup registration could not be refreshed.");
+            }
+
             var activityHookSetupService = new CodexActivityHookSetupService(
                 new CodexHookConfigurationManager(),
                 appServerSession,
@@ -55,6 +61,7 @@ public partial class App : System.Windows.Application, IDisposable
                 new CodexCliLauncher(),
                 new DisplayModeStore(),
                 new WidgetDensityStore(),
+                startupRegistrationService,
                 new TrayIconService());
             MainWindow = window;
             activityMonitor.StartAsync().GetAwaiter().GetResult();
