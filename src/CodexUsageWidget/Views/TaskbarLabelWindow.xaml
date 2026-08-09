@@ -14,6 +14,13 @@
         Focusable="False"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/TaskbarMenuTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Border x:Name="LabelSurface"
             CornerRadius="6"
             Cursor="Hand"
@@ -32,19 +39,56 @@
             </Style>
         </Border.Style>
         <Border.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Open widget" Click="OpenMenuItem_OnClick" />
-                <MenuItem Header="Refresh" Click="RefreshMenuItem_OnClick" />
-                <MenuItem Header="Activity dots..." Click="ActivityDotsMenuItem_OnClick" />
+            <ContextMenu Style="{StaticResource TaskbarContextMenu}">
+                <ContextMenu.Resources>
+                    <Style TargetType="MenuItem"
+                           BasedOn="{StaticResource TaskbarContextMenuItem}" />
+                    <Style TargetType="Separator"
+                           BasedOn="{StaticResource TaskbarContextMenuSeparator}" />
+                </ContextMenu.Resources>
+                <MenuItem Header="Open widget" Click="OpenMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 2.5,3.5 H 13.5 V 12.5 H 2.5 Z M 2.5,6 H 13.5"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Refresh" Click="RefreshMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 13.5,5.5 V 2.5 M 13.5,2.5 H 10.5 M 13,7 A 5.5,5.5 0 1 0 13,10.5"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Activity dots..." Click="ActivityDotsMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 2.5,8 H 2.6 M 8,8 H 8.1 M 13.5,8 H 13.6"
+                              StrokeThickness="3"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem x:Name="ActivityPreviewMenuItem"
                           Header="Preview activity animation"
                           IsCheckable="True"
                           Visibility="Collapsed"
-                          Click="ActivityPreviewMenuItem_OnClick" />
+                          Click="ActivityPreviewMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 5,3 L 12.5,8 L 5,13 Z"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="Use desktop widget" Click="DesktopModeMenuItem_OnClick" />
+                <MenuItem Header="Use desktop widget" Click="DesktopModeMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 2,3.5 H 14 V 11 H 2 Z M 6,13.5 H 10 M 8,11 V 13.5"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="Exit" Click="ExitMenuItem_OnClick" />
+                <MenuItem Header="Exit" Click="ExitMenuItem_OnClick">
+                    <MenuItem.Icon>
+                        <Path Data="M 6,3 H 3 V 13 H 6 M 9.5,5 L 12.5,8 L 9.5,11 M 12.5,8 H 6"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
         </Border.ContextMenu>
         <TextBlock HorizontalAlignment="Center"
