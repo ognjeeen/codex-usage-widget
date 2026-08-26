@@ -75,6 +75,42 @@
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="Taskbar limit">
+                    <MenuItem.Icon>
+                        <Path Data="M 2.5,12.5 A 6,6 0 1 1 13.5,12.5 M 8,8 L 11.5,5"
+                              Style="{StaticResource TaskbarMenuIcon}" />
+                    </MenuItem.Icon>
+                    <MenuItem x:Name="FiveHourLimitMenuItem"
+                              Header="5h limit"
+                              IsEnabled="False"
+                              IsCheckable="True"
+                              ToolTipService.BetweenShowDelay="0"
+                              ToolTipService.HorizontalOffset="10"
+                              ToolTipService.InitialShowDelay="150"
+                              ToolTipService.Placement="MousePoint"
+                              ToolTipService.ShowDuration="15000"
+                              ToolTipService.ShowOnDisabled="True"
+                              ToolTipService.VerticalOffset="10"
+                              Click="FiveHourLimitMenuItem_OnClick">
+                        <MenuItem.ToolTip>
+                            <ToolTip Style="{StaticResource TokenActivityToolTip}">
+                                <TextBlock MaxWidth="240"
+                                           Text="Codex did not return a global 5h limit for this account."
+                                           TextWrapping="Wrap"
+                                           FontSize="11.5"
+                                           Foreground="{StaticResource TextSecondary}" />
+                            </ToolTip>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                    <MenuItem x:Name="WeeklyLimitMenuItem"
+                              Header="Weekly limit"
+                              IsCheckable="True"
+                              Click="WeeklyLimitMenuItem_OnClick" />
+                    <MenuItem x:Name="MostConstrainedLimitMenuItem"
+                              Header="Most constrained"
+                              IsCheckable="True"
+                              Click="MostConstrainedLimitMenuItem_OnClick" />
+                </MenuItem>
                 <Separator />
                 <MenuItem Header="Use desktop widget" Click="DesktopModeMenuItem_OnClick">
                     <MenuItem.Icon>

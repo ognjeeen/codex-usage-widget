@@ -16,6 +16,7 @@ notifications.
 - Credit, spend-control, earned-reset, and model-specific limit details when available
 - Compact, movable, always-on-top desktop widget
 - Native-looking taskbar label beside the Windows notification area
+- Selectable taskbar limit with a 5-hour default and automatic fallback
 - Event-driven task activity animation through official local Codex lifecycle hooks
 - Immediate taskbar-label hiding while another app is fullscreen on the same monitor
 - Persistent desktop/taskbar display preference
@@ -193,6 +194,7 @@ The application only writes under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `app\<version>\CodexUsageWidget.exe` — stable copy used after a direct ZIP launch
 - `display-mode.txt` — the selected display mode
 - `widget-density.txt` — the selected compact or detailed widget layout
+- `taskbar-limit.txt` — the selected limit shown in the taskbar label
 - `logs\codex-usage-widget-YYYYMMDD.log` — diagnostics, retained for 14 days
 
 No credentials are read or stored by the widget. Authentication remains owned by

@@ -61,6 +61,7 @@ public partial class App : System.Windows.Application, IDisposable
                 new CodexCliLauncher(),
                 new DisplayModeStore(),
                 new WidgetDensityStore(),
+                new TaskbarLimitPreferenceStore(),
                 startupRegistrationService,
                 new TrayIconService());
             MainWindow = window;

@@ -20,6 +20,7 @@ public partial class ActivityHookSetupWindow : Window
     private readonly CancellationTokenSource _lifetime = new();
     private bool _refreshInProgress;
     private bool _refreshTrustOnActivation;
+    private bool _reviewDialogOpen;
 
     public ActivityHookSetupWindow(
         IActivityHookSetupService setupService,
@@ -33,6 +34,7 @@ public partial class ActivityHookSetupWindow : Window
         DataContext = ActivityHookSetupViewModel.Loading();
         Loaded += ActivityHookSetupWindowOnLoaded;
         Activated += ActivityHookSetupWindowOnActivated;
+        Deactivated += ActivityHookSetupWindowOnDeactivated;
         Closed += ActivityHookSetupWindowOnClosed;
     }
 
@@ -55,7 +57,16 @@ public partial class ActivityHookSetupWindow : Window
     {
         if (_refreshTrustOnActivation && !_refreshInProgress)
         {
+            _refreshTrustOnActivation = false;
             await RefreshStatusAsync();
+        }
+    }
+
+    private void ActivityHookSetupWindowOnDeactivated(object? sender, EventArgs e)
+    {
+        if (!_reviewDialogOpen && !_refreshTrustOnActivation)
+        {
+            Close();
         }
     }
 
@@ -63,6 +74,7 @@ public partial class ActivityHookSetupWindow : Window
     {
         SizeChanged -= ActivityHookSetupWindowOnSizeChanged;
         Activated -= ActivityHookSetupWindowOnActivated;
+        Deactivated -= ActivityHookSetupWindowOnDeactivated;
         _lifetime.Cancel();
         _lifetime.Dispose();
     }
@@ -90,7 +102,10 @@ public partial class ActivityHookSetupWindow : Window
                 _refreshTrustOnActivation = false;
             }
         }
-        catch (OperationCanceledException) when (!_lifetime.IsCancellationRequested)
+        catch (OperationCanceledException) when (_lifetime.IsCancellationRequested)
+        {
+        }
+        catch (OperationCanceledException)
         {
             DataContext = ActivityHookSetupViewModel.Error(
                 "Codex did not report hook status in time. Check that the CLI is available, then try again.");
@@ -136,7 +151,18 @@ public partial class ActivityHookSetupWindow : Window
             }
 
             var reviewWindow = new ActivityHookChangeReviewWindow(preview) { Owner = this };
-            if (reviewWindow.ShowDialog() != true)
+            bool accepted;
+            _reviewDialogOpen = true;
+            try
+            {
+                accepted = reviewWindow.ShowDialog() == true;
+            }
+            finally
+            {
+                _reviewDialogOpen = false;
+            }
+
+            if (!accepted)
             {
                 return;
             }

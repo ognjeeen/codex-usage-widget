@@ -1,6 +1,8 @@
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Windows;
 
 namespace CodexUsageWidget.Views;
@@ -62,6 +64,8 @@ public partial class TaskbarLabelWindow : Window
 
     public event EventHandler? DesktopModeRequested;
 
+    public event Action<TaskbarLimitPreference>? TaskbarLimitPreferenceChanged;
+
     public event EventHandler? StartupToggleRequested;
 
     public event EventHandler? ExitRequested;
@@ -111,7 +115,23 @@ public partial class TaskbarLabelWindow : Window
 
     public void SetStartupEnabled(bool enabled) => StartWithWindowsMenuItem.IsChecked = enabled;
 
-    public void UpdateUsage(double? remainingPercent, DateTimeOffset? resetsAt)
+    public void SetTaskbarLimitPreference(TaskbarLimitPreference preference)
+    {
+        FiveHourLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.FiveHour;
+        WeeklyLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.Weekly;
+        MostConstrainedLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.MostConstrained;
+    }
+
+    public void SetFiveHourLimitAvailability(bool available)
+    {
+        FiveHourLimitMenuItem.IsEnabled = available;
+        ToolTipService.SetIsEnabled(FiveHourLimitMenuItem, !available);
+    }
+
+    public void UpdateUsage(
+        string? limitLabel,
+        double? remainingPercent,
+        DateTimeOffset? resetsAt)
     {
         if (remainingPercent is null)
         {
@@ -122,9 +142,10 @@ public partial class TaskbarLabelWindow : Window
 
         var value = Math.Round(Math.Clamp(remainingPercent.Value, 0d, 100d));
         UsageText.Text = $"{value:0}%";
+        var label = string.IsNullOrWhiteSpace(limitLabel) ? "Codex" : limitLabel;
         LabelSurface.ToolTip = resetsAt is null
-            ? $"Codex: {value:0}% remaining"
-            : $"Codex: {value:0}% remaining · resets {resetsAt.Value:ddd HH:mm}";
+            ? $"{label}: {value:0}% remaining"
+            : $"{label}: {value:0}% remaining · resets {resetsAt.Value:ddd HH:mm}";
     }
 
     private void Reposition()
@@ -195,6 +216,15 @@ public partial class TaskbarLabelWindow : Window
 
     private void DesktopModeMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         DesktopModeRequested?.Invoke(this, EventArgs.Empty);
+
+    private void FiveHourLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.FiveHour);
+
+    private void WeeklyLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.Weekly);
+
+    private void MostConstrainedLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.MostConstrained);
 
     private void StartWithWindowsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         StartupToggleRequested?.Invoke(this, EventArgs.Empty);

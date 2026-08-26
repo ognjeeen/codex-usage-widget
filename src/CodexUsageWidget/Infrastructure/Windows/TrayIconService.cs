@@ -1,3 +1,4 @@
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using Forms = System.Windows.Forms;
 
@@ -5,16 +6,25 @@ namespace CodexUsageWidget.Infrastructure.Windows;
 
 public sealed class TrayIconService : IDisposable
 {
+    private const string FiveHourUnavailableText =
+        "Codex did not return a global 5h limit for this account.";
+
     private readonly Forms.NotifyIcon _notifyIcon;
     private readonly Forms.ToolStripMenuItem _desktopWidgetModeItem;
     private readonly Forms.ToolStripMenuItem _taskbarIndicatorModeItem;
+    private readonly Forms.ToolStripMenuItem _fiveHourLimitItem;
+    private readonly Forms.ToolStripMenuItem _weeklyLimitItem;
+    private readonly Forms.ToolStripMenuItem _mostConstrainedLimitItem;
     private readonly Forms.ToolStripMenuItem _startWithWindowsItem;
     private System.Drawing.Icon _currentIcon;
     private bool _disposed;
 
     public TrayIconService()
     {
-        var menu = new Forms.ContextMenuStrip();
+        var menu = new Forms.ContextMenuStrip
+        {
+            ShowItemToolTips = true
+        };
         menu.Items.Add("Open", null, (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add("Refresh", null, (_, _) => RefreshRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add(
@@ -35,6 +45,25 @@ public sealed class TrayIconService : IDisposable
         displayModeMenu.DropDownItems.Add(_desktopWidgetModeItem);
         displayModeMenu.DropDownItems.Add(_taskbarIndicatorModeItem);
         menu.Items.Add(displayModeMenu);
+
+        var taskbarLimitMenu = new Forms.ToolStripMenuItem("Taskbar limit");
+        _fiveHourLimitItem = new Forms.ToolStripMenuItem("5h limit")
+        {
+            Enabled = false,
+            ToolTipText = FiveHourUnavailableText
+        };
+        _fiveHourLimitItem.Click += (_, _) =>
+            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.FiveHour);
+        _weeklyLimitItem = new Forms.ToolStripMenuItem("Weekly limit");
+        _weeklyLimitItem.Click += (_, _) =>
+            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.Weekly);
+        _mostConstrainedLimitItem = new Forms.ToolStripMenuItem("Most constrained");
+        _mostConstrainedLimitItem.Click += (_, _) =>
+            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.MostConstrained);
+        taskbarLimitMenu.DropDownItems.Add(_fiveHourLimitItem);
+        taskbarLimitMenu.DropDownItems.Add(_weeklyLimitItem);
+        taskbarLimitMenu.DropDownItems.Add(_mostConstrainedLimitItem);
+        menu.Items.Add(taskbarLimitMenu);
         _startWithWindowsItem = new Forms.ToolStripMenuItem("Start with Windows")
         {
             CheckOnClick = true
@@ -66,6 +95,8 @@ public sealed class TrayIconService : IDisposable
 
     public event EventHandler? TaskbarModeRequested;
 
+    public event Action<TaskbarLimitPreference>? TaskbarLimitPreferenceChanged;
+
     public event EventHandler? StartupToggleRequested;
 
     public event EventHandler? ExitRequested;
@@ -77,6 +108,19 @@ public sealed class TrayIconService : IDisposable
     }
 
     public void SetStartupEnabled(bool enabled) => _startWithWindowsItem.Checked = enabled;
+
+    public void SetTaskbarLimitPreference(TaskbarLimitPreference preference)
+    {
+        _fiveHourLimitItem.Checked = preference == TaskbarLimitPreference.FiveHour;
+        _weeklyLimitItem.Checked = preference == TaskbarLimitPreference.Weekly;
+        _mostConstrainedLimitItem.Checked = preference == TaskbarLimitPreference.MostConstrained;
+    }
+
+    public void SetFiveHourLimitAvailability(bool available)
+    {
+        _fiveHourLimitItem.Enabled = available;
+        _fiveHourLimitItem.ToolTipText = available ? string.Empty : FiveHourUnavailableText;
+    }
 
     public void UpdateUsage(double? remainingPercent)
     {
