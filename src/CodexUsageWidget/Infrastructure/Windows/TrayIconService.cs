@@ -46,24 +46,24 @@ public sealed class TrayIconService : IDisposable
         displayModeMenu.DropDownItems.Add(_taskbarIndicatorModeItem);
         menu.Items.Add(displayModeMenu);
 
-        var taskbarLimitMenu = new Forms.ToolStripMenuItem("Taskbar limit");
+        var displayedLimitMenu = new Forms.ToolStripMenuItem("Displayed limit");
         _fiveHourLimitItem = new Forms.ToolStripMenuItem("5h limit")
         {
             Enabled = false,
             ToolTipText = FiveHourUnavailableText
         };
         _fiveHourLimitItem.Click += (_, _) =>
-            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.FiveHour);
+            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.FiveHour);
         _weeklyLimitItem = new Forms.ToolStripMenuItem("Weekly limit");
         _weeklyLimitItem.Click += (_, _) =>
-            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.Weekly);
+            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.Weekly);
         _mostConstrainedLimitItem = new Forms.ToolStripMenuItem("Most constrained");
         _mostConstrainedLimitItem.Click += (_, _) =>
-            TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.MostConstrained);
-        taskbarLimitMenu.DropDownItems.Add(_fiveHourLimitItem);
-        taskbarLimitMenu.DropDownItems.Add(_weeklyLimitItem);
-        taskbarLimitMenu.DropDownItems.Add(_mostConstrainedLimitItem);
-        menu.Items.Add(taskbarLimitMenu);
+            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.MostConstrained);
+        displayedLimitMenu.DropDownItems.Add(_fiveHourLimitItem);
+        displayedLimitMenu.DropDownItems.Add(_weeklyLimitItem);
+        displayedLimitMenu.DropDownItems.Add(_mostConstrainedLimitItem);
+        menu.Items.Add(displayedLimitMenu);
         _startWithWindowsItem = new Forms.ToolStripMenuItem("Start with Windows")
         {
             CheckOnClick = true
@@ -99,7 +99,7 @@ public sealed class TrayIconService : IDisposable
 
     public event EventHandler? TaskbarModeRequested;
 
-    public event Action<TaskbarLimitPreference>? TaskbarLimitPreferenceChanged;
+    public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
 
     public event EventHandler? StartupToggleRequested;
 
@@ -115,11 +115,11 @@ public sealed class TrayIconService : IDisposable
 
     public void SetStartupEnabled(bool enabled) => _startWithWindowsItem.Checked = enabled;
 
-    public void SetTaskbarLimitPreference(TaskbarLimitPreference preference)
+    public void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
     {
-        _fiveHourLimitItem.Checked = preference == TaskbarLimitPreference.FiveHour;
-        _weeklyLimitItem.Checked = preference == TaskbarLimitPreference.Weekly;
-        _mostConstrainedLimitItem.Checked = preference == TaskbarLimitPreference.MostConstrained;
+        _fiveHourLimitItem.Checked = preference == DisplayedLimitPreference.FiveHour;
+        _weeklyLimitItem.Checked = preference == DisplayedLimitPreference.Weekly;
+        _mostConstrainedLimitItem.Checked = preference == DisplayedLimitPreference.MostConstrained;
     }
 
     public void SetFiveHourLimitAvailability(bool available)

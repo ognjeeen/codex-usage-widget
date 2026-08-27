@@ -81,7 +81,7 @@
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Taskbar limit">
+                <MenuItem Header="Displayed limit">
                     <MenuItem.Icon>
                         <Path Data="M 2.5,12.5 A 6,6 0 1 1 13.5,12.5 M 8,8 L 11.5,5"
                               Style="{StaticResource TaskbarMenuIcon}" />

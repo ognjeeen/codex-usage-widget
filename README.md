@@ -16,7 +16,8 @@ notifications.
 - Credit, spend-control, earned-reset, and model-specific limit details when available
 - Compact, movable, always-on-top desktop widget
 - Native-looking taskbar label beside the Windows notification area
-- Selectable taskbar limit with a 5-hour default and automatic fallback
+- Selectable displayed limit shared by the widget, taskbar label, and tray icon,
+  with a 5-hour default and automatic fallback
 - Event-driven task activity animation through official local Codex lifecycle hooks
 - Immediate taskbar-label hiding while another app is fullscreen on the same monitor
 - Persistent desktop/taskbar display preference
@@ -65,9 +66,12 @@ If Codex is installed in a non-standard location, set
 
 The desktop widget has two persisted layouts:
 
-- **Compact** shows the general Codex windows and highlights the most constrained one.
+- **Compact** shows the general Codex windows and highlights the selected displayed limit.
 - **Details** adds available credits and spend controls, token activity, earned resets,
   and model-specific limits such as GPT-5.3-Codex-Spark.
+
+The selected **Displayed limit** controls the headline percentage in the widget, the taskbar
+label, and the tray icon. Limit rows continue to show every general Codex window.
 
 ![Codex Usage Widget detailed preview](docs/images/detailed-widget.png)
 
@@ -167,6 +171,16 @@ dotnet test .\CodexUsageWidget.slnx -c Release
 dotnet run --project .\src\CodexUsageWidget\CodexUsageWidget.csproj
 ```
 
+To preview both general rate-limit windows without reading Codex usage, close any running
+widget instance and start a local preview build:
+
+```powershell
+dotnet run --project .\src\CodexUsageWidget\CodexUsageWidget.csproj -p:EnableUsagePreview=true -- --preview-usage
+```
+
+The preview reports 80% remaining for the 5-hour limit and 15% remaining for the weekly
+limit. Standard release builds do not accept the preview flag.
+
 Warnings are treated as errors and the recommended .NET analyzers run during every
 build.
 
@@ -194,7 +208,7 @@ The application only writes under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `app\<version>\CodexUsageWidget.exe` — stable copy used after a direct ZIP launch
 - `display-mode.txt` — the selected display mode
 - `widget-density.txt` — the selected compact or detailed widget layout
-- `taskbar-limit.txt` — the selected limit shown in the taskbar label
+- `displayed-limit.txt` — the selected limit used by summary usage displays
 - `logs\codex-usage-widget-YYYYMMDD.log` — diagnostics, retained for 14 days
 
 No credentials are read or stored by the widget. Authentication remains owned by

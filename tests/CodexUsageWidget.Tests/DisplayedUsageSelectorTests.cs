@@ -3,7 +3,7 @@ using CodexUsageWidget.Domain;
 
 namespace CodexUsageWidget.Tests;
 
-public sealed class TaskbarUsageSelectorTests
+public sealed class DisplayedUsageSelectorTests
 {
     [Fact]
     public void FiveHourPreferenceSelectsFiveHourWindowWhenWeeklyIsMoreConstrained()
@@ -12,7 +12,7 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 85, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(fiveHour, weekly);
 
-        var selected = TaskbarUsageSelector.Select(snapshot, TaskbarLimitPreference.FiveHour);
+        var selected = DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.FiveHour);
 
         Assert.Same(fiveHour, selected);
     }
@@ -23,7 +23,7 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 40, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(weekly);
 
-        var selected = TaskbarUsageSelector.Select(snapshot, TaskbarLimitPreference.FiveHour);
+        var selected = DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.FiveHour);
 
         Assert.Same(weekly, selected);
     }
@@ -35,7 +35,7 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 20, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(fiveHour, weekly);
 
-        var selected = TaskbarUsageSelector.Select(snapshot, TaskbarLimitPreference.Weekly);
+        var selected = DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.Weekly);
 
         Assert.Same(weekly, selected);
     }
@@ -47,9 +47,9 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 85, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(fiveHour, weekly);
 
-        var selected = TaskbarUsageSelector.Select(
+        var selected = DisplayedUsageSelector.Select(
             snapshot,
-            TaskbarLimitPreference.MostConstrained);
+            DisplayedLimitPreference.MostConstrained);
 
         Assert.Same(weekly, selected);
     }
@@ -60,9 +60,22 @@ public sealed class TaskbarUsageSelectorTests
         var fiveHour = new UsageWindow("5h limit", 20, 300, DateTimeOffset.Now.AddHours(2));
         var snapshot = CreateSnapshot(fiveHour);
 
-        var selected = TaskbarUsageSelector.Select(snapshot, TaskbarLimitPreference.Weekly);
+        var selected = DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.Weekly);
 
         Assert.Same(fiveHour, selected);
+    }
+
+    [Fact]
+    public void WeeklyPreferenceResolvesToFiveHourWhenWeeklyWindowIsUnavailable()
+    {
+        var fiveHour = new UsageWindow("5h limit", 20, 300, DateTimeOffset.Now.AddHours(2));
+        var snapshot = CreateSnapshot(fiveHour);
+
+        var resolved = DisplayedUsageSelector.ResolvePreference(
+            snapshot,
+            DisplayedLimitPreference.Weekly);
+
+        Assert.Equal(DisplayedLimitPreference.FiveHour, resolved);
     }
 
     [Fact]
@@ -71,9 +84,22 @@ public sealed class TaskbarUsageSelectorTests
         var daily = new UsageWindow("1d limit", 75, 1_440, DateTimeOffset.Now.AddHours(4));
         var snapshot = CreateSnapshot(daily);
 
-        var selected = TaskbarUsageSelector.Select(snapshot, TaskbarLimitPreference.FiveHour);
+        var selected = DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.FiveHour);
 
         Assert.Same(daily, selected);
+    }
+
+    [Fact]
+    public void DurationPreferenceResolvesToMostConstrainedWhenNamedWindowsAreUnavailable()
+    {
+        var daily = new UsageWindow("1d limit", 75, 1_440, DateTimeOffset.Now.AddHours(4));
+        var snapshot = CreateSnapshot(daily);
+
+        var resolved = DisplayedUsageSelector.ResolvePreference(
+            snapshot,
+            DisplayedLimitPreference.FiveHour);
+
+        Assert.Equal(DisplayedLimitPreference.MostConstrained, resolved);
     }
 
     [Fact]
@@ -82,9 +108,9 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 40, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(weekly);
 
-        var available = TaskbarUsageSelector.IsAvailable(
+        var available = DisplayedUsageSelector.IsAvailable(
             snapshot,
-            TaskbarLimitPreference.FiveHour);
+            DisplayedLimitPreference.FiveHour);
 
         Assert.False(available);
     }
@@ -95,11 +121,23 @@ public sealed class TaskbarUsageSelectorTests
         var weekly = new UsageWindow("Weekly limit", 40, 10_080, DateTimeOffset.Now.AddDays(2));
         var snapshot = CreateSnapshot(weekly);
 
-        var resolved = TaskbarUsageSelector.ResolvePreference(
+        var resolved = DisplayedUsageSelector.ResolvePreference(
             snapshot,
-            TaskbarLimitPreference.FiveHour);
+            DisplayedLimitPreference.FiveHour);
 
-        Assert.Equal(TaskbarLimitPreference.Weekly, resolved);
+        Assert.Equal(DisplayedLimitPreference.Weekly, resolved);
+    }
+
+    [Fact]
+    public void FiveHourPreferenceIsPreservedWhenNoFallbackWindowIsAvailable()
+    {
+        var snapshot = CreateSnapshot();
+
+        var resolved = DisplayedUsageSelector.ResolvePreference(
+            snapshot,
+            DisplayedLimitPreference.FiveHour);
+
+        Assert.Equal(DisplayedLimitPreference.FiveHour, resolved);
     }
 
     private static UsageSnapshot CreateSnapshot(params UsageWindow[] windows) => new(

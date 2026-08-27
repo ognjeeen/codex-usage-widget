@@ -3,37 +3,37 @@ using CodexUsageWidget.Application;
 
 namespace CodexUsageWidget.Infrastructure.Settings;
 
-public sealed class TaskbarLimitPreferenceStore
+public sealed class DisplayedLimitPreferenceStore
 {
     private readonly string _path;
 
-    public TaskbarLimitPreferenceStore(string? path = null)
+    public DisplayedLimitPreferenceStore(string? path = null)
     {
-        _path = path ?? AppPaths.TaskbarLimitPreferenceFile;
+        _path = path ?? AppPaths.DisplayedLimitPreferenceFile;
     }
 
-    public TaskbarLimitPreference Load()
+    public DisplayedLimitPreference Load()
     {
         try
         {
             return File.ReadAllText(_path).Trim().ToLowerInvariant() switch
             {
-                "weekly" => TaskbarLimitPreference.Weekly,
-                "most-constrained" => TaskbarLimitPreference.MostConstrained,
-                _ => TaskbarLimitPreference.FiveHour
+                "weekly" => DisplayedLimitPreference.Weekly,
+                "most-constrained" => DisplayedLimitPreference.MostConstrained,
+                _ => DisplayedLimitPreference.FiveHour
             };
         }
         catch (IOException)
         {
-            return TaskbarLimitPreference.FiveHour;
+            return DisplayedLimitPreference.FiveHour;
         }
         catch (UnauthorizedAccessException)
         {
-            return TaskbarLimitPreference.FiveHour;
+            return DisplayedLimitPreference.FiveHour;
         }
     }
 
-    public void Save(TaskbarLimitPreference preference)
+    public void Save(DisplayedLimitPreference preference)
     {
         try
         {
@@ -42,8 +42,8 @@ public sealed class TaskbarLimitPreferenceStore
                 _path,
                 preference switch
                 {
-                    TaskbarLimitPreference.Weekly => "weekly",
-                    TaskbarLimitPreference.MostConstrained => "most-constrained",
+                    DisplayedLimitPreference.Weekly => "weekly",
+                    DisplayedLimitPreference.MostConstrained => "most-constrained",
                     _ => "five-hour"
                 });
         }

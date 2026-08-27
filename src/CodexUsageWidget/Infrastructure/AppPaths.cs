@@ -12,9 +12,9 @@ public static class AppPaths
 
     public static string WidgetDensityFile => Path.Combine(LocalDataDirectory, "widget-density.txt");
 
-    public static string TaskbarLimitPreferenceFile => Path.Combine(
+    public static string DisplayedLimitPreferenceFile => Path.Combine(
         LocalDataDirectory,
-        "taskbar-limit.txt");
+        "displayed-limit.txt");
 
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");
 }

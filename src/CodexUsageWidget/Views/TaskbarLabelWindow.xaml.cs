@@ -69,7 +69,7 @@ public partial class TaskbarLabelWindow : Window
 
     public event EventHandler? DesktopModeRequested;
 
-    public event Action<TaskbarLimitPreference>? TaskbarLimitPreferenceChanged;
+    public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
 
     public event EventHandler? StartupToggleRequested;
 
@@ -144,11 +144,11 @@ public partial class TaskbarLabelWindow : Window
 
     public void SetStartupEnabled(bool enabled) => StartWithWindowsMenuItem.IsChecked = enabled;
 
-    public void SetTaskbarLimitPreference(TaskbarLimitPreference preference)
+    public void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
     {
-        FiveHourLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.FiveHour;
-        WeeklyLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.Weekly;
-        MostConstrainedLimitMenuItem.IsChecked = preference == TaskbarLimitPreference.MostConstrained;
+        FiveHourLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.FiveHour;
+        WeeklyLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.Weekly;
+        MostConstrainedLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.MostConstrained;
     }
 
     public void SetFiveHourLimitAvailability(bool available)
@@ -277,13 +277,13 @@ public partial class TaskbarLabelWindow : Window
         DesktopModeRequested?.Invoke(this, EventArgs.Empty);
 
     private void FiveHourLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.FiveHour);
+        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.FiveHour);
 
     private void WeeklyLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.Weekly);
+        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.Weekly);
 
     private void MostConstrainedLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        TaskbarLimitPreferenceChanged?.Invoke(TaskbarLimitPreference.MostConstrained);
+        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.MostConstrained);
 
     private void StartWithWindowsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         StartupToggleRequested?.Invoke(this, EventArgs.Empty);

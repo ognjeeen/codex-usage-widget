@@ -1,6 +1,6 @@
 namespace CodexUsageWidget.Application;
 
-public enum TaskbarLimitPreference
+public enum DisplayedLimitPreference
 {
     FiveHour,
     Weekly,

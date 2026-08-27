@@ -74,10 +74,12 @@ public sealed class UsageWidgetViewModel
         HeadlineResetsAt = HeadlineResetsAt
     };
 
-    public static UsageWidgetViewModel FromSnapshot(UsageSnapshot snapshot)
+    public static UsageWidgetViewModel FromSnapshot(
+        UsageSnapshot snapshot,
+        UsageWindow? displayedWindow)
     {
         var generalLimits = BuildLimitViewModels(snapshot.GeneralLimits, includeBucketLabel: false);
-        if (generalLimits.Length == 0 || snapshot.MostConstrainedWindow is not { } constrained)
+        if (generalLimits.Length == 0 || displayedWindow is not { } displayed)
         {
             return Error("No subscription limits returned. Run codex login first.");
         }
@@ -91,10 +93,10 @@ public sealed class UsageWidgetViewModel
         {
             StatusText = plan is null ? "Live · ChatGPT" : $"Live · {plan}",
             StatusBrush = BrushFromHex("#68B88A"),
-            HeadlineRemainingText = $"{Math.Round(constrained.RemainingPercent):0}%",
-            HeadlineLabel = $"{constrained.Label} remaining",
-            HeadlineRemainingPercent = constrained.RemainingPercent,
-            HeadlineResetsAt = constrained.ResetsAt,
+            HeadlineRemainingText = $"{Math.Round(displayed.RemainingPercent):0}%",
+            HeadlineLabel = $"{displayed.Label} remaining",
+            HeadlineRemainingPercent = displayed.RemainingPercent,
+            HeadlineResetsAt = displayed.ResetsAt,
             UpdatedText = $"Local only · updated {snapshot.FetchedAt:HH:mm:ss}",
             WarningText = BuildWarning(snapshot.RateLimits.Limits),
             GeneralLimits = generalLimits,
@@ -181,6 +183,7 @@ public sealed class UsageWidgetViewModel
         "team" or "business" or "self_serve_business_usage_based" => "Business",
         "enterprise" or "enterprise_cbp_usage_based" or "ent26" => "Enterprise",
         "edu" => "Edu",
+        "preview" => "Preview",
         _ => "ChatGPT"
     };
 

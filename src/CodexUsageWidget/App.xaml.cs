@@ -4,6 +4,7 @@ using CodexUsageWidget.Infrastructure;
 using CodexUsageWidget.Infrastructure.Codex;
 using CodexUsageWidget.Infrastructure.Codex.Hooks;
 using CodexUsageWidget.Infrastructure.Logging;
+using CodexUsageWidget.Infrastructure.Preview;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
 using CodexUsageWidget.Views;
@@ -36,7 +37,17 @@ public partial class App : System.Windows.Application, IDisposable
         try
         {
             var appServerSession = new CodexAppServerSession();
-            var usageProvider = new CodexUsageProvider(appServerSession);
+            var codexUsageProvider = new CodexUsageProvider(appServerSession);
+            IUsageProvider usageProvider = codexUsageProvider;
+            var usagePreviewEnabled = false;
+#if DEBUG || USAGE_PREVIEW
+            if (e.Args.Contains("--preview-usage", StringComparer.OrdinalIgnoreCase))
+            {
+                usagePreviewEnabled = true;
+                usageProvider = new PreviewUsageProvider(codexUsageProvider);
+                _logger.Info("Usage preview mode is active.");
+            }
+#endif
             var usageMonitor = new UsageMonitor(usageProvider);
             usageMonitor.DiagnosticMessage += (_, message) => _logger.Info(message);
 
@@ -44,7 +55,9 @@ public partial class App : System.Windows.Application, IDisposable
             activityMonitor.DiagnosticMessage += (_, message) => _logger.Info(message);
             var processPath = Environment.ProcessPath ??
                 throw new InvalidOperationException("Cannot determine the widget executable path.");
-            var startupRegistrationService = new StartupRegistrationService(processPath);
+            var startupRegistrationService = new StartupRegistrationService(
+                processPath,
+                usagePreviewEnabled ? new PreviewStartupRegistrationStore() : null);
             if (!startupRegistrationService.TryRefreshExecutablePathIfEnabled())
             {
                 _logger.LogError("The Windows startup registration could not be refreshed.");
@@ -61,7 +74,7 @@ public partial class App : System.Windows.Application, IDisposable
                 new CodexCliLauncher(),
                 new DisplayModeStore(),
                 new WidgetDensityStore(),
-                new TaskbarLimitPreferenceStore(),
+                new DisplayedLimitPreferenceStore(),
                 startupRegistrationService,
                 new TrayIconService());
             MainWindow = window;

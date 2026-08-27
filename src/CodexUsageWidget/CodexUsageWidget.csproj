@@ -17,6 +17,7 @@
     <RepositoryUrl>https://github.com/ognjeeen/codex-usage-widget</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <DefineConstants Condition="'$(EnableActivityPreview)' == 'true'">$(DefineConstants);ACTIVITY_PREVIEW</DefineConstants>
+    <DefineConstants Condition="'$(EnableUsagePreview)' == 'true'">$(DefineConstants);USAGE_PREVIEW</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\LICENSE" Link="LICENSE" CopyToPublishDirectory="PreserveNewest" />
