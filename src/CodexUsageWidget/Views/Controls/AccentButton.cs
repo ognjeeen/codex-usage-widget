@@ -99,6 +99,7 @@ public sealed class AccentButton : WpfButton
     {
         PaletteChanged -= ApplyCurrentPalette;
         PaletteChanged += ApplyCurrentPalette;
+        ApplyCurrentPalette();
     }
 
     private void AccentButtonOnUnloaded(object sender, RoutedEventArgs e) =>

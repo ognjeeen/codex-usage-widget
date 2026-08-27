@@ -1,7 +1,6 @@
 using System.Runtime.ExceptionServices;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
@@ -211,31 +210,29 @@ public sealed class TaskbarSettingsMenuTests
                     };
                     accentButton.Style = Assert.IsType<System.Windows.Style>(
                         application.FindResource("PrimaryDialogButton"));
-                    var accentHost = new System.Windows.Window
-                    {
-                        Width = 200d,
-                        Height = 100d,
-                        Content = accentButton
-                    };
-                    accentHost.Show();
+                    accentButton.ApplyTemplate();
+                    Assert.Equal(
+                        Color.FromRgb(124, 58, 237),
+                        Assert.IsType<SolidColorBrush>(accentButton.PrimaryBrush).Color);
+
+                    themeController.SetAccentPalette(AccentPalette.Emerald);
+                    accentButton.RaiseEvent(
+                        new System.Windows.RoutedEventArgs(
+                            System.Windows.FrameworkElement.LoadedEvent));
                     try
                     {
-                        accentButton.ApplyTemplate();
-                        PumpDispatcher(TimeSpan.FromMilliseconds(200d));
                         Assert.Equal(
-                            Color.FromRgb(124, 58, 237),
-                            GetButtonSurfaceColor(accentButton));
-
-                        themeController.SetAccentPalette(AccentPalette.Emerald);
-                        PumpDispatcher(TimeSpan.FromMilliseconds(200d));
-
+                            Color.FromRgb(29, 145, 72),
+                            Assert.IsType<SolidColorBrush>(accentButton.PrimaryBrush).Color);
                         Assert.Equal(
                             Color.FromRgb(29, 145, 72),
                             GetButtonSurfaceColor(accentButton));
                     }
                     finally
                     {
-                        accentHost.Close();
+                        accentButton.RaiseEvent(
+                            new System.Windows.RoutedEventArgs(
+                                System.Windows.FrameworkElement.UnloadedEvent));
                     }
 
                 window.Close();
@@ -269,22 +266,6 @@ public sealed class TaskbarSettingsMenuTests
     {
         var surface = Assert.IsType<Border>(button.Template.FindName("ButtonSurface", button));
         return Assert.IsType<SolidColorBrush>(surface.Background).Color;
-    }
-
-    private static void PumpDispatcher(TimeSpan duration)
-    {
-        var frame = new DispatcherFrame();
-        var timer = new DispatcherTimer(DispatcherPriority.Background)
-        {
-            Interval = duration
-        };
-        timer.Tick += (_, _) =>
-        {
-            timer.Stop();
-            frame.Continue = false;
-        };
-        timer.Start();
-        Dispatcher.PushFrame(frame);
     }
 
     private sealed class StubActivityHookSetupService : IActivityHookSetupService
