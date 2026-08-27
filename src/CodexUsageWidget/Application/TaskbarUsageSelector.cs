@@ -7,6 +7,14 @@ public static class TaskbarUsageSelector
     private const long FiveHourDurationMinutes = 300;
     private const long WeeklyDurationThresholdMinutes = 10_000;
 
+    public static TaskbarLimitPreference ResolvePreference(
+        UsageSnapshot snapshot,
+        TaskbarLimitPreference preference) =>
+        preference == TaskbarLimitPreference.FiveHour &&
+        !IsAvailable(snapshot, TaskbarLimitPreference.FiveHour)
+            ? TaskbarLimitPreference.Weekly
+            : preference;
+
     public static bool IsAvailable(
         UsageSnapshot snapshot,
         TaskbarLimitPreference preference) => preference switch

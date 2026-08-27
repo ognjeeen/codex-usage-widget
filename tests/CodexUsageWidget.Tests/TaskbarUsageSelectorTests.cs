@@ -89,6 +89,19 @@ public sealed class TaskbarUsageSelectorTests
         Assert.False(available);
     }
 
+    [Fact]
+    public void FiveHourPreferenceResolvesToWeeklyWhenFiveHourWindowIsUnavailable()
+    {
+        var weekly = new UsageWindow("Weekly limit", 40, 10_080, DateTimeOffset.Now.AddDays(2));
+        var snapshot = CreateSnapshot(weekly);
+
+        var resolved = TaskbarUsageSelector.ResolvePreference(
+            snapshot,
+            TaskbarLimitPreference.FiveHour);
+
+        Assert.Equal(TaskbarLimitPreference.Weekly, resolved);
+    }
+
     private static UsageSnapshot CreateSnapshot(params UsageWindow[] windows) => new(
         new UsageRateLimits(
             [

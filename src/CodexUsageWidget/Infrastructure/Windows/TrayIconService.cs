@@ -71,6 +71,10 @@ public sealed class TrayIconService : IDisposable
         _startWithWindowsItem.Click += (_, _) =>
             StartupToggleRequested?.Invoke(this, EventArgs.Empty);
         menu.Items.Add(_startWithWindowsItem);
+        menu.Items.Add(
+            "Check for updates...",
+            null,
+            (_, _) => UpdateCheckRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add(new Forms.ToolStripSeparator());
         menu.Items.Add("Exit", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
 
@@ -98,6 +102,8 @@ public sealed class TrayIconService : IDisposable
     public event Action<TaskbarLimitPreference>? TaskbarLimitPreferenceChanged;
 
     public event EventHandler? StartupToggleRequested;
+
+    public event EventHandler? UpdateCheckRequested;
 
     public event EventHandler? ExitRequested;
 

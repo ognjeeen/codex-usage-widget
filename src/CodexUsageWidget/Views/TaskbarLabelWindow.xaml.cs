@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 using CodexUsageWidget.Application;
@@ -15,10 +16,12 @@ public partial class TaskbarLabelWindow : Window
 {
     private readonly System.Windows.Threading.DispatcherTimer _positionTimer;
     private readonly WindowChangeWatcher _windowChangeWatcher;
+    private ExternalMouseDownWatcher? _contextMenuDismissWatcher;
     private IntPtr _windowHandle;
     private bool _labelRequested;
     private bool _isTaskActive;
     private bool _isClosed;
+    private bool _resetMenuPlacementOnClose;
     private int _visibilityUpdateQueued;
 
     public TaskbarLabelWindow()
@@ -48,6 +51,8 @@ public partial class TaskbarLabelWindow : Window
             _isClosed = true;
             _labelRequested = false;
             _positionTimer.Stop();
+            _contextMenuDismissWatcher?.Dispose();
+            _contextMenuDismissWatcher = null;
             _windowChangeWatcher.Dispose();
         };
     }
@@ -68,6 +73,8 @@ public partial class TaskbarLabelWindow : Window
 
     public event EventHandler? StartupToggleRequested;
 
+    public event EventHandler? UpdateCheckRequested;
+
     public event EventHandler? ExitRequested;
 
     public bool IsPointerOver => IsMouseOver;
@@ -75,6 +82,28 @@ public partial class TaskbarLabelWindow : Window
     public bool IsActivityPreviewEnabled => ActivityPreviewMenuItem.IsChecked;
 
     public void ResetActivityPreview() => ActivityPreviewMenuItem.IsChecked = false;
+
+    public void OpenMenu(FrameworkElement placementTarget)
+    {
+        ArgumentNullException.ThrowIfNull(placementTarget);
+
+        if (_isClosed)
+        {
+            return;
+        }
+
+        if (TaskbarMenu.IsOpen)
+        {
+            TaskbarMenu.IsOpen = false;
+        }
+
+        _resetMenuPlacementOnClose = true;
+        TaskbarMenu.PlacementTarget = placementTarget;
+        TaskbarMenu.Placement = PlacementMode.Bottom;
+        TaskbarMenu.HorizontalOffset = placementTarget.ActualWidth - TaskbarMenu.MinWidth;
+        TaskbarMenu.VerticalOffset = 4;
+        TaskbarMenu.IsOpen = true;
+    }
 
     public void ShowLabel()
     {
@@ -214,6 +243,36 @@ public partial class TaskbarLabelWindow : Window
     private void ActivityPreviewMenuItem_OnClick(object sender, RoutedEventArgs e)
         => ActivityPreviewChanged?.Invoke(this, EventArgs.Empty);
 
+    private void TaskbarMenu_OnOpened(object sender, RoutedEventArgs e)
+    {
+        _contextMenuDismissWatcher?.Dispose();
+        _contextMenuDismissWatcher = new ExternalMouseDownWatcher(() =>
+            Dispatcher.BeginInvoke(CloseTaskbarMenu));
+    }
+
+    private void TaskbarMenu_OnClosed(object sender, RoutedEventArgs e)
+    {
+        _contextMenuDismissWatcher?.Dispose();
+        _contextMenuDismissWatcher = null;
+
+        if (_resetMenuPlacementOnClose)
+        {
+            _resetMenuPlacementOnClose = false;
+            TaskbarMenu.ClearValue(System.Windows.Controls.ContextMenu.PlacementTargetProperty);
+            TaskbarMenu.ClearValue(System.Windows.Controls.ContextMenu.PlacementProperty);
+            TaskbarMenu.ClearValue(System.Windows.Controls.ContextMenu.HorizontalOffsetProperty);
+            TaskbarMenu.ClearValue(System.Windows.Controls.ContextMenu.VerticalOffsetProperty);
+        }
+    }
+
+    private void CloseTaskbarMenu()
+    {
+        if (TaskbarMenu.IsOpen)
+        {
+            TaskbarMenu.IsOpen = false;
+        }
+    }
+
     private void DesktopModeMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         DesktopModeRequested?.Invoke(this, EventArgs.Empty);
 
@@ -228,6 +287,9 @@ public partial class TaskbarLabelWindow : Window
 
     private void StartWithWindowsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         StartupToggleRequested?.Invoke(this, EventArgs.Empty);
+
+    private void CheckForUpdatesMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        UpdateCheckRequested?.Invoke(this, EventArgs.Empty);
 
     private void ExitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         ExitRequested?.Invoke(this, EventArgs.Empty);

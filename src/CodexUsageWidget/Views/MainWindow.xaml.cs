@@ -110,6 +110,8 @@ public partial class MainWindow : Window
             Dispatcher.BeginInvoke(() => SetDisplayMode(WidgetDisplayMode.DesktopWidget));
         _taskbarLabel.StartupToggleRequested += (_, _) =>
             Dispatcher.BeginInvoke(ToggleStartupRegistration);
+        _taskbarLabel.UpdateCheckRequested += (_, _) =>
+            Dispatcher.BeginInvoke(GitHubReleaseLauncher.OpenLatestRelease);
         _taskbarLabel.ExitRequested += (_, _) => Dispatcher.BeginInvoke(ExitApplication);
 
         _trayIcon.OpenRequested += (_, _) => Dispatcher.BeginInvoke(_widgetVisibility.Show);
@@ -125,6 +127,8 @@ public partial class MainWindow : Window
             Dispatcher.BeginInvoke(() => SetTaskbarLimitPreference(preference));
         _trayIcon.StartupToggleRequested += (_, _) =>
             Dispatcher.BeginInvoke(ToggleStartupRegistration);
+        _trayIcon.UpdateCheckRequested += (_, _) =>
+            Dispatcher.BeginInvoke(GitHubReleaseLauncher.OpenLatestRelease);
         _trayIcon.ExitRequested += (_, _) => Dispatcher.BeginInvoke(ExitApplication);
     }
 
@@ -215,6 +219,16 @@ public partial class MainWindow : Window
             TaskbarLimitPreference.FiveHour);
         _taskbarLabel.SetFiveHourLimitAvailability(fiveHourAvailable);
         _trayIcon.SetFiveHourLimitAvailability(fiveHourAvailable);
+
+        var resolvedPreference = TaskbarUsageSelector.ResolvePreference(
+            snapshot,
+            _taskbarLimitPreference);
+        if (resolvedPreference != _taskbarLimitPreference)
+        {
+            _taskbarLimitPreference = resolvedPreference;
+            _taskbarLimitPreferenceStore.Save(resolvedPreference);
+            SetTaskbarLimitPreferenceState(resolvedPreference);
+        }
 
         var selected = TaskbarUsageSelector.Select(snapshot, _taskbarLimitPreference);
         _taskbarLabel.UpdateUsage(
@@ -378,6 +392,9 @@ public partial class MainWindow : Window
         await _usageMonitor.RefreshAsync();
 
     private void DensityButton_OnClick(object sender, RoutedEventArgs e) => ToggleDensity();
+
+    private void SettingsButton_OnClick(object sender, RoutedEventArgs e) =>
+        _taskbarLabel.OpenMenu(SettingsButton);
 
     private void ActivityDotsButton_OnClick(object sender, RoutedEventArgs e) =>
         ShowActivityHookSetup();

@@ -21,6 +21,7 @@ public partial class ActivityHookSetupWindow : Window
     private bool _refreshInProgress;
     private bool _refreshTrustOnActivation;
     private bool _reviewDialogOpen;
+    private bool _closeRequested;
 
     public ActivityHookSetupWindow(
         IActivityHookSetupService setupService,
@@ -35,6 +36,7 @@ public partial class ActivityHookSetupWindow : Window
         Loaded += ActivityHookSetupWindowOnLoaded;
         Activated += ActivityHookSetupWindowOnActivated;
         Deactivated += ActivityHookSetupWindowOnDeactivated;
+        Closing += ActivityHookSetupWindowOnClosing;
         Closed += ActivityHookSetupWindowOnClosed;
     }
 
@@ -66,15 +68,19 @@ public partial class ActivityHookSetupWindow : Window
     {
         if (!_reviewDialogOpen && !_refreshTrustOnActivation)
         {
-            Close();
+            RequestClose();
         }
     }
+
+    private void ActivityHookSetupWindowOnClosing(object? sender, CancelEventArgs e) =>
+        _closeRequested = true;
 
     private void ActivityHookSetupWindowOnClosed(object? sender, EventArgs e)
     {
         SizeChanged -= ActivityHookSetupWindowOnSizeChanged;
         Activated -= ActivityHookSetupWindowOnActivated;
         Deactivated -= ActivityHookSetupWindowOnDeactivated;
+        Closing -= ActivityHookSetupWindowOnClosing;
         _lifetime.Cancel();
         _lifetime.Dispose();
     }
@@ -131,7 +137,18 @@ public partial class ActivityHookSetupWindow : Window
         }
     }
 
-    private void CloseButton_OnClick(object sender, RoutedEventArgs e) => Close();
+    private void CloseButton_OnClick(object sender, RoutedEventArgs e) => RequestClose();
+
+    private void RequestClose()
+    {
+        if (_closeRequested)
+        {
+            return;
+        }
+
+        _closeRequested = true;
+        Close();
+    }
 
     private async void InstallButton_OnClick(object sender, RoutedEventArgs e) =>
         await ReviewAndApplyAsync(ActivityHookChangeKind.Install);
