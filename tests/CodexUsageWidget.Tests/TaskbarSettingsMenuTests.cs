@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Views;
+using CodexUsageWidget.Views.Controls;
 
 namespace CodexUsageWidget.Tests;
 
@@ -37,6 +38,12 @@ public sealed class TaskbarSettingsMenuTests
                     menu.Items.OfType<MenuItem>(),
                     item => string.Equals(
                         item.Header as string,
+                        "Activity dots...",
+                        StringComparison.Ordinal));
+                Assert.DoesNotContain(
+                    menu.Items.OfType<MenuItem>(),
+                    item => string.Equals(
+                        item.Header as string,
                         "Displayed limit",
                         StringComparison.Ordinal));
                 Assert.DoesNotContain(
@@ -59,7 +66,9 @@ public sealed class TaskbarSettingsMenuTests
                         widgetDensity: WidgetDensity.Compact,
                         displayedLimitPreference: DisplayedLimitPreference.FiveHour,
                         fiveHourLimitAvailable: true,
-                        startWithWindowsEnabled: false);
+                        startWithWindowsEnabled: false,
+                        activityHookSetupService: new StubActivityHookSetupService(),
+                        codexLauncher: new StubCodexLauncher());
                     var option = Assert.IsType<RadioButton>(
                         settings.FindName(expectedOptionName));
                     Assert.True(option.IsChecked);
@@ -71,7 +80,9 @@ public sealed class TaskbarSettingsMenuTests
                     widgetDensity: WidgetDensity.Compact,
                     displayedLimitPreference: DisplayedLimitPreference.FiveHour,
                     fiveHourLimitAvailable: true,
-                    startWithWindowsEnabled: false);
+                    startWithWindowsEnabled: false,
+                    activityHookSetupService: new StubActivityHookSetupService(),
+                    codexLauncher: new StubCodexLauncher());
                 ThemePreference? changedPreference = null;
                 liveSettings.ThemePreferenceChanged += preference =>
                     changedPreference = preference;
@@ -88,7 +99,13 @@ public sealed class TaskbarSettingsMenuTests
                     widgetDensity: WidgetDensity.Compact,
                     displayedLimitPreference: DisplayedLimitPreference.Weekly,
                     fiveHourLimitAvailable: false,
-                    startWithWindowsEnabled: true);
+                    startWithWindowsEnabled: true,
+                    activityHookSetupService: new StubActivityHookSetupService(),
+                    codexLauncher: new StubCodexLauncher());
+                Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
+                var activityDotsHost = Assert.IsType<ContentControl>(
+                    usageSettings.FindName("ActivityDotsHost"));
+                Assert.IsType<ActivityHookSetupControl>(activityDotsHost.Content);
                 var weeklyOption = Assert.IsType<RadioButton>(
                     usageSettings.FindName("WeeklyLimitOption"));
                 var fiveHourOption = Assert.IsType<RadioButton>(
@@ -144,6 +161,27 @@ public sealed class TaskbarSettingsMenuTests
         if (failure is not null)
         {
             ExceptionDispatchInfo.Capture(failure).Throw();
+        }
+    }
+
+    private sealed class StubActivityHookSetupService : IActivityHookSetupService
+    {
+        public Task<ActivityHookSetupStatus> GetStatusAsync(
+            CancellationToken cancellationToken = default) =>
+            Task.FromResult(new ActivityHookSetupStatus(ActivityHookSetupState.Active));
+
+        public ActivityHookChangePreview PrepareChange(ActivityHookChangeKind kind) =>
+            new(kind, HasChanges: false, ProposedContent: string.Empty);
+
+        public void ApplyChange(ActivityHookChangePreview preview)
+        {
+        }
+    }
+
+    private sealed class StubCodexLauncher : ICodexLauncher
+    {
+        public void OpenInteractive()
+        {
         }
     }
 }

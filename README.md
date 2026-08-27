@@ -65,10 +65,9 @@ subscription percentage.
 ![Codex Usage Widget taskbar label preview](docs/images/taskbar-label.png)
 
 Select the `−` button to move the widget to the taskbar. Right-click the taskbar label or
-tray icon to refresh, change the display mode, configure activity dots, open Settings,
-check for updates, or exit. The Settings window opens from the gear button on the widget too.
-Theme, widget layout, displayed limit, and Start with Windows changes apply as soon as they
-are selected.
+tray icon to refresh, change the display mode, open Settings, check for updates, or exit.
+The Settings window opens from the gear button on the widget too. Theme, widget layout,
+displayed limit, and Start with Windows changes apply as soon as they are selected.
 
 ## Activity dots
 
@@ -78,7 +77,7 @@ read prompt text, responses, transcript paths, or model output.
 
 To enable them:
 
-1. Open **Activity dots...** from the widget, taskbar label, or tray menu.
+1. Open **Settings**, then find **Codex activity** under **Features**.
 2. Select **Install hooks** and review the exact proposed `~/.codex/hooks.json` change.
 3. Select **Copy /hooks and open Codex**, paste `/hooks`, and trust the three definitions.
 4. Return to the widget and select **Check again**.
@@ -107,7 +106,8 @@ billing or API-key usage.
 
 ## Uninstall
 
-1. If activity hooks are installed, open **Activity dots...** and select **Remove hooks**.
+1. If activity hooks are installed, open **Settings**, find **Codex activity** under
+   **Features**, and select **Remove hooks**.
 2. Turn off **Start with Windows** in **Settings** under **General**.
 3. Exit the widget.
 4. Delete the extracted application folder and `%LOCALAPPDATA%\CodexUsageWidget`. The local

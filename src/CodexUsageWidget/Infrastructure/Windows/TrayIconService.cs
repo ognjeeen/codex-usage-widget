@@ -21,10 +21,6 @@ public sealed class TrayIconService : IDisposable
         menu.Items.Add("Open", null, (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add("Refresh", null, (_, _) => RefreshRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add(
-            "Activity dots...",
-            null,
-            (_, _) => ActivityDotsSetupRequested?.Invoke(this, EventArgs.Empty));
-        menu.Items.Add(
             "Settings...",
             null,
             (_, _) => SettingsRequested?.Invoke(this, EventArgs.Empty));
@@ -66,8 +62,6 @@ public sealed class TrayIconService : IDisposable
     public event EventHandler? OpenRequested;
 
     public event EventHandler? RefreshRequested;
-
-    public event EventHandler? ActivityDotsSetupRequested;
 
     public event EventHandler? SettingsRequested;
 

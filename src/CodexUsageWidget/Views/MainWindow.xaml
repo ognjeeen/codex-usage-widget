@@ -153,21 +153,6 @@
                     <StackPanel HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Orientation="Horizontal">
-                        <Button ToolTip="Activity dots setup"
-                                AutomationProperties.Name="Activity dots setup"
-                                Style="{StaticResource IconButton}"
-                                Click="ActivityDotsButton_OnClick">
-                            <Viewbox Width="16" Height="16">
-                                <Canvas Width="16" Height="16">
-                                    <Ellipse Canvas.Left="2" Canvas.Top="7" Width="2.5" Height="2.5"
-                                             Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                    <Ellipse Canvas.Left="6.75" Canvas.Top="7" Width="2.5" Height="2.5"
-                                             Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                    <Ellipse Canvas.Left="11.5" Canvas.Top="7" Width="2.5" Height="2.5"
-                                             Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
-                                </Canvas>
-                            </Viewbox>
-                        </Button>
                         <Button x:Name="SettingsButton"
                                 ToolTip="Settings"
                                 AutomationProperties.Name="Settings"

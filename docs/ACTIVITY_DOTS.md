@@ -19,20 +19,20 @@ paths, or model output.
 
 ## Set up in the widget
 
-1. Select the three-dot activity button in the desktop widget, or choose
-   **Activity dots...** from the taskbar-label or tray menu.
+1. Open **Settings** from the desktop widget, taskbar-label menu, or tray menu, then find
+   **Codex activity** under **Features**.
 2. Select **Install hooks**.
 3. Review the exact proposed `~/.codex/hooks.json` content and confirm the change.
 4. Select **Copy /hooks and open Codex**.
 5. Paste `/hooks` into Codex and trust the new `UserPromptSubmit`, `Stop`, and `SessionEnd`
    definitions.
-6. Return to the setup window and select **Check again**.
+6. Return to Settings and select **Check again**.
 
 Codex owns hook trust. New or changed definitions require approval in Codex. The widget only
 reads the reported trust state.
 
-To remove the handlers, return to the setup window and select **Remove hooks**. The widget
-preserves unrelated hooks and unknown configuration fields.
+To remove the handlers, return to **Codex activity** under **Features** in Settings and
+select **Remove hooks**. The widget preserves unrelated hooks and unknown configuration fields.
 
 ## Command-line setup and removal
 

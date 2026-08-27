@@ -2,28 +2,27 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Views.ViewModels;
 
-namespace CodexUsageWidget.Views;
+namespace CodexUsageWidget.Views.Controls;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage(
     "Design",
     "CA1001:Types that own disposable fields should be disposable",
-    Justification = "WPF owns the window lifecycle; the Closed handler disposes the cancellation source.")]
-public partial class ActivityHookSetupWindow : Window
+    Justification = "WPF owns the control lifecycle; the Unloaded handler disposes the cancellation source.")]
+public partial class ActivityHookSetupControl : System.Windows.Controls.UserControl
 {
     private static readonly TimeSpan StatusTimeout = TimeSpan.FromSeconds(10);
     private readonly IActivityHookSetupService _setupService;
     private readonly ICodexLauncher _codexLauncher;
     private readonly CancellationTokenSource _lifetime = new();
+    private Window? _hostWindow;
     private bool _refreshInProgress;
     private bool _refreshTrustOnActivation;
-    private bool _reviewDialogOpen;
-    private bool _closeRequested;
+    private bool _disposed;
 
-    public ActivityHookSetupWindow(
+    public ActivityHookSetupControl(
         IActivityHookSetupService setupService,
         ICodexLauncher codexLauncher)
     {
@@ -33,29 +32,40 @@ public partial class ActivityHookSetupWindow : Window
         _codexLauncher = codexLauncher;
         InitializeComponent();
         DataContext = ActivityHookSetupViewModel.Loading();
-        Loaded += ActivityHookSetupWindowOnLoaded;
-        Activated += ActivityHookSetupWindowOnActivated;
-        Deactivated += ActivityHookSetupWindowOnDeactivated;
-        Closing += ActivityHookSetupWindowOnClosing;
-        Closed += ActivityHookSetupWindowOnClosed;
+        Loaded += ActivityHookSetupControlOnLoaded;
+        Unloaded += ActivityHookSetupControlOnUnloaded;
     }
 
-    private async void ActivityHookSetupWindowOnLoaded(object sender, RoutedEventArgs e)
+    private async void ActivityHookSetupControlOnLoaded(object sender, RoutedEventArgs e)
     {
-        await RefreshStatusAsync();
-        UpdateLayout();
-        SizeChanged += ActivityHookSetupWindowOnSizeChanged;
-    }
-
-    private void ActivityHookSetupWindowOnSizeChanged(object sender, SizeChangedEventArgs e)
-    {
-        if (e.HeightChanged)
+        _hostWindow = Window.GetWindow(this);
+        if (_hostWindow is not null)
         {
-            Top += e.PreviousSize.Height - e.NewSize.Height;
+            _hostWindow.Activated += HostWindowOnActivated;
         }
+
+        await RefreshStatusAsync();
     }
 
-    private async void ActivityHookSetupWindowOnActivated(object? sender, EventArgs e)
+    private void ActivityHookSetupControlOnUnloaded(object sender, RoutedEventArgs e)
+    {
+        if (_hostWindow is not null)
+        {
+            _hostWindow.Activated -= HostWindowOnActivated;
+            _hostWindow = null;
+        }
+
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        _lifetime.Cancel();
+        _lifetime.Dispose();
+    }
+
+    private async void HostWindowOnActivated(object? sender, EventArgs e)
     {
         if (_refreshTrustOnActivation && !_refreshInProgress)
         {
@@ -64,30 +74,9 @@ public partial class ActivityHookSetupWindow : Window
         }
     }
 
-    private void ActivityHookSetupWindowOnDeactivated(object? sender, EventArgs e)
-    {
-        if (!_reviewDialogOpen && !_refreshTrustOnActivation)
-        {
-            RequestClose();
-        }
-    }
-
-    private void ActivityHookSetupWindowOnClosing(object? sender, CancelEventArgs e) =>
-        _closeRequested = true;
-
-    private void ActivityHookSetupWindowOnClosed(object? sender, EventArgs e)
-    {
-        SizeChanged -= ActivityHookSetupWindowOnSizeChanged;
-        Activated -= ActivityHookSetupWindowOnActivated;
-        Deactivated -= ActivityHookSetupWindowOnDeactivated;
-        Closing -= ActivityHookSetupWindowOnClosing;
-        _lifetime.Cancel();
-        _lifetime.Dispose();
-    }
-
     private async Task RefreshStatusAsync()
     {
-        if (_refreshInProgress)
+        if (_refreshInProgress || _disposed)
         {
             return;
         }
@@ -129,27 +118,6 @@ public partial class ActivityHookSetupWindow : Window
     private async void RefreshButton_OnClick(object sender, RoutedEventArgs e) =>
         await RefreshStatusAsync();
 
-    private void Header_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.ButtonState == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
-    }
-
-    private void CloseButton_OnClick(object sender, RoutedEventArgs e) => RequestClose();
-
-    private void RequestClose()
-    {
-        if (_closeRequested)
-        {
-            return;
-        }
-
-        _closeRequested = true;
-        Close();
-    }
-
     private async void InstallButton_OnClick(object sender, RoutedEventArgs e) =>
         await ReviewAndApplyAsync(ActivityHookChangeKind.Install);
 
@@ -167,19 +135,11 @@ public partial class ActivityHookSetupWindow : Window
                 return;
             }
 
-            var reviewWindow = new ActivityHookChangeReviewWindow(preview) { Owner = this };
-            bool accepted;
-            _reviewDialogOpen = true;
-            try
+            var reviewWindow = new ActivityHookChangeReviewWindow(preview)
             {
-                accepted = reviewWindow.ShowDialog() == true;
-            }
-            finally
-            {
-                _reviewDialogOpen = false;
-            }
-
-            if (!accepted)
+                Owner = Window.GetWindow(this)
+            };
+            if (reviewWindow.ShowDialog() != true)
             {
                 return;
             }

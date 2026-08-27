@@ -200,10 +200,25 @@
                           HorizontalScrollBarVisibility="Disabled"
                           Style="{StaticResource SlimScrollViewer}">
               <StackPanel Margin="0,0,5,0">
-                <StackPanel Margin="0,0,0,14">
-                    <TextBlock Text="APPEARANCE" Style="{StaticResource SectionTitle}" />
+                <StackPanel>
+                    <TextBlock Text="GENERAL" Style="{StaticResource SectionTitle}" />
+                    <CheckBox x:Name="StartWithWindowsOption"
+                              Margin="0,14,0,0"
+                              AutomationProperties.Name="Start with Windows"
+                              Checked="StartWithWindowsOption_OnChanged"
+                              Unchecked="StartWithWindowsOption_OnChanged"
+                              Style="{StaticResource SettingsToggleCard}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Start with Windows" FontWeight="SemiBold" />
+                            <TextBlock Text="Launch the widget when you sign in"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource SupportingText}" />
+                        </StackPanel>
+                    </CheckBox>
+                </StackPanel>
+
+                <StackPanel Margin="0,18,0,14">
                     <TextBlock Text="Theme"
-                               Margin="0,8,0,0"
                                FontSize="15"
                                FontWeight="SemiBold"
                                Foreground="{DynamicResource TextPrimary}" />
@@ -418,21 +433,9 @@
                       Margin="0,2,0,10"
                       Background="{DynamicResource DividerBrush}" />
 
-              <StackPanel>
-                  <TextBlock Text="GENERAL" Style="{StaticResource SectionTitle}" />
-                  <CheckBox x:Name="StartWithWindowsOption"
-                            Margin="0,14,0,0"
-                            AutomationProperties.Name="Start with Windows"
-                            Checked="StartWithWindowsOption_OnChanged"
-                            Unchecked="StartWithWindowsOption_OnChanged"
-                            Style="{StaticResource SettingsToggleCard}">
-                      <StackPanel VerticalAlignment="Center">
-                          <TextBlock Text="Start with Windows" FontWeight="SemiBold" />
-                          <TextBlock Text="Launch the widget when you sign in"
-                                     Margin="0,3,0,0"
-                                     Style="{StaticResource SupportingText}" />
-                      </StackPanel>
-                  </CheckBox>
+              <StackPanel x:Name="ActivityDotsSection">
+                  <TextBlock Text="FEATURES" Style="{StaticResource SectionTitle}" />
+                  <ContentControl x:Name="ActivityDotsHost" Margin="0,14,0,0" />
               </StackPanel>
              </StackPanel>
             </ScrollViewer>

@@ -67,13 +67,6 @@
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Activity dots..." Click="ActivityDotsMenuItem_OnClick">
-                    <MenuItem.Icon>
-                        <Path Data="M 2.5,8 H 2.6 M 8,8 H 8.1 M 13.5,8 H 13.6"
-                              StrokeThickness="3"
-                              Style="{StaticResource TaskbarMenuIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
                 <MenuItem x:Name="ActivityPreviewMenuItem"
                           Header="Preview activity animation"
                           IsCheckable="True"

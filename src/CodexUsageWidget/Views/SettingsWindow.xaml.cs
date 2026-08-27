@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Views.Controls;
 
 namespace CodexUsageWidget.Views;
 
@@ -15,9 +16,14 @@ public partial class SettingsWindow : Window
         WidgetDensity widgetDensity,
         DisplayedLimitPreference displayedLimitPreference,
         bool fiveHourLimitAvailable,
-        bool startWithWindowsEnabled)
+        bool startWithWindowsEnabled,
+        IActivityHookSetupService activityHookSetupService,
+        ICodexLauncher codexLauncher)
     {
         InitializeComponent();
+        ActivityDotsHost.Content = new ActivityHookSetupControl(
+            activityHookSetupService,
+            codexLauncher);
         _suppressChangeEvents = true;
         SetSelectedTheme(themePreference);
         SetWidgetDensity(widgetDensity);

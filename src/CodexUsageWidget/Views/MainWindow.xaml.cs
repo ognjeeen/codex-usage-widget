@@ -20,7 +20,8 @@ public partial class MainWindow : Window
 
     private readonly UsageMonitor _usageMonitor;
     private readonly CodexActivityMonitor _activityMonitor;
-    private readonly ActivityHookSetupWindowController _activityHookSetupWindows;
+    private readonly IActivityHookSetupService _activityHookSetupService;
+    private readonly ICodexLauncher _codexLauncher;
     private readonly DisplayModeStore _displayModeStore;
     private readonly WidgetDensityStore _densityStore;
     private readonly DisplayedLimitPreferenceStore _displayedLimitPreferenceStore;
@@ -55,10 +56,8 @@ public partial class MainWindow : Window
     {
         _usageMonitor = usageMonitor;
         _activityMonitor = activityMonitor;
-        _activityHookSetupWindows = new ActivityHookSetupWindowController(
-            this,
-            activityHookSetupService,
-            codexLauncher);
+        _activityHookSetupService = activityHookSetupService;
+        _codexLauncher = codexLauncher;
         _displayModeStore = displayModeStore;
         _densityStore = densityStore;
         _displayedLimitPreferenceStore = displayedLimitPreferenceStore;
@@ -88,21 +87,11 @@ public partial class MainWindow : Window
         _usageMonitor.SnapshotUpdated += UsageMonitorOnSnapshotUpdated;
         _usageMonitor.RefreshFailed += UsageMonitorOnRefreshFailed;
         _activityMonitor.ActivityChanged += ActivityMonitorOnActivityChanged;
-        _activityHookSetupWindows.Closed += (_, _) =>
-        {
-            if (_displayMode == WidgetDisplayMode.TaskbarIndicator)
-            {
-                Hide();
-            }
-        };
-
         _taskbarLabel.OpenRequested += (_, _) =>
             Dispatcher.BeginInvoke(_widgetVisibility.Show, DispatcherPriority.ApplicationIdle);
         _taskbarLabel.ToggleRequested += (_, _) => _widgetVisibility.Toggle();
         _taskbarLabel.RefreshRequested += (_, _) =>
             Dispatcher.BeginInvoke(() => _ = _usageMonitor.RefreshAsync());
-        _taskbarLabel.ActivityDotsSetupRequested += (_, _) =>
-            Dispatcher.BeginInvoke(ShowActivityHookSetup);
         _taskbarLabel.SettingsRequested += (_, _) => Dispatcher.BeginInvoke(ShowSettings);
         _taskbarLabel.ActivityPreviewChanged += (_, _) =>
             Dispatcher.BeginInvoke(() =>
@@ -119,8 +108,6 @@ public partial class MainWindow : Window
         _trayIcon.OpenRequested += (_, _) => Dispatcher.BeginInvoke(_widgetVisibility.Show);
         _trayIcon.RefreshRequested += (_, _) =>
             Dispatcher.BeginInvoke(() => _ = _usageMonitor.RefreshAsync());
-        _trayIcon.ActivityDotsSetupRequested += (_, _) =>
-            Dispatcher.BeginInvoke(ShowActivityHookSetup);
         _trayIcon.SettingsRequested += (_, _) => Dispatcher.BeginInvoke(ShowSettings);
         _trayIcon.DesktopModeRequested += (_, _) =>
             Dispatcher.BeginInvoke(() => SetDisplayMode(WidgetDisplayMode.DesktopWidget));
@@ -317,16 +304,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private void ShowActivityHookSetup()
-    {
-        if (!IsVisible)
-        {
-            ShowWidget();
-        }
-
-        _activityHookSetupWindows.Show();
-    }
-
     private void ShowSettings()
     {
         var shouldReturnToTaskbar = _displayMode == WidgetDisplayMode.TaskbarIndicator;
@@ -347,7 +324,9 @@ public partial class MainWindow : Window
                 _density,
                 _displayedLimitPreference,
                 fiveHourLimitAvailable,
-                _startupRegistration.IsEnabled)
+                _startupRegistration.IsEnabled,
+                _activityHookSetupService,
+                _codexLauncher)
             {
                 Owner = this
             };
@@ -465,9 +444,6 @@ public partial class MainWindow : Window
 
     private void SettingsButton_OnClick(object sender, RoutedEventArgs e) => ShowSettings();
 
-    private void ActivityDotsButton_OnClick(object sender, RoutedEventArgs e) =>
-        ShowActivityHookSetup();
-
     private void HideButton_OnClick(object sender, RoutedEventArgs e) =>
         SetDisplayMode(WidgetDisplayMode.TaskbarIndicator);
 
@@ -476,7 +452,6 @@ public partial class MainWindow : Window
     private void MainWindowOnDeactivated(object? sender, EventArgs e)
     {
         if (_displayMode == WidgetDisplayMode.TaskbarIndicator &&
-            !_activityHookSetupWindows.IsOpen &&
             !_isSettingsOpen)
         {
             _widgetVisibility.HideOnDeactivated(_taskbarLabel.IsPointerOver);
