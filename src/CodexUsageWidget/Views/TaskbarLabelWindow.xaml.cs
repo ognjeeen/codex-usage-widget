@@ -141,10 +141,12 @@ public partial class TaskbarLabelWindow : Window
     public void SetSystemTheme(EffectiveTheme theme)
     {
         var light = theme == EffectiveTheme.Light;
-        Resources["TaskbarTextPrimaryBrush"] = new System.Windows.Media.SolidColorBrush(
+        var primaryBrush = new System.Windows.Media.SolidColorBrush(
             light
                 ? System.Windows.Media.Color.FromRgb(32, 33, 36)
                 : System.Windows.Media.Color.FromRgb(242, 242, 242));
+        Resources["TaskbarTextPrimaryBrush"] = primaryBrush;
+        ActivityDots.DotBrush = primaryBrush;
         Resources["TaskbarTextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(
             light
                 ? System.Windows.Media.Color.FromRgb(72, 73, 78)

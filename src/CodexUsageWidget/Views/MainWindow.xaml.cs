@@ -306,6 +306,16 @@ public partial class MainWindow : Window
 
     private void ShowSettings()
     {
+        if (_settingsWindow is { } existingWindow)
+        {
+            if (existingWindow.IsVisible)
+            {
+                existingWindow.Activate();
+            }
+
+            return;
+        }
+
         var shouldReturnToTaskbar = _displayMode == WidgetDisplayMode.TaskbarIndicator;
         if (!IsVisible)
         {

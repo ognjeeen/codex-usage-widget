@@ -1,7 +1,10 @@
 using System.Runtime.ExceptionServices;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Infrastructure.Windows;
 using CodexUsageWidget.Views;
 using CodexUsageWidget.Views.Controls;
 
@@ -19,8 +22,30 @@ public sealed class TaskbarSettingsMenuTests
             {
                 var application = new App();
                 application.InitializeComponent();
+                var themeTestDirectory = Path.Combine(
+                    Path.GetTempPath(),
+                    "CodexUsageWidget.Tests",
+                    Guid.NewGuid().ToString("N"));
+                var themeStore = new ThemePreferenceStore(
+                    Path.Combine(themeTestDirectory, "theme.txt"));
+                themeStore.Save(ThemePreference.Dark);
+                var accentStore = new AccentPaletteStore(
+                    Path.Combine(themeTestDirectory, "accent.txt"));
+                accentStore.Save(AccentPalette.Violet);
+                using var themeController = new AppThemeController(
+                    application,
+                    new ThemePreferenceMonitor(themeStore, new WindowsThemeMonitor()),
+                    accentStore);
+                try
+                {
                 var window = new TaskbarLabelWindow();
                 var menu = Assert.IsType<ContextMenu>(window.FindName("TaskbarMenu"));
+
+                window.SetSystemTheme(EffectiveTheme.Light);
+                var activityDots = Assert.IsType<ActivityDotsIndicator>(
+                    window.FindName("ActivityDots"));
+                var activityDotBrush = Assert.IsType<SolidColorBrush>(activityDots.DotBrush);
+                Assert.Equal(Color.FromRgb(32, 33, 36), activityDotBrush.Color);
 
                 Assert.Contains(
                     menu.Items.OfType<MenuItem>(),
@@ -161,8 +186,68 @@ public sealed class TaskbarSettingsMenuTests
                 Assert.Equal(WidgetDensity.Detailed, changedDensity);
                 usageSettings.Close();
 
+                var constrainedSettings = new SettingsWindow(
+                    themePreference: ThemePreference.System,
+                    widgetDensity: WidgetDensity.Compact,
+                    displayedLimitPreference: DisplayedLimitPreference.FiveHour,
+                    fiveHourLimitAvailable: true,
+                    startWithWindowsEnabled: false,
+                    activityHookSetupService: new StubActivityHookSetupService(),
+                    codexLauncher: new StubCodexLauncher(),
+                    workAreaProvider: new StubWindowWorkAreaProvider(600d));
+                constrainedSettings.Show();
+                try
+                {
+                    Assert.Equal(600d, constrainedSettings.Height);
+                }
+                finally
+                {
+                    constrainedSettings.Close();
+                }
+
+                    var accentButton = new AccentButton
+                    {
+                        Content = "Accent action"
+                    };
+                    accentButton.Style = Assert.IsType<System.Windows.Style>(
+                        application.FindResource("PrimaryDialogButton"));
+                    var accentHost = new System.Windows.Window
+                    {
+                        Width = 200d,
+                        Height = 100d,
+                        Content = accentButton
+                    };
+                    accentHost.Show();
+                    try
+                    {
+                        accentButton.ApplyTemplate();
+                        PumpDispatcher(TimeSpan.FromMilliseconds(200d));
+                        Assert.Equal(
+                            Color.FromRgb(124, 58, 237),
+                            GetButtonSurfaceColor(accentButton));
+
+                        themeController.SetAccentPalette(AccentPalette.Emerald);
+                        PumpDispatcher(TimeSpan.FromMilliseconds(200d));
+
+                        Assert.Equal(
+                            Color.FromRgb(29, 145, 72),
+                            GetButtonSurfaceColor(accentButton));
+                    }
+                    finally
+                    {
+                        accentHost.Close();
+                    }
+
                 window.Close();
                 application.Shutdown();
+                }
+                finally
+                {
+                    if (Directory.Exists(themeTestDirectory))
+                    {
+                        Directory.Delete(themeTestDirectory, recursive: true);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -178,6 +263,28 @@ public sealed class TaskbarSettingsMenuTests
         {
             ExceptionDispatchInfo.Capture(failure).Throw();
         }
+    }
+
+    private static Color GetButtonSurfaceColor(Button button)
+    {
+        var surface = Assert.IsType<Border>(button.Template.FindName("ButtonSurface", button));
+        return Assert.IsType<SolidColorBrush>(surface.Background).Color;
+    }
+
+    private static void PumpDispatcher(TimeSpan duration)
+    {
+        var frame = new DispatcherFrame();
+        var timer = new DispatcherTimer(DispatcherPriority.Background)
+        {
+            Interval = duration
+        };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            frame.Continue = false;
+        };
+        timer.Start();
+        Dispatcher.PushFrame(frame);
     }
 
     private sealed class StubActivityHookSetupService : IActivityHookSetupService
@@ -199,5 +306,11 @@ public sealed class TaskbarSettingsMenuTests
         public void OpenInteractive()
         {
         }
+    }
+
+    private sealed class StubWindowWorkAreaProvider(double availableHeight) : IWindowWorkAreaProvider
+    {
+        public double GetAvailableHeightInDips(System.Windows.Window referenceWindow) =>
+            availableHeight;
     }
 }

@@ -9,13 +9,13 @@ public sealed class ThemePreferenceResolverTests
     [InlineData(ThemePreference.System, false, EffectiveTheme.Dark)]
     [InlineData(ThemePreference.Light, false, EffectiveTheme.Light)]
     [InlineData(ThemePreference.Dark, true, EffectiveTheme.Dark)]
-    public void ResolveUsesPreferenceOrSystemTheme(
+    public void ResolveUsesPreferenceOrAppTheme(
         ThemePreference preference,
-        bool systemUsesLightTheme,
+        bool appsUseLightTheme,
         EffectiveTheme expected)
     {
         Assert.Equal(
             expected,
-            ThemePreferenceResolver.Resolve(preference, systemUsesLightTheme));
+            ThemePreferenceResolver.Resolve(preference, appsUseLightTheme));
     }
 }

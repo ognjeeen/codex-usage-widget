@@ -1,6 +1,7 @@
 <Window x:Class="CodexUsageWidget.Views.ActivityHookChangeReviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
         Title="Review Codex activity hooks"
         Width="620"
         Height="520"
@@ -67,10 +68,10 @@
                         Margin="0,0,8,0"
                         IsCancel="True"
                         Style="{StaticResource DialogButton}" />
-                <Button x:Name="ApplyButton"
-                        IsDefault="True"
-                        Click="ApplyButton_OnClick"
-                        Style="{StaticResource PrimaryDialogButton}" />
+                <controls:AccentButton x:Name="ApplyButton"
+                                       IsDefault="True"
+                                       Click="ApplyButton_OnClick"
+                                       Style="{StaticResource PrimaryDialogButton}" />
             </StackPanel>
         </Grid>
     </Border>

@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Views.Controls;
 using MediaColor = System.Windows.Media.Color;
 
 namespace CodexUsageWidget.Views;
@@ -205,10 +206,31 @@ public sealed class AppThemeController : IDisposable
             resources["AccentPrimaryHoverBorderColor"] = colors.HoverBorder;
             resources["AccentPrimaryPressedColor"] = colors.Pressed;
             resources["AccentDataColor"] = colors.Data;
-            resources["AccentPrimaryBrush"] = new SolidColorBrush(colors.Primary);
-            resources["AccentPrimaryBorderBrush"] = new SolidColorBrush(colors.Border);
-            resources["AccentDataBrush"] = new SolidColorBrush(colors.Data);
-            resources["UsageNormalBrush"] = new SolidColorBrush(colors.Data);
+            SetBrushColor(resources, "AccentPrimaryBrush", colors.Primary);
+            SetBrushColor(resources, "AccentPrimaryBorderBrush", colors.Border);
+            SetBrushColor(resources, "AccentDataBrush", colors.Data);
+            SetBrushColor(resources, "UsageNormalBrush", colors.Data);
+
+            AccentButton.ApplyPalette(
+                colors.Primary,
+                colors.Border,
+                colors.Hover,
+                colors.HoverBorder,
+                colors.Pressed);
+        }
+
+        private static void SetBrushColor(
+            ResourceDictionary resources,
+            string key,
+            MediaColor color)
+        {
+            if (resources[key] is SolidColorBrush brush && !brush.IsFrozen)
+            {
+                brush.Color = color;
+                return;
+            }
+
+            resources[key] = new SolidColorBrush(color);
         }
 
         private static AccentColors Resolve(EffectiveTheme theme, AccentPalette palette) =>

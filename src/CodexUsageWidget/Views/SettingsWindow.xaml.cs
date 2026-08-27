@@ -3,12 +3,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Infrastructure.Windows;
 using CodexUsageWidget.Views.Controls;
 
 namespace CodexUsageWidget.Views;
 
 public partial class SettingsWindow : Window
 {
+    private readonly IWindowWorkAreaProvider _workAreaProvider;
     private bool _suppressChangeEvents;
 
     public SettingsWindow(
@@ -19,8 +21,10 @@ public partial class SettingsWindow : Window
         bool startWithWindowsEnabled,
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
-        AccentPalette accentPalette = AccentPalette.Blue)
+        AccentPalette accentPalette = AccentPalette.Blue,
+        IWindowWorkAreaProvider? workAreaProvider = null)
     {
+        _workAreaProvider = workAreaProvider ?? new WindowWorkAreaProvider();
         InitializeComponent();
         ActivityDotsHost.Content = new ActivityHookSetupControl(
             activityHookSetupService,
@@ -76,6 +80,20 @@ public partial class SettingsWindow : Window
             : WidgetDensity.Compact;
 
     public bool StartWithWindowsEnabled => StartWithWindowsOption.IsChecked == true;
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        var availableHeight = _workAreaProvider.GetAvailableHeightInDips(Owner ?? this);
+        if (!double.IsFinite(availableHeight) || availableHeight <= 0d)
+        {
+            return;
+        }
+
+        MaxHeight = Math.Min(MaxHeight, availableHeight);
+        Height = Math.Min(Height, MaxHeight);
+    }
 
     public void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
     {

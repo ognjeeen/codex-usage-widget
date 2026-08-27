@@ -27,7 +27,7 @@ public sealed class ThemePreferenceMonitor : IDisposable
 
     public EffectiveTheme EffectiveTheme { get; private set; }
 
-    public EffectiveTheme SystemTheme => _windowsThemeMonitor.UsesLightTheme
+    public EffectiveTheme SystemTheme => _windowsThemeMonitor.UsesLightSystemTheme
         ? EffectiveTheme.Light
         : EffectiveTheme.Dark;
 
@@ -49,7 +49,7 @@ public sealed class ThemePreferenceMonitor : IDisposable
 
     private EffectiveTheme ResolveEffectiveTheme() => ThemePreferenceResolver.Resolve(
         Preference,
-        _windowsThemeMonitor.UsesLightTheme);
+        _windowsThemeMonitor.UsesLightAppTheme);
 
     private void SetEffectiveTheme(EffectiveTheme theme)
     {

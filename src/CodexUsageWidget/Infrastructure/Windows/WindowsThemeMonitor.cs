@@ -7,23 +7,26 @@ public sealed class WindowsThemeMonitor : IDisposable
     private const string PersonalizeKey =
         @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
     private const string AppsUseLightThemeValue = "AppsUseLightTheme";
-    private readonly string _personalizeKey = PersonalizeKey;
+    private const string SystemUsesLightThemeValue = "SystemUsesLightTheme";
+    private readonly string _personalizeKey;
     private bool _disposed;
 
-    public WindowsThemeMonitor()
+    public WindowsThemeMonitor(string? personalizeKey = null)
     {
+        _personalizeKey = personalizeKey ?? PersonalizeKey;
         SystemEvents.UserPreferenceChanged += SystemEventsOnUserPreferenceChanged;
     }
 
     public event EventHandler? ThemeChanged;
 
-    public bool UsesLightTheme
+    public bool UsesLightAppTheme => ReadLightThemeValue(AppsUseLightThemeValue);
+
+    public bool UsesLightSystemTheme => ReadLightThemeValue(SystemUsesLightThemeValue);
+
+    private bool ReadLightThemeValue(string valueName)
     {
-        get
-        {
-            using var key = Registry.CurrentUser.OpenSubKey(_personalizeKey);
-            return key?.GetValue(AppsUseLightThemeValue) is not int value || value != 0;
-        }
+        using var key = Registry.CurrentUser.OpenSubKey(_personalizeKey);
+        return key?.GetValue(valueName) is not int value || value != 0;
     }
 
     private void SystemEventsOnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) =>
