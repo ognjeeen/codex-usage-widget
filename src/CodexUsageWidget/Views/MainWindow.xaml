@@ -19,8 +19,8 @@
     <Border x:Name="WidgetSurface"
             Margin="12"
             CornerRadius="16"
-            Background="#FA1F1F1F"
-            BorderBrush="#343434"
+            Background="{DynamicResource WidgetSurfaceBrush}"
+            BorderBrush="{DynamicResource WidgetBorderBrush}"
             BorderThickness="1"
             MouseLeftButtonDown="Widget_OnMouseLeftButtonDown">
         <Border.Effect>
@@ -49,13 +49,13 @@
                                    FontFamily="{StaticResource UiFont}"
                                    FontSize="13.5"
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextPrimary}" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                         <controls:ActivityDotsIndicator x:Name="WidgetActivityDots"
                                                         Margin="18,0,0,0"
                                                         VerticalAlignment="Center"
                                                         ToolTip="Codex task is running"
                                                         AutomationProperties.Name="Codex task is running"
-                                                        DotBrush="{StaticResource AccentDataBrush}" />
+                                                        DotBrush="{DynamicResource AccentDataBrush}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,1,0,0">
                         <Ellipse Width="5"
@@ -86,6 +86,7 @@
                     </Button>
                     <Button x:Name="DensityButton"
                             ToolTip="Show details"
+                            AutomationProperties.Name="Toggle widget layout"
                             Style="{StaticResource IconButton}"
                             Click="DensityButton_OnClick">
                         <Viewbox Width="16" Height="16">
@@ -141,14 +142,14 @@
 
             <Border Grid.Row="2"
                     Margin="16,0,16,0"
-                    BorderBrush="#303030"
+                    BorderBrush="{DynamicResource DividerBrush}"
                     BorderThickness="0,1,0,0">
                 <Grid>
                     <TextBlock Text="{Binding UpdatedText}"
                                VerticalAlignment="Center"
                                Style="{StaticResource SupportingText}"
                                FontSize="10.5"
-                               Foreground="{StaticResource TextTertiary}" />
+                               Foreground="{DynamicResource TextTertiary}" />
                     <StackPanel HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Orientation="Horizontal">

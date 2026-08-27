@@ -4,8 +4,8 @@
         <Setter Property="MinWidth" Value="238" />
         <Setter Property="Padding" Value="4" />
         <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
-        <Setter Property="Background" Value="#242424" />
-        <Setter Property="BorderBrush" Value="#454545" />
+        <Setter Property="Background" Value="{DynamicResource MenuBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource MenuBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
         <Setter Property="FontSize" Value="12.5" />
@@ -68,7 +68,7 @@
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
-                                        BorderBrush="#565656"
+                                        BorderBrush="{DynamicResource MenuCheckBorderBrush}"
                                         BorderThickness="1"
                                         CornerRadius="4"
                                         Opacity="0">
@@ -76,7 +76,7 @@
                                           Width="10"
                                           Height="8"
                                           Data="M 1,4 L 4,7 L 9,1"
-                                          Stroke="#FFFFFF"
+                                          Stroke="{DynamicResource MenuCheckForegroundBrush}"
                                           StrokeEndLineCap="Round"
                                           StrokeLineJoin="Round"
                                           StrokeStartLineCap="Round"
@@ -110,8 +110,8 @@
                                PopupAnimation="Fade">
                             <Border MinWidth="190"
                                     Padding="4"
-                                    Background="#242424"
-                                    BorderBrush="#454545"
+                                    Background="{DynamicResource MenuBackgroundBrush}"
+                                    BorderBrush="{DynamicResource MenuBorderBrush}"
                                     BorderThickness="1"
                                     CornerRadius="10">
                                 <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Cycle" />
@@ -120,7 +120,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="ItemSurface" Property="Background" Value="#363636" />
+                            <Setter TargetName="ItemSurface" Property="Background" Value="{DynamicResource MenuHoverBrush}" />
                             <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
                         </Trigger>
                         <Trigger Property="IsCheckable" Value="True">
@@ -153,7 +153,7 @@
                             Margin="10,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Center"
-                            Background="#3B3B3B" />
+                            Background="{DynamicResource MenuSeparatorBrush}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

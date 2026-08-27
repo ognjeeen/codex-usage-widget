@@ -19,7 +19,7 @@
                        FontFamily="{StaticResource UiFont}"
                        FontSize="12"
                        FontWeight="Medium"
-                       Foreground="{StaticResource TextPrimary}" />
+                       Foreground="{DynamicResource TextPrimary}" />
             <TextBlock Grid.Column="1"
                        Text="{Binding RemainingText}"
                        Style="{StaticResource SupportingText}"
@@ -39,12 +39,12 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding ResetText}"
                        Style="{StaticResource SupportingText}"
-                       Foreground="{StaticResource TextTertiary}" />
+                       Foreground="{DynamicResource TextTertiary}" />
             <TextBlock Grid.Column="1"
                        Text="{Binding UsedText}"
                        Style="{StaticResource SupportingText}"
                        Margin="8,0,0,0"
-                       Foreground="{StaticResource TextTertiary}" />
+                       Foreground="{DynamicResource TextTertiary}" />
         </Grid>
     </Grid>
 </UserControl>

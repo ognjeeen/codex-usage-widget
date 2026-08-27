@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
-using CodexUsageWidget.Application;
+using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
 
 namespace CodexUsageWidget.Views;
@@ -65,13 +65,11 @@ public partial class TaskbarLabelWindow : Window
 
     public event EventHandler? ActivityDotsSetupRequested;
 
+    public event EventHandler? SettingsRequested;
+
     public event EventHandler? ActivityPreviewChanged;
 
     public event EventHandler? DesktopModeRequested;
-
-    public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
-
-    public event EventHandler? StartupToggleRequested;
 
     public event EventHandler? UpdateCheckRequested;
 
@@ -142,19 +140,21 @@ public partial class TaskbarLabelWindow : Window
         ActivityDots.IsActive = isActive;
     }
 
-    public void SetStartupEnabled(bool enabled) => StartWithWindowsMenuItem.IsChecked = enabled;
-
-    public void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
+    public void SetSystemTheme(EffectiveTheme theme)
     {
-        FiveHourLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.FiveHour;
-        WeeklyLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.Weekly;
-        MostConstrainedLimitMenuItem.IsChecked = preference == DisplayedLimitPreference.MostConstrained;
-    }
-
-    public void SetFiveHourLimitAvailability(bool available)
-    {
-        FiveHourLimitMenuItem.IsEnabled = available;
-        ToolTipService.SetIsEnabled(FiveHourLimitMenuItem, !available);
+        var light = theme == EffectiveTheme.Light;
+        Resources["TaskbarTextPrimaryBrush"] = new System.Windows.Media.SolidColorBrush(
+            light
+                ? System.Windows.Media.Color.FromRgb(32, 33, 36)
+                : System.Windows.Media.Color.FromRgb(242, 242, 242));
+        Resources["TaskbarTextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(
+            light
+                ? System.Windows.Media.Color.FromRgb(72, 73, 78)
+                : System.Windows.Media.Color.FromRgb(212, 212, 212));
+        Resources["TaskbarLabelHoverBrush"] = new System.Windows.Media.SolidColorBrush(
+            light
+                ? System.Windows.Media.Color.FromArgb(18, 0, 0, 0)
+                : System.Windows.Media.Color.FromArgb(24, 255, 255, 255));
     }
 
     public void UpdateUsage(
@@ -240,6 +240,9 @@ public partial class TaskbarLabelWindow : Window
     private void ActivityDotsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         ActivityDotsSetupRequested?.Invoke(this, EventArgs.Empty);
 
+    private void SettingsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
+        SettingsRequested?.Invoke(this, EventArgs.Empty);
+
     private void ActivityPreviewMenuItem_OnClick(object sender, RoutedEventArgs e)
         => ActivityPreviewChanged?.Invoke(this, EventArgs.Empty);
 
@@ -275,18 +278,6 @@ public partial class TaskbarLabelWindow : Window
 
     private void DesktopModeMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         DesktopModeRequested?.Invoke(this, EventArgs.Empty);
-
-    private void FiveHourLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.FiveHour);
-
-    private void WeeklyLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.Weekly);
-
-    private void MostConstrainedLimitMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.MostConstrained);
-
-    private void StartWithWindowsMenuItem_OnClick(object sender, RoutedEventArgs e) =>
-        StartupToggleRequested?.Invoke(this, EventArgs.Empty);
 
     private void CheckForUpdatesMenuItem_OnClick(object sender, RoutedEventArgs e) =>
         UpdateCheckRequested?.Invoke(this, EventArgs.Empty);

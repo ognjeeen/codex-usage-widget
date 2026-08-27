@@ -16,5 +16,7 @@ public static class AppPaths
         LocalDataDirectory,
         "displayed-limit.txt");
 
+    public static string ThemePreferenceFile => Path.Combine(LocalDataDirectory, "theme.txt");
+
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");
 }

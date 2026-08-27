@@ -22,16 +22,16 @@
                                    FontFamily="{StaticResource UiFont}"
                                    FontSize="16"
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextPrimary}" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </Grid>
                     <Border Visibility="{Binding HasWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="0,0,0,8"
                             Padding="9,6"
-                            Background="#24DDA56D"
+                            Background="{DynamicResource NoticeBackgroundBrush}"
                             CornerRadius="6">
                         <TextBlock Text="{Binding WarningText}"
                                    Style="{StaticResource SupportingText}"
-                                   Foreground="#E6B47D" />
+                                   Foreground="{DynamicResource NoticeForegroundBrush}" />
                     </Border>
                     <ItemsControl ItemsSource="{Binding GeneralLimits}">
                         <ItemsControl.ItemTemplate>
@@ -66,7 +66,7 @@
                                                FontFamily="{StaticResource UiFont}"
                                                FontSize="11.5"
                                                FontWeight="Medium"
-                                               Foreground="{StaticResource TextPrimary}" />
+                                               Foreground="{DynamicResource TextPrimary}" />
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -87,7 +87,7 @@
                                    Text="Not quota consumption"
                                    Style="{StaticResource SupportingText}"
                                    FontSize="10.5"
-                                   Foreground="{StaticResource TextTertiary}" />
+                                   Foreground="{DynamicResource TextTertiary}" />
                     </Grid>
 
                     <ItemsControl Height="48"
@@ -117,16 +117,16 @@
                                             <StackPanel>
                                                 <TextBlock Text="{Binding DateText}"
                                                            FontSize="10.5"
-                                                           Foreground="{StaticResource TextSecondary}" />
+                                                           Foreground="{DynamicResource TextSecondary}" />
                                                 <TextBlock Margin="0,3,0,0"
                                                            Text="{Binding TokensText}"
                                                            FontSize="13"
                                                            FontWeight="SemiBold"
-                                                           Foreground="{StaticResource AccentDataBrush}" />
+                                                           Foreground="{DynamicResource AccentDataBrush}" />
                                                 <TextBlock Margin="0,2,0,0"
                                                            Text="{Binding PeakComparisonText}"
                                                            FontSize="10"
-                                                           Foreground="{StaticResource TextTertiary}" />
+                                                           Foreground="{DynamicResource TextTertiary}" />
                                             </StackPanel>
                                         </ToolTip>
                                     </Grid.ToolTip>
@@ -134,7 +134,7 @@
                                             Height="{Binding Height}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Bottom"
-                                            Background="{StaticResource AccentDataBrush}"
+                                            Background="{DynamicResource AccentDataBrush}"
                                             CornerRadius="2,2,0,0" />
                                 </Grid>
                             </DataTemplate>
@@ -153,12 +153,12 @@
                                     <TextBlock Text="{Binding Label}"
                                                Style="{StaticResource SupportingText}"
                                                FontSize="10.5"
-                                               Foreground="{StaticResource TextTertiary}" />
+                                               Foreground="{DynamicResource TextTertiary}" />
                                     <TextBlock Text="{Binding Value}"
                                                FontFamily="{StaticResource UiFont}"
                                                FontSize="12"
                                                FontWeight="Medium"
-                                               Foreground="{StaticResource TextPrimary}" />
+                                               Foreground="{DynamicResource TextPrimary}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

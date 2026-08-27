@@ -26,15 +26,15 @@
                 <StackPanel Orientation="Horizontal"
                             MouseLeftButtonDown="Header_OnMouseLeftButtonDown">
                     <Canvas Width="42" Height="24" Margin="0,1,14,0">
-                        <Ellipse Canvas.Left="1" Canvas.Top="9" Width="6" Height="6" Fill="#AFAFAF" />
-                        <Ellipse Canvas.Left="18" Canvas.Top="9" Width="6" Height="6" Fill="#D0D0D0" />
-                        <Ellipse Canvas.Left="35" Canvas.Top="9" Width="6" Height="6" Fill="#F2F2F2" />
+                        <Ellipse Canvas.Left="1" Canvas.Top="9" Width="6" Height="6" Fill="{DynamicResource TextTertiary}" />
+                        <Ellipse Canvas.Left="18" Canvas.Top="9" Width="6" Height="6" Fill="{DynamicResource TextSecondary}" />
+                        <Ellipse Canvas.Left="35" Canvas.Top="9" Width="6" Height="6" Fill="{DynamicResource TextPrimary}" />
                     </Canvas>
                     <StackPanel>
                         <TextBlock Text="Activity dots"
                                    FontSize="19"
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextPrimary}" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                         <TextBlock Text="Local Codex lifecycle integration"
                                    Margin="0,1,0,0"
                                    Style="{StaticResource SupportingText}" />
@@ -71,7 +71,7 @@
                                  Fill="{Binding StatusBrush}" />
                         <TextBlock Text="{Binding StatusLabel}"
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextPrimary}" />
+                                   Foreground="{DynamicResource TextPrimary}" />
                     </StackPanel>
                     <TextBlock Text="{Binding Description}"
                                Margin="0,7,0,0"
@@ -83,15 +83,15 @@
 
             <Border Grid.Row="2"
                     Padding="11,9"
-                    Background="#252525"
-                    BorderBrush="#303030"
+                    Background="{DynamicResource SubtleSurfaceBrush}"
+                    BorderBrush="{DynamicResource DividerBrush}"
                     BorderThickness="1"
                     CornerRadius="8">
                 <TextBlock Text="Privacy: only activity type, session ID, and turn ID travel through a local user-only pipe. Prompts and responses never leave Codex."
                            TextWrapping="Wrap"
                            LineHeight="16"
                            FontSize="10.5"
-                           Foreground="{StaticResource TextTertiary}" />
+                           Foreground="{DynamicResource TextTertiary}" />
             </Border>
 
             <TextBlock x:Name="InstructionText"

@@ -19,6 +19,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/TaskbarMenuTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="TaskbarTextPrimaryBrush" Color="#F2F2F2" />
+            <SolidColorBrush x:Key="TaskbarTextSecondaryBrush" Color="#D4D4D4" />
+            <SolidColorBrush x:Key="TaskbarLabelHoverBrush" Color="#18FFFFFF" />
         </ResourceDictionary>
     </Window.Resources>
     <Border x:Name="LabelSurface"
@@ -35,7 +38,7 @@
                 <Setter Property="Background" Value="#01000000" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#18FFFFFF" />
+                        <Setter Property="Background" Value="{DynamicResource TaskbarLabelHoverBrush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -81,55 +84,16 @@
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Displayed limit">
+                <MenuItem Header="Settings..." Click="SettingsMenuItem_OnClick">
                     <MenuItem.Icon>
-                        <Path Data="M 2.5,12.5 A 6,6 0 1 1 13.5,12.5 M 8,8 L 11.5,5"
+                        <Path Data="M 8,5.2 A 2.8,2.8 0 1 0 8,10.8 A 2.8,2.8 0 1 0 8,5.2 M 8,2 V 3.3 M 8,12.7 V 14 M 2,8 H 3.3 M 12.7,8 H 14 M 3.8,3.8 L 4.8,4.8 M 11.2,11.2 L 12.2,12.2 M 12.2,3.8 L 11.2,4.8 M 4.8,11.2 L 3.8,12.2"
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
-                    <MenuItem x:Name="FiveHourLimitMenuItem"
-                              Header="5h limit"
-                              IsEnabled="False"
-                              IsCheckable="True"
-                              ToolTipService.BetweenShowDelay="0"
-                              ToolTipService.HorizontalOffset="10"
-                              ToolTipService.InitialShowDelay="150"
-                              ToolTipService.Placement="MousePoint"
-                              ToolTipService.ShowDuration="15000"
-                              ToolTipService.ShowOnDisabled="True"
-                              ToolTipService.VerticalOffset="10"
-                              Click="FiveHourLimitMenuItem_OnClick">
-                        <MenuItem.ToolTip>
-                            <ToolTip Style="{StaticResource TokenActivityToolTip}">
-                                <TextBlock MaxWidth="240"
-                                           Text="Codex did not return a global 5h limit for this account."
-                                           TextWrapping="Wrap"
-                                           FontSize="11.5"
-                                           Foreground="{StaticResource TextSecondary}" />
-                            </ToolTip>
-                        </MenuItem.ToolTip>
-                    </MenuItem>
-                    <MenuItem x:Name="WeeklyLimitMenuItem"
-                              Header="Weekly limit"
-                              IsCheckable="True"
-                              Click="WeeklyLimitMenuItem_OnClick" />
-                    <MenuItem x:Name="MostConstrainedLimitMenuItem"
-                              Header="Most constrained"
-                              IsCheckable="True"
-                              Click="MostConstrainedLimitMenuItem_OnClick" />
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Use desktop widget" Click="DesktopModeMenuItem_OnClick">
                     <MenuItem.Icon>
                         <Path Data="M 2,3.5 H 14 V 11 H 2 Z M 6,13.5 H 10 M 8,11 V 13.5"
-                              Style="{StaticResource TaskbarMenuIcon}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem x:Name="StartWithWindowsMenuItem"
-                          Header="Start with Windows"
-                          IsCheckable="True"
-                          Click="StartWithWindowsMenuItem_OnClick">
-                    <MenuItem.Icon>
-                        <Path Data="M 8,2 V 8 M 4.5,4.5 A 5,5 0 1 0 11.5,4.5"
                               Style="{StaticResource TaskbarMenuIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
@@ -161,13 +125,13 @@
             </InlineUIContainer><Run
                 Text="Codex"
                 FontWeight="Medium"
-                Foreground="#F2F2F2" /><Run
+                Foreground="{DynamicResource TaskbarTextPrimaryBrush}" /><Run
                 Text=" " /><Run
                 x:Name="UsageText"
                 Text="--%"
                 FontWeight="SemiBold"
                 Typography.NumeralAlignment="Tabular"
-                Foreground="#D4D4D4" />
+                Foreground="{DynamicResource TaskbarTextSecondaryBrush}" />
         </TextBlock>
     </Border>
 </Window>

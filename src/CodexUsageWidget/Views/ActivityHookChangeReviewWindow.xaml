@@ -25,7 +25,7 @@
                            VerticalAlignment="Center"
                            FontSize="19"
                            FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimary}" />
+                           Foreground="{DynamicResource TextPrimary}" />
                 <Button Grid.Column="1"
                         Width="28"
                         Height="28"
@@ -50,8 +50,8 @@
                        TextWrapping="Wrap"
                        Style="{StaticResource SupportingText}" />
             <Border Grid.Row="2"
-                    Background="#171717"
-                    BorderBrush="#343434"
+                    Background="{DynamicResource CodeSurfaceBrush}"
+                    BorderBrush="{DynamicResource WidgetBorderBrush}"
                     BorderThickness="1"
                     CornerRadius="8">
                 <TextBox x:Name="ProposedContentText"

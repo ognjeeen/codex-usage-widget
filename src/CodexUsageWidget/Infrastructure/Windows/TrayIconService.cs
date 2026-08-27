@@ -1,4 +1,3 @@
-using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using Forms = System.Windows.Forms;
 
@@ -6,16 +5,10 @@ namespace CodexUsageWidget.Infrastructure.Windows;
 
 public sealed class TrayIconService : IDisposable
 {
-    private const string FiveHourUnavailableText =
-        "Codex did not return a global 5h limit for this account.";
-
     private readonly Forms.NotifyIcon _notifyIcon;
+    private readonly Forms.ContextMenuStrip _menu;
     private readonly Forms.ToolStripMenuItem _desktopWidgetModeItem;
     private readonly Forms.ToolStripMenuItem _taskbarIndicatorModeItem;
-    private readonly Forms.ToolStripMenuItem _fiveHourLimitItem;
-    private readonly Forms.ToolStripMenuItem _weeklyLimitItem;
-    private readonly Forms.ToolStripMenuItem _mostConstrainedLimitItem;
-    private readonly Forms.ToolStripMenuItem _startWithWindowsItem;
     private System.Drawing.Icon _currentIcon;
     private bool _disposed;
 
@@ -31,6 +24,10 @@ public sealed class TrayIconService : IDisposable
             "Activity dots...",
             null,
             (_, _) => ActivityDotsSetupRequested?.Invoke(this, EventArgs.Empty));
+        menu.Items.Add(
+            "Settings...",
+            null,
+            (_, _) => SettingsRequested?.Invoke(this, EventArgs.Empty));
         menu.Items.Add(new Forms.ToolStripSeparator());
 
         var displayModeMenu = new Forms.ToolStripMenuItem("Display mode");
@@ -46,31 +43,6 @@ public sealed class TrayIconService : IDisposable
         displayModeMenu.DropDownItems.Add(_taskbarIndicatorModeItem);
         menu.Items.Add(displayModeMenu);
 
-        var displayedLimitMenu = new Forms.ToolStripMenuItem("Displayed limit");
-        _fiveHourLimitItem = new Forms.ToolStripMenuItem("5h limit")
-        {
-            Enabled = false,
-            ToolTipText = FiveHourUnavailableText
-        };
-        _fiveHourLimitItem.Click += (_, _) =>
-            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.FiveHour);
-        _weeklyLimitItem = new Forms.ToolStripMenuItem("Weekly limit");
-        _weeklyLimitItem.Click += (_, _) =>
-            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.Weekly);
-        _mostConstrainedLimitItem = new Forms.ToolStripMenuItem("Most constrained");
-        _mostConstrainedLimitItem.Click += (_, _) =>
-            DisplayedLimitPreferenceChanged?.Invoke(DisplayedLimitPreference.MostConstrained);
-        displayedLimitMenu.DropDownItems.Add(_fiveHourLimitItem);
-        displayedLimitMenu.DropDownItems.Add(_weeklyLimitItem);
-        displayedLimitMenu.DropDownItems.Add(_mostConstrainedLimitItem);
-        menu.Items.Add(displayedLimitMenu);
-        _startWithWindowsItem = new Forms.ToolStripMenuItem("Start with Windows")
-        {
-            CheckOnClick = true
-        };
-        _startWithWindowsItem.Click += (_, _) =>
-            StartupToggleRequested?.Invoke(this, EventArgs.Empty);
-        menu.Items.Add(_startWithWindowsItem);
         menu.Items.Add(
             "Check for updates...",
             null,
@@ -79,6 +51,7 @@ public sealed class TrayIconService : IDisposable
         menu.Items.Add("Exit", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
 
         _currentIcon = UsageIconFactory.Create(null);
+        _menu = menu;
         _notifyIcon = new Forms.NotifyIcon
         {
             Icon = _currentIcon,
@@ -87,6 +60,7 @@ public sealed class TrayIconService : IDisposable
             ContextMenuStrip = menu
         };
         _notifyIcon.MouseClick += NotifyIconOnMouseClick;
+        SetTheme(EffectiveTheme.Dark);
     }
 
     public event EventHandler? OpenRequested;
@@ -95,13 +69,11 @@ public sealed class TrayIconService : IDisposable
 
     public event EventHandler? ActivityDotsSetupRequested;
 
+    public event EventHandler? SettingsRequested;
+
     public event EventHandler? DesktopModeRequested;
 
     public event EventHandler? TaskbarModeRequested;
-
-    public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
-
-    public event EventHandler? StartupToggleRequested;
 
     public event EventHandler? UpdateCheckRequested;
 
@@ -113,19 +85,37 @@ public sealed class TrayIconService : IDisposable
         _taskbarIndicatorModeItem.Checked = mode == WidgetDisplayMode.TaskbarIndicator;
     }
 
-    public void SetStartupEnabled(bool enabled) => _startWithWindowsItem.Checked = enabled;
-
-    public void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
+    public void SetTheme(EffectiveTheme theme)
     {
-        _fiveHourLimitItem.Checked = preference == DisplayedLimitPreference.FiveHour;
-        _weeklyLimitItem.Checked = preference == DisplayedLimitPreference.Weekly;
-        _mostConstrainedLimitItem.Checked = preference == DisplayedLimitPreference.MostConstrained;
+        var light = theme == EffectiveTheme.Light;
+        var background = light
+            ? System.Drawing.Color.FromArgb(250, 250, 251)
+            : System.Drawing.Color.FromArgb(36, 36, 36);
+        var foreground = light
+            ? System.Drawing.Color.FromArgb(35, 35, 37)
+            : System.Drawing.Color.FromArgb(232, 232, 232);
+
+        _menu.BackColor = background;
+        _menu.ForeColor = foreground;
+        ApplyMenuColors(_menu.Items, background, foreground);
+        _menu.Renderer = new Forms.ToolStripProfessionalRenderer(
+            new TrayMenuColorTable(light));
     }
 
-    public void SetFiveHourLimitAvailability(bool available)
+    private static void ApplyMenuColors(
+        Forms.ToolStripItemCollection items,
+        System.Drawing.Color background,
+        System.Drawing.Color foreground)
     {
-        _fiveHourLimitItem.Enabled = available;
-        _fiveHourLimitItem.ToolTipText = available ? string.Empty : FiveHourUnavailableText;
+        foreach (Forms.ToolStripItem item in items)
+        {
+            item.BackColor = background;
+            item.ForeColor = foreground;
+            if (item is Forms.ToolStripMenuItem menuItem)
+            {
+                ApplyMenuColors(menuItem.DropDownItems, background, foreground);
+            }
+        }
     }
 
     public void UpdateUsage(double? remainingPercent)
@@ -162,5 +152,46 @@ public sealed class TrayIconService : IDisposable
         _notifyIcon.ContextMenuStrip?.Dispose();
         _notifyIcon.Dispose();
         _currentIcon.Dispose();
+    }
+
+    private sealed class TrayMenuColorTable(bool light) : Forms.ProfessionalColorTable
+    {
+        private readonly System.Drawing.Color _background = light
+            ? System.Drawing.Color.FromArgb(250, 250, 251)
+            : System.Drawing.Color.FromArgb(36, 36, 36);
+        private readonly System.Drawing.Color _border = light
+            ? System.Drawing.Color.FromArgb(215, 217, 222)
+            : System.Drawing.Color.FromArgb(69, 69, 69);
+        private readonly System.Drawing.Color _hover = light
+            ? System.Drawing.Color.FromArgb(236, 238, 241)
+            : System.Drawing.Color.FromArgb(54, 54, 54);
+
+        public override System.Drawing.Color ToolStripDropDownBackground => _background;
+
+        public override System.Drawing.Color ImageMarginGradientBegin => _background;
+
+        public override System.Drawing.Color ImageMarginGradientMiddle => _background;
+
+        public override System.Drawing.Color ImageMarginGradientEnd => _background;
+
+        public override System.Drawing.Color MenuBorder => _border;
+
+        public override System.Drawing.Color MenuItemBorder => _hover;
+
+        public override System.Drawing.Color MenuItemSelected => _hover;
+
+        public override System.Drawing.Color MenuItemSelectedGradientBegin => _hover;
+
+        public override System.Drawing.Color MenuItemSelectedGradientEnd => _hover;
+
+        public override System.Drawing.Color MenuItemPressedGradientBegin => _hover;
+
+        public override System.Drawing.Color MenuItemPressedGradientMiddle => _hover;
+
+        public override System.Drawing.Color MenuItemPressedGradientEnd => _hover;
+
+        public override System.Drawing.Color SeparatorDark => _border;
+
+        public override System.Drawing.Color SeparatorLight => _background;
     }
 }

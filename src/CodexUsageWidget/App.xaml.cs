@@ -17,6 +17,7 @@ public partial class App : System.Windows.Application, IDisposable
     private SingleInstanceGuard? _singleInstanceGuard;
     private FileLogger? _logger;
     private GlobalExceptionHandler? _exceptionHandler;
+    private AppThemeController? _themeController;
     private bool _disposed;
 
     protected override void OnStartup(StartupEventArgs e)
@@ -66,6 +67,11 @@ public partial class App : System.Windows.Application, IDisposable
             var activityHookSetupService = new CodexActivityHookSetupService(
                 new CodexHookConfigurationManager(),
                 appServerSession);
+            _themeController = new AppThemeController(
+                this,
+                new ThemePreferenceMonitor(
+                    new ThemePreferenceStore(),
+                    new WindowsThemeMonitor()));
 
             var window = new MainWindow(
                 usageMonitor,
@@ -76,7 +82,8 @@ public partial class App : System.Windows.Application, IDisposable
                 new WidgetDensityStore(),
                 new DisplayedLimitPreferenceStore(),
                 startupRegistrationService,
-                new TrayIconService());
+                new TrayIconService(),
+                _themeController);
             MainWindow = window;
             activityMonitor.StartAsync().GetAwaiter().GetResult();
             window.Show();
@@ -126,6 +133,8 @@ public partial class App : System.Windows.Application, IDisposable
         _disposed = true;
         _exceptionHandler?.Dispose();
         _exceptionHandler = null;
+        _themeController?.Dispose();
+        _themeController = null;
         _singleInstanceGuard?.Dispose();
         _singleInstanceGuard = null;
         GC.SuppressFinalize(this);

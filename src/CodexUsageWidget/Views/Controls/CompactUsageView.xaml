@@ -20,7 +20,7 @@
                            FontSize="34"
                            FontWeight="SemiBold"
                            Typography.NumeralAlignment="Tabular"
-                           Foreground="{StaticResource TextPrimary}" />
+                           Foreground="{DynamicResource TextPrimary}" />
                 <TextBlock Text="{Binding HeadlineLabel}"
                            Margin="1,-5,0,0"
                            Style="{StaticResource SupportingText}" />
@@ -32,8 +32,8 @@
                        Padding="10,7"
                        TextWrapping="Wrap"
                        Style="{StaticResource SupportingText}"
-                       Foreground="#E6B47D"
-                       Background="#24DDA56D" />
+                       Foreground="{DynamicResource NoticeForegroundBrush}"
+                       Background="{DynamicResource NoticeBackgroundBrush}" />
         </Grid>
 
         <ItemsControl Grid.Row="1"
