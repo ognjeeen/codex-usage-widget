@@ -10,14 +10,19 @@ public sealed class AppThemeController : IDisposable
 {
     private readonly System.Windows.Application _application;
     private readonly ThemePreferenceMonitor _themePreferences;
+    private readonly AccentPaletteStore _accentPaletteStore;
+    private AccentPalette _accentPalette;
     private bool _disposed;
 
     public AppThemeController(
         System.Windows.Application application,
-        ThemePreferenceMonitor themePreferences)
+        ThemePreferenceMonitor themePreferences,
+        AccentPaletteStore accentPaletteStore)
     {
         _application = application;
         _themePreferences = themePreferences;
+        _accentPaletteStore = accentPaletteStore;
+        _accentPalette = accentPaletteStore.Load();
         _themePreferences.EffectiveThemeChanged += ThemePreferencesOnEffectiveThemeChanged;
         _themePreferences.SystemThemeChanged += ThemePreferencesOnSystemThemeChanged;
         ApplyEffectiveTheme(themePreferences.EffectiveTheme);
@@ -29,6 +34,8 @@ public sealed class AppThemeController : IDisposable
 
     public ThemePreference Preference => _themePreferences.Preference;
 
+    public AccentPalette AccentPalette => _accentPalette;
+
     public EffectiveTheme EffectiveTheme => _themePreferences.EffectiveTheme;
 
     public EffectiveTheme SystemTheme => _themePreferences.SystemTheme;
@@ -36,6 +43,18 @@ public sealed class AppThemeController : IDisposable
     public void SetPreference(ThemePreference preference)
     {
         _themePreferences.SetPreference(preference);
+    }
+
+    public void SetAccentPalette(AccentPalette palette)
+    {
+        if (_accentPalette == palette)
+        {
+            return;
+        }
+
+        _accentPalette = palette;
+        _accentPaletteStore.Save(palette);
+        RunOnUiThread(() => ApplyAccentPalette(EffectiveTheme));
     }
 
     private void ThemePreferencesOnEffectiveThemeChanged(EffectiveTheme theme) =>
@@ -58,7 +77,13 @@ public sealed class AppThemeController : IDisposable
     private void ApplyEffectiveTheme(EffectiveTheme effectiveTheme)
     {
         AppThemePalette.Apply(_application.Resources, effectiveTheme);
+        ApplyAccentPalette(effectiveTheme);
         EffectiveThemeChanged?.Invoke(effectiveTheme);
+    }
+
+    private void ApplyAccentPalette(EffectiveTheme effectiveTheme)
+    {
+        AppAccentPalette.Apply(_application.Resources, effectiveTheme, _accentPalette);
     }
 
     public void Dispose()
@@ -164,5 +189,75 @@ public sealed class AppThemeController : IDisposable
 
         private static MediaColor Parse(string value) =>
             (MediaColor)System.Windows.Media.ColorConverter.ConvertFromString(value);
+    }
+
+    private static class AppAccentPalette
+    {
+        public static void Apply(
+            ResourceDictionary resources,
+            EffectiveTheme theme,
+            AccentPalette palette)
+        {
+            var colors = Resolve(theme, palette);
+            resources["AccentPrimaryColor"] = colors.Primary;
+            resources["AccentPrimaryBorderColor"] = colors.Border;
+            resources["AccentPrimaryHoverColor"] = colors.Hover;
+            resources["AccentPrimaryHoverBorderColor"] = colors.HoverBorder;
+            resources["AccentPrimaryPressedColor"] = colors.Pressed;
+            resources["AccentDataColor"] = colors.Data;
+            resources["AccentPrimaryBrush"] = new SolidColorBrush(colors.Primary);
+            resources["AccentPrimaryBorderBrush"] = new SolidColorBrush(colors.Border);
+            resources["AccentDataBrush"] = new SolidColorBrush(colors.Data);
+            resources["UsageNormalBrush"] = new SolidColorBrush(colors.Data);
+        }
+
+        private static AccentColors Resolve(EffectiveTheme theme, AccentPalette palette) =>
+            theme == EffectiveTheme.Light
+                ? ResolveLight(palette)
+                : ResolveDark(palette);
+
+        private static AccentColors ResolveLight(AccentPalette palette) => palette switch
+        {
+            AccentPalette.Violet => Colors("#7C3AED", "#6D28D9", "#6D28D9", "#5B21B6", "#5B21B6", "#7C3AED"),
+            AccentPalette.Teal => Colors("#0F766E", "#0D6B64", "#0D6B64", "#0B5D57", "#0B5D57", "#0F766E"),
+            AccentPalette.Emerald => Colors("#15803D", "#137337", "#137337", "#116530", "#116530", "#15803D"),
+            AccentPalette.Pink => Colors("#BE185D", "#A91552", "#A91552", "#941047", "#941047", "#BE185D"),
+            _ => Colors("#3B78D8", "#326BC3", "#326BC3", "#2859A6", "#2859A6", "#3B78D8")
+        };
+
+        private static AccentColors ResolveDark(AccentPalette palette) => palette switch
+        {
+            AccentPalette.Violet => Colors("#7C3AED", "#9565E8", "#8B5CF6", "#A78BFA", "#6D28D9", "#A78BFA"),
+            AccentPalette.Teal => Colors("#0F8F83", "#32B8AA", "#14A89A", "#5EEAD4", "#0D766C", "#5EEAD4"),
+            AccentPalette.Emerald => Colors("#1D9148", "#42B968", "#26A957", "#6EE7B7", "#18783C", "#6EE7B7"),
+            AccentPalette.Pink => Colors("#C72F75", "#E25998", "#D9468A", "#F9A8D4", "#A92363", "#F9A8D4"),
+            _ => Colors("#3B78D8", "#5B91E5", "#4A88E8", "#76ADF2", "#2E63B5", "#75A7F0")
+        };
+
+        private static AccentColors Colors(
+            string primary,
+            string border,
+            string hover,
+            string hoverBorder,
+            string pressed,
+            string data) =>
+            new(
+                Parse(primary),
+                Parse(border),
+                Parse(hover),
+                Parse(hoverBorder),
+                Parse(pressed),
+                Parse(data));
+
+        private static MediaColor Parse(string value) =>
+            (MediaColor)System.Windows.Media.ColorConverter.ConvertFromString(value);
+
+        private sealed record AccentColors(
+            MediaColor Primary,
+            MediaColor Border,
+            MediaColor Hover,
+            MediaColor HoverBorder,
+            MediaColor Pressed,
+            MediaColor Data);
     }
 }

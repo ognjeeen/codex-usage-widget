@@ -326,12 +326,14 @@ public partial class MainWindow : Window
                 fiveHourLimitAvailable,
                 _startupRegistration.IsEnabled,
                 _activityHookSetupService,
-                _codexLauncher)
+                _codexLauncher,
+                _themeController.AccentPalette)
             {
                 Owner = this
             };
             _settingsWindow = window;
             window.ThemePreferenceChanged += _themeController.SetPreference;
+            window.AccentPaletteChanged += _themeController.SetAccentPalette;
             window.WidgetDensityChanged += SetDensity;
             window.DisplayedLimitPreferenceChanged += SetDisplayedLimitPreference;
             window.StartWithWindowsChanged += SetStartupRegistration;

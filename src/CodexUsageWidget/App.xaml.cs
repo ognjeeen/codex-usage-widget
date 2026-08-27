@@ -71,7 +71,8 @@ public partial class App : System.Windows.Application, IDisposable
                 this,
                 new ThemePreferenceMonitor(
                     new ThemePreferenceStore(),
-                    new WindowsThemeMonitor()));
+                    new WindowsThemeMonitor()),
+                new AccentPaletteStore());
 
             var window = new MainWindow(
                 usageMonitor,

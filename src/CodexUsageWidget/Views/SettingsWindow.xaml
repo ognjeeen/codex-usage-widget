@@ -189,6 +189,44 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="AccentSwatchOption" TargetType="RadioButton">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Grid>
+                            <Ellipse x:Name="SelectionRing"
+                                     Fill="Transparent"
+                                     Stroke="Transparent"
+                                     StrokeThickness="1.5" />
+                            <Ellipse Width="16"
+                                     Height="16"
+                                     Fill="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.82" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SelectionRing"
+                                        Property="Stroke"
+                                        Value="{DynamicResource TextPrimary}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="SelectionRing"
+                                        Property="Stroke"
+                                        Value="{DynamicResource TextPrimary}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Border Style="{StaticResource DialogSurface}">
@@ -331,7 +369,7 @@
                                 CornerRadius="6">
                             <Border Width="24"
                                     Height="4"
-                                    Background="#3B78D8"
+                                    Background="{DynamicResource AccentDataBrush}"
                                     CornerRadius="2" />
                         </Border>
                     </Grid>
@@ -362,11 +400,58 @@
                                 CornerRadius="6">
                             <Border Width="24"
                                     Height="4"
-                                    Background="#75A7F0"
+                                    Background="{DynamicResource AccentDataBrush}"
                                     CornerRadius="2" />
                         </Border>
                     </Grid>
                 </RadioButton>
+
+                <Grid Margin="12,4,8,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Accent"
+                               Style="{StaticResource SupportingText}" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <RadioButton x:Name="BlueAccentOption"
+                                     GroupName="AccentPalette"
+                                     Background="#3B78D8"
+                                     ToolTip="Blue"
+                                     AutomationProperties.Name="Use blue accent"
+                                     Checked="AccentPaletteOption_OnChecked"
+                                     Style="{StaticResource AccentSwatchOption}" />
+                        <RadioButton x:Name="VioletAccentOption"
+                                     GroupName="AccentPalette"
+                                     Background="#7C3AED"
+                                     ToolTip="Violet"
+                                     AutomationProperties.Name="Use violet accent"
+                                     Checked="AccentPaletteOption_OnChecked"
+                                     Style="{StaticResource AccentSwatchOption}" />
+                        <RadioButton x:Name="TealAccentOption"
+                                     GroupName="AccentPalette"
+                                     Background="#0F8F83"
+                                     ToolTip="Teal"
+                                     AutomationProperties.Name="Use teal accent"
+                                     Checked="AccentPaletteOption_OnChecked"
+                                     Style="{StaticResource AccentSwatchOption}" />
+                        <RadioButton x:Name="EmeraldAccentOption"
+                                     GroupName="AccentPalette"
+                                     Background="#1D9148"
+                                     ToolTip="Emerald"
+                                     AutomationProperties.Name="Use emerald accent"
+                                     Checked="AccentPaletteOption_OnChecked"
+                                     Style="{StaticResource AccentSwatchOption}" />
+                        <RadioButton x:Name="PinkAccentOption"
+                                     GroupName="AccentPalette"
+                                     Background="#C72F75"
+                                     ToolTip="Pink"
+                                     AutomationProperties.Name="Use pink accent"
+                                     Checked="AccentPaletteOption_OnChecked"
+                                     Style="{StaticResource AccentSwatchOption}" />
+                    </StackPanel>
+                </Grid>
               </StackPanel>
 
               <StackPanel Margin="0,10,0,14">

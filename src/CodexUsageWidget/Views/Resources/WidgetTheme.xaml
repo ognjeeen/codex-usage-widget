@@ -166,8 +166,8 @@
     <Style x:Key="PrimaryDialogButton"
            TargetType="Button"
            BasedOn="{StaticResource DialogButton}">
-        <Setter Property="Background" Value="{StaticResource AccentPrimaryBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource AccentPrimaryBorderBrush}" />
+        <Setter Property="Background" Value="{DynamicResource AccentPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AccentPrimaryBorderBrush}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -175,10 +175,10 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="7">
                         <Border.Background>
-                            <SolidColorBrush Color="{StaticResource AccentPrimaryColor}" />
+                            <SolidColorBrush Color="{DynamicResource AccentPrimaryColor}" />
                         </Border.Background>
                         <Border.BorderBrush>
-                            <SolidColorBrush Color="{StaticResource AccentPrimaryBorderColor}" />
+                            <SolidColorBrush Color="{DynamicResource AccentPrimaryBorderColor}" />
                         </Border.BorderBrush>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
@@ -186,12 +186,12 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryColor}"
+                                                        To="{DynamicResource AccentPrimaryColor}"
                                                         Duration="0:0:0.14"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryBorderColor}"
+                                                        To="{DynamicResource AccentPrimaryBorderColor}"
                                                         Duration="0:0:0.14"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                         <DoubleAnimation Storyboard.TargetName="ButtonSurface"
@@ -204,12 +204,12 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryHoverColor}"
+                                                        To="{DynamicResource AccentPrimaryHoverColor}"
                                                         Duration="0:0:0.14"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryHoverBorderColor}"
+                                                        To="{DynamicResource AccentPrimaryHoverBorderColor}"
                                                         Duration="0:0:0.14"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                     </Storyboard>
@@ -218,12 +218,12 @@
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryPressedColor}"
+                                                        To="{DynamicResource AccentPrimaryPressedColor}"
                                                         Duration="0:0:0.07"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                         <ColorAnimation Storyboard.TargetName="ButtonSurface"
                                                         Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                        To="{StaticResource AccentPrimaryColor}"
+                                                        To="{DynamicResource AccentPrimaryColor}"
                                                         Duration="0:0:0.07"
                                                         EasingFunction="{StaticResource DialogButtonEaseOut}" />
                                     </Storyboard>

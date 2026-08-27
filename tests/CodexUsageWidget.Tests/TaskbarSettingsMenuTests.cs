@@ -101,11 +101,27 @@ public sealed class TaskbarSettingsMenuTests
                     fiveHourLimitAvailable: false,
                     startWithWindowsEnabled: true,
                     activityHookSetupService: new StubActivityHookSetupService(),
-                    codexLauncher: new StubCodexLauncher());
+                    codexLauncher: new StubCodexLauncher(),
+                    accentPalette: AccentPalette.Violet);
                 Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
                 var activityDotsHost = Assert.IsType<ContentControl>(
                     usageSettings.FindName("ActivityDotsHost"));
                 Assert.IsType<ActivityHookSetupControl>(activityDotsHost.Content);
+                Assert.NotNull(usageSettings.FindName("BlueAccentOption"));
+                var violetAccentOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("VioletAccentOption"));
+                Assert.True(violetAccentOption.IsChecked);
+                Assert.NotNull(usageSettings.FindName("TealAccentOption"));
+                Assert.NotNull(usageSettings.FindName("EmeraldAccentOption"));
+                Assert.NotNull(usageSettings.FindName("PinkAccentOption"));
+                AccentPalette? changedAccentPalette = null;
+                usageSettings.AccentPaletteChanged += palette =>
+                    changedAccentPalette = palette;
+                var emeraldAccentOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("EmeraldAccentOption"));
+                emeraldAccentOption.IsChecked = true;
+
+                Assert.Equal(AccentPalette.Emerald, changedAccentPalette);
                 var weeklyOption = Assert.IsType<RadioButton>(
                     usageSettings.FindName("WeeklyLimitOption"));
                 var fiveHourOption = Assert.IsType<RadioButton>(
