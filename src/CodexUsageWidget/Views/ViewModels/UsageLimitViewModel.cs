@@ -10,6 +10,7 @@ public sealed class UsageLimitViewModel
     {
         Label = label;
         UsedPercent = window.UsedPercent;
+        IsNormal = window.RemainingPercent > 25;
         UsedText = $"{Math.Round(window.UsedPercent):0}% used";
         RemainingText = $"{Math.Round(window.RemainingPercent):0}% remaining";
         ResetText = window.ResetsAt is null
@@ -23,6 +24,8 @@ public sealed class UsageLimitViewModel
     public string Label { get; }
 
     public double UsedPercent { get; }
+
+    public bool IsNormal { get; }
 
     public string UsedText { get; }
 

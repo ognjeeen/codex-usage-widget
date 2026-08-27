@@ -30,7 +30,6 @@
                      Margin="0,7,0,6"
                      Maximum="100"
                      Value="{Binding UsedPercent, Mode=OneWay}"
-                     Foreground="{Binding ProgressBrush}"
                      Style="{StaticResource UsageProgress}" />
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

@@ -20,6 +20,7 @@
     <SolidColorBrush x:Key="IconHoverBrush" Color="#2C2C2C" />
     <SolidColorBrush x:Key="IconPressedBrush" Color="#363636" />
     <SolidColorBrush x:Key="ProgressTrackBrush" Color="#3A3A3A" />
+    <SolidColorBrush x:Key="UsageNormalBrush" Color="#E7E7E7" />
     <SolidColorBrush x:Key="ScrollThumbBrush" Color="#646464" />
     <SolidColorBrush x:Key="ScrollThumbHoverBrush" Color="#858585" />
     <SolidColorBrush x:Key="TooltipBackgroundBrush" Color="#F5232323" />
@@ -268,6 +269,7 @@
     <Style x:Key="UsageProgress" TargetType="ProgressBar">
         <Setter Property="Height" Value="6" />
         <Setter Property="Background" Value="{DynamicResource ProgressTrackBrush}" />
+        <Setter Property="Foreground" Value="{Binding ProgressBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
@@ -283,6 +285,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource UsageNormalBrush}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="SlimScrollThumb" TargetType="Thumb">

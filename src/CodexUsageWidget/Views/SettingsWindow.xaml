@@ -94,28 +94,83 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="9">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CheckStates">
+                                    <VisualStateGroup.Transitions>
+                                        <VisualTransition GeneratedDuration="0:0:0.16">
+                                            <VisualTransition.GeneratedEasingFunction>
+                                                <CubicEase EasingMode="EaseOut" />
+                                            </VisualTransition.GeneratedEasingFunction>
+                                        </VisualTransition>
+                                    </VisualStateGroup.Transitions>
+                                    <VisualState x:Name="Unchecked">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumb"
+                                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                             To="0"
+                                                             Duration="0" />
+                                            <DoubleAnimation Storyboard.TargetName="ToggleTrackAccent"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0"
+                                                             Duration="0" />
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumbSelectedFill"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0"
+                                                             Duration="0" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Checked">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumb"
+                                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                                             To="18"
+                                                             Duration="0" />
+                                            <DoubleAnimation Storyboard.TargetName="ToggleTrackAccent"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0" />
+                                            <DoubleAnimation Storyboard.TargetName="ToggleThumbSelectedFill"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter VerticalAlignment="Center" />
-                                <Border x:Name="ToggleTrack"
-                                        Grid.Column="1"
-                                        Width="40"
-                                        Height="22"
-                                        VerticalAlignment="Center"
-                                        Background="{DynamicResource ControlBackgroundBrush}"
-                                        BorderBrush="{DynamicResource ControlBorderBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="11">
-                                    <Ellipse x:Name="ToggleThumb"
-                                             Width="16"
-                                             Height="16"
-                                             Margin="2"
-                                             HorizontalAlignment="Left"
-                                             Fill="{DynamicResource TextSecondary}" />
-                                </Border>
+                                <Grid Grid.Column="1"
+                                      Width="40"
+                                      Height="22"
+                                      VerticalAlignment="Center">
+                                    <Border Background="{DynamicResource ControlBackgroundBrush}"
+                                            BorderBrush="{DynamicResource ControlBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="11" />
+                                    <Border x:Name="ToggleTrackAccent"
+                                            Background="{DynamicResource AccentPrimaryBrush}"
+                                            BorderBrush="{DynamicResource AccentPrimaryBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="11"
+                                            Opacity="0" />
+                                    <Grid x:Name="ToggleThumb"
+                                          Width="16"
+                                          Height="16"
+                                          Margin="3"
+                                          HorizontalAlignment="Left">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform />
+                                        </Grid.RenderTransform>
+                                        <Ellipse Fill="{DynamicResource TextSecondary}" />
+                                        <Ellipse x:Name="ToggleThumbSelectedFill"
+                                                 Fill="#FFFFFF"
+                                                 Opacity="0" />
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -123,18 +178,6 @@
                                 <Setter TargetName="Card"
                                         Property="BorderBrush"
                                         Value="{DynamicResource AccentPrimaryBorderBrush}" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="ToggleTrack"
-                                        Property="Background"
-                                        Value="{DynamicResource AccentPrimaryBrush}" />
-                                <Setter TargetName="ToggleTrack"
-                                        Property="BorderBrush"
-                                        Value="{DynamicResource AccentPrimaryBrush}" />
-                                <Setter TargetName="ToggleThumb"
-                                        Property="HorizontalAlignment"
-                                        Value="Right" />
-                                <Setter TargetName="ToggleThumb" Property="Fill" Value="#FFFFFF" />
                             </Trigger>
                             <Trigger Property="IsKeyboardFocused" Value="True">
                                 <Setter TargetName="Card"
