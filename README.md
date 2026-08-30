@@ -39,7 +39,7 @@ of `codex.cmd` or `codex.exe`.
   including credits, spend controls, earned resets, token activity, and model-specific limits
   when Codex returns them
 - System, light, and dark themes with five preset accent colors selected from Settings
-- A movable, always-on-top desktop widget and a compact label beside the notification area
+- A movable, always-on-top desktop widget and a compact bottom-left screen indicator
 - Live task activity dots based on official local Codex lifecycle hooks
 - Automatic refresh every two minutes plus live rate-limit notifications
 - Fullscreen-aware taskbar behavior, per-monitor DPI support, and optional start with Windows
@@ -50,7 +50,7 @@ of `codex.cmd` or `codex.exe`.
 **Desktop widget.** Shows the selected limit as the headline and keeps every general limit
 visible below it. Compact mode focuses on limits; Details adds account and token activity.
 
-**Taskbar label.** Shows the same selected percentage beside the Windows notification area.
+**Bottom-left indicator.** Shows the same selected percentage in the bottom-left corner of the screen.
 The tray icon and its tooltip follow that selection too.
 
 Choose `5h limit`, `Weekly limit`, or `Most constrained` in **Settings** under **Usage**.
@@ -64,7 +64,7 @@ subscription percentage.
 
 ![Codex Usage Widget taskbar label preview](docs/images/taskbar-label.png)
 
-Select the `−` button to move the widget to the taskbar. Right-click the taskbar label or
+Select the `−` button to switch to the bottom-left indicator. Right-click the indicator or
 tray icon to refresh, change the display mode, open Settings, check for updates, or exit.
 The Settings window opens from the gear button on the widget too. Theme, accent color,
 widget layout, displayed limit, and Start with Windows changes apply as soon as they are

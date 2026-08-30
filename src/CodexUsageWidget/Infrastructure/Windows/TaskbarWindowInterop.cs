@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Forms = System.Windows.Forms;
 
 namespace CodexUsageWidget.Infrastructure.Windows;
 
@@ -9,6 +10,8 @@ public static class TaskbarWindowInterop
     private const long WsExToolWindow = 0x00000080L;
     private const long WsExNoActivate = 0x08000000L;
     private const uint SwpNoActivate = 0x0010;
+    private const int ScreenEdgeMarginLogicalPixels = 16;
+    private const string TrayNotificationWindowClass = "TrayNotifyWnd";
     private static readonly IntPtr HwndTopmost = new(-1);
 
     public static void ConfigureAsTaskbarOverlay(IntPtr windowHandle)
@@ -26,30 +29,27 @@ public static class TaskbarWindowInterop
         }
     }
 
-    public static void PositionNextToNotificationArea(
+    public static void PositionAtBottomLeftOfWorkArea(
         IntPtr windowHandle,
         double logicalWidth,
         double logicalHeight)
     {
         var taskbar = FindWindow("Shell_TrayWnd", null);
-        if (taskbar == IntPtr.Zero || !GetWindowRect(taskbar, out var taskbarRect))
+        if (taskbar == IntPtr.Zero)
         {
             return;
         }
 
         EnsureOwnedByTaskbar(windowHandle, taskbar);
 
-        var tray = FindWindowEx(taskbar, IntPtr.Zero, "TrayNotifyWnd", null);
-        var trayLeft = tray != IntPtr.Zero && GetWindowRect(tray, out var trayRect)
-            ? trayRect.Left
-            : taskbarRect.Right - 240;
-
         var dpi = GetDpiForWindow(taskbar);
         var scale = dpi > 0 ? dpi / 96d : 1d;
         var width = (int)Math.Round(logicalWidth * scale);
         var height = (int)Math.Round(logicalHeight * scale);
-        var left = trayLeft - width;
-        var top = taskbarRect.Top + Math.Max(0, (taskbarRect.Bottom - taskbarRect.Top - height) / 2);
+        var margin = (int)Math.Round(ScreenEdgeMarginLogicalPixels * scale);
+        var workArea = Forms.Screen.FromHandle(taskbar).WorkingArea;
+        var left = workArea.Left + margin;
+        var top = workArea.Bottom - height - margin;
 
         SetWindowPos(
             windowHandle,
@@ -69,6 +69,56 @@ public static class TaskbarWindowInterop
         }
     }
 
+    internal static IntPtr FindDescendantByClass(
+        IntPtr root,
+        string className,
+        Func<IntPtr, IntPtr, IntPtr> findNextChild,
+        Func<IntPtr, string?> getClassName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(className);
+        ArgumentNullException.ThrowIfNull(findNextChild);
+        ArgumentNullException.ThrowIfNull(getClassName);
+
+        var childAfter = IntPtr.Zero;
+        while (true)
+        {
+            var child = findNextChild(root, childAfter);
+            if (child == IntPtr.Zero)
+            {
+                return IntPtr.Zero;
+            }
+
+            if (string.Equals(getClassName(child), className, StringComparison.Ordinal))
+            {
+                return child;
+            }
+
+            var descendant = FindDescendantByClass(
+                child,
+                className,
+                findNextChild,
+                getClassName);
+            if (descendant != IntPtr.Zero)
+            {
+                return descendant;
+            }
+
+            childAfter = child;
+        }
+    }
+
+    private static string? GetWindowClassName(IntPtr windowHandle)
+    {
+        var classNameBuffer = new char[256];
+        var classNameLength = GetClassName(
+            windowHandle,
+            classNameBuffer,
+            classNameBuffer.Length);
+        return classNameLength == 0
+            ? null
+            : new string(classNameBuffer, 0, classNameLength);
+    }
+
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern IntPtr FindWindow(string className, string? windowName);
 
@@ -76,8 +126,14 @@ public static class TaskbarWindowInterop
     private static extern IntPtr FindWindowEx(
         IntPtr parent,
         IntPtr childAfter,
-        string className,
+        string? className,
         string? windowName);
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern int GetClassName(
+        IntPtr window,
+        [Out] char[] className,
+        int maximumCount);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

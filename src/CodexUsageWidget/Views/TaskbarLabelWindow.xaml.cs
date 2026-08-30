@@ -181,7 +181,7 @@ public partial class TaskbarLabelWindow : Window
     {
         if (_windowHandle != IntPtr.Zero)
         {
-            TaskbarWindowInterop.PositionNextToNotificationArea(_windowHandle, Width, Height);
+            TaskbarWindowInterop.PositionAtBottomLeftOfWorkArea(_windowHandle, Width, Height);
         }
     }
 
