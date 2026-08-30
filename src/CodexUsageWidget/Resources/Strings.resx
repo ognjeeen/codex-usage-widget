@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="App_Name" xml:space="preserve"><value>Codex Usage Widget</value></data>
+  <data name="App_MainTitle" xml:space="preserve"><value>Codex Usage</value></data>
+  <data name="App_InstallFailure" xml:space="preserve"><value>Codex Usage Widget could not install itself for the current user. {0}</value></data>
+  <data name="App_StartupFailure" xml:space="preserve"><value>Codex Usage Widget could not start. See the log under {0}</value></data>
+  <data name="Common_Available" xml:space="preserve"><value>Available</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Common_CheckAgain" xml:space="preserve"><value>Check again</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="Common_Exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="Common_NoneAvailable" xml:space="preserve"><value>None available</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>Refresh</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Settings</value></data>
+  <data name="Common_Unlimited" xml:space="preserve"><value>Unlimited</value></data>
+  <data name="Main_ActivityRunning" xml:space="preserve"><value>Codex task is running</value></data>
+  <data name="Main_RefreshUsage" xml:space="preserve"><value>Refresh usage</value></data>
+  <data name="Main_ShowCompact" xml:space="preserve"><value>Show compact view</value></data>
+  <data name="Main_ShowDetails" xml:space="preserve"><value>Show details</value></data>
+  <data name="Main_ToggleLayout" xml:space="preserve"><value>Toggle widget layout</value></data>
+  <data name="Main_UseTaskbarLabel" xml:space="preserve"><value>Use taskbar label</value></data>
+  <data name="Main_StartupPreferenceError" xml:space="preserve"><value>The Windows startup preference could not be updated.</value></data>
+  <data name="Main_UpdateOpenError" xml:space="preserve"><value>Windows could not open the widget release page.</value></data>
+  <data name="Status_Connecting" xml:space="preserve"><value>Connecting…</value></data>
+  <data name="Status_WaitingForCodex" xml:space="preserve"><value>Waiting for Codex</value></data>
+  <data name="Status_LocalWaiting" xml:space="preserve"><value>Local only · waiting for sync</value></data>
+  <data name="Status_Offline" xml:space="preserve"><value>Offline</value></data>
+  <data name="Status_LocalRetry" xml:space="preserve"><value>Local only · select refresh to retry</value></data>
+  <data name="Status_Syncing" xml:space="preserve"><value>Syncing…</value></data>
+  <data name="Status_LivePlan" xml:space="preserve"><value>Live · {0}</value></data>
+  <data name="Status_HeadlineRemaining" xml:space="preserve"><value>{0} remaining</value></data>
+  <data name="Status_LocalUpdated" xml:space="preserve"><value>Local only · updated {0}</value></data>
+  <data name="Status_NoLimits" xml:space="preserve"><value>No subscription limits returned. Run codex login first.</value></data>
+  <data name="Error_CliNotFound" xml:space="preserve"><value>Codex CLI was not found on PATH.</value></data>
+  <data name="Error_LoginRequired" xml:space="preserve"><value>Run codex login, then refresh.</value></data>
+  <data name="Error_ResponseTimeout" xml:space="preserve"><value>Codex did not respond in time.</value></data>
+  <data name="Error_Unexpected" xml:space="preserve"><value>Codex usage could not be read. {0}</value></data>
+  <data name="Warning_WorkspaceCreditsDepleted" xml:space="preserve"><value>Workspace credits are depleted.</value></data>
+  <data name="Warning_WorkspaceUsageLimitReached" xml:space="preserve"><value>Workspace usage limit reached.</value></data>
+  <data name="Warning_UsageLimitReached" xml:space="preserve"><value>Codex usage limit reached.</value></data>
+  <data name="Warning_SpendControlReached" xml:space="preserve"><value>Individual spend control reached.</value></data>
+  <data name="Usage_FiveHourLimit" xml:space="preserve"><value>5h limit</value></data>
+  <data name="Usage_WeeklyLimit" xml:space="preserve"><value>Weekly limit</value></data>
+  <data name="Usage_DayLimit" xml:space="preserve"><value>{0}d limit</value></data>
+  <data name="Usage_HourLimit" xml:space="preserve"><value>{0}h limit</value></data>
+  <data name="Usage_MinuteLimit" xml:space="preserve"><value>{0}m limit</value></data>
+  <data name="Usage_PrimaryLimit" xml:space="preserve"><value>Primary limit</value></data>
+  <data name="Usage_SecondaryLimit" xml:space="preserve"><value>Secondary limit</value></data>
+  <data name="Usage_UsedPercent" xml:space="preserve"><value>{0}% used</value></data>
+  <data name="Usage_RemainingPercent" xml:space="preserve"><value>{0}% remaining</value></data>
+  <data name="Usage_ResetUnavailable" xml:space="preserve"><value>Reset time unavailable</value></data>
+  <data name="Usage_ResetsNow" xml:space="preserve"><value>Resets now</value></data>
+  <data name="Usage_ResetsInHours" xml:space="preserve"><value>Resets in {0}h · {1}</value></data>
+  <data name="Usage_ResetsAt" xml:space="preserve"><value>Resets {0}</value></data>
+  <data name="Usage_CreditsRemaining" xml:space="preserve"><value>{0} remaining</value></data>
+  <data name="Usage_ChatGptCredits" xml:space="preserve"><value>ChatGPT credits</value></data>
+  <data name="Usage_IndividualSpendLimit" xml:space="preserve"><value>Individual spend limit</value></data>
+  <data name="Usage_SpendLimitValue" xml:space="preserve"><value>{0} of {1} · {2}% remaining</value></data>
+  <data name="Usage_SpendLimitResets" xml:space="preserve"><value>Spend limit resets</value></data>
+  <data name="Usage_RateLimitResets" xml:space="preserve"><value>Rate-limit resets</value></data>
+  <data name="Usage_CountAvailable" xml:space="preserve"><value>{0} available</value></data>
+  <data name="Usage_SectionOverview" xml:space="preserve"><value>OVERVIEW</value></data>
+  <data name="Usage_SectionCreditsLimits" xml:space="preserve"><value>CREDITS &amp; LIMITS</value></data>
+  <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>TOKEN ACTIVITY</value></data>
+  <data name="Usage_NotQuotaConsumption" xml:space="preserve"><value>Not quota consumption</value></data>
+  <data name="Usage_SectionModelLimits" xml:space="preserve"><value>MODEL-SPECIFIC LIMITS</value></data>
+  <data name="Token_Lifetime" xml:space="preserve"><value>Lifetime tokens</value></data>
+  <data name="Token_PeakDaily" xml:space="preserve"><value>Peak daily tokens</value></data>
+  <data name="Token_LongestTurn" xml:space="preserve"><value>Longest turn</value></data>
+  <data name="Token_CurrentStreak" xml:space="preserve"><value>Current streak</value></data>
+  <data name="Token_LongestStreak" xml:space="preserve"><value>Longest streak</value></data>
+  <data name="Token_Days" xml:space="preserve"><value>{0} days</value></data>
+  <data name="Token_Count" xml:space="preserve"><value>{0} tokens</value></data>
+  <data name="Token_ChartPeak" xml:space="preserve"><value>{0}% of chart peak</value></data>
+  <data name="Token_DurationHoursMinutes" xml:space="preserve"><value>{0}h {1}m</value></data>
+  <data name="Token_DurationMinutes" xml:space="preserve"><value>{0}m</value></data>
+  <data name="Settings_Description" xml:space="preserve"><value>Choose how Codex Usage Widget looks and behaves.</value></data>
+  <data name="Settings_SectionGeneral" xml:space="preserve"><value>GENERAL</value></data>
+  <data name="Settings_StartWithWindows" xml:space="preserve"><value>Start with Windows</value></data>
+  <data name="Settings_StartWithWindowsDescription" xml:space="preserve"><value>Launch the widget when you sign in</value></data>
+  <data name="Settings_Theme_Title" xml:space="preserve"><value>Theme</value></data>
+  <data name="Settings_Theme_Description" xml:space="preserve"><value>Use the Windows setting or keep the widget in one theme.</value></data>
+  <data name="Settings_Theme_System" xml:space="preserve"><value>Use Windows setting</value></data>
+  <data name="Settings_Theme_SystemDescription" xml:space="preserve"><value>Changes with your Windows app theme</value></data>
+  <data name="Settings_Theme_SystemAutomation" xml:space="preserve"><value>Use Windows theme</value></data>
+  <data name="Settings_Theme_Light" xml:space="preserve"><value>Light</value></data>
+  <data name="Settings_Theme_LightDescription" xml:space="preserve"><value>Bright surfaces with dark text</value></data>
+  <data name="Settings_Theme_LightAutomation" xml:space="preserve"><value>Use light theme</value></data>
+  <data name="Settings_Theme_Dark" xml:space="preserve"><value>Dark</value></data>
+  <data name="Settings_Theme_DarkDescription" xml:space="preserve"><value>Dark surfaces with light text</value></data>
+  <data name="Settings_Theme_DarkAutomation" xml:space="preserve"><value>Use dark theme</value></data>
+  <data name="Settings_Accent_Title" xml:space="preserve"><value>Accent</value></data>
+  <data name="Settings_Accent_Blue" xml:space="preserve"><value>Blue</value></data>
+  <data name="Settings_Accent_Violet" xml:space="preserve"><value>Violet</value></data>
+  <data name="Settings_Accent_Teal" xml:space="preserve"><value>Teal</value></data>
+  <data name="Settings_Accent_Emerald" xml:space="preserve"><value>Emerald</value></data>
+  <data name="Settings_Accent_Pink" xml:space="preserve"><value>Pink</value></data>
+  <data name="Settings_Accent_Automation" xml:space="preserve"><value>Use {0} accent</value></data>
+  <data name="Settings_Accent_BlueAutomation" xml:space="preserve"><value>Use blue accent</value></data>
+  <data name="Settings_Accent_VioletAutomation" xml:space="preserve"><value>Use violet accent</value></data>
+  <data name="Settings_Accent_TealAutomation" xml:space="preserve"><value>Use teal accent</value></data>
+  <data name="Settings_Accent_EmeraldAutomation" xml:space="preserve"><value>Use emerald accent</value></data>
+  <data name="Settings_Accent_PinkAutomation" xml:space="preserve"><value>Use pink accent</value></data>
+  <data name="Settings_Layout_Title" xml:space="preserve"><value>Widget layout</value></data>
+  <data name="Settings_Layout_Description" xml:space="preserve"><value>Choose how much information the desktop widget shows.</value></data>
+  <data name="Settings_Layout_Compact" xml:space="preserve"><value>Compact</value></data>
+  <data name="Settings_Layout_CompactDescription" xml:space="preserve"><value>Summary at a glance</value></data>
+  <data name="Settings_Layout_CompactAutomation" xml:space="preserve"><value>Use compact widget layout</value></data>
+  <data name="Settings_Layout_Detailed" xml:space="preserve"><value>Detailed</value></data>
+  <data name="Settings_Layout_DetailedDescription" xml:space="preserve"><value>Full usage breakdown</value></data>
+  <data name="Settings_Layout_DetailedAutomation" xml:space="preserve"><value>Use detailed widget layout</value></data>
+  <data name="Settings_SectionUsage" xml:space="preserve"><value>USAGE</value></data>
+  <data name="Settings_DisplayedLimit_Title" xml:space="preserve"><value>Displayed limit</value></data>
+  <data name="Settings_DisplayedLimit_Description" xml:space="preserve"><value>Choose the limit shown in the widget, taskbar label, and tray icon.</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourDescription" xml:space="preserve"><value>Show the global five-hour usage window</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourAutomation" xml:space="preserve"><value>Display 5-hour limit</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourUnavailable" xml:space="preserve"><value>Codex did not return a global 5h limit for this account.</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyDescription" xml:space="preserve"><value>Show the global weekly usage window</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyAutomation" xml:space="preserve"><value>Display weekly limit</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrained" xml:space="preserve"><value>Most constrained</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedDescription" xml:space="preserve"><value>Show whichever available limit has the least remaining</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>Display most constrained limit</value></data>
+  <data name="Settings_SectionFeatures" xml:space="preserve"><value>FEATURES</value></data>
+  <data name="Settings_Language_Title" xml:space="preserve"><value>Language</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Follow the Windows display language or always use one language.</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Use Windows setting</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Uses Simplified Chinese when supported; otherwise English</value></data>
+  <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>Use Windows language</value></data>
+  <data name="Settings_Language_English" xml:space="preserve"><value>English</value></data>
+  <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>Always use English</value></data>
+  <data name="Settings_Language_EnglishAutomation" xml:space="preserve"><value>Use English</value></data>
+  <data name="Settings_Language_Chinese" xml:space="preserve"><value>简体中文</value></data>
+  <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>Always use Simplified Chinese</value></data>
+  <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>Use Simplified Chinese</value></data>
+  <data name="Activity_Title" xml:space="preserve"><value>Codex activity</value></data>
+  <data name="Activity_Description" xml:space="preserve"><value>Show when a local Codex turn is running</value></data>
+  <data name="Activity_Privacy" xml:space="preserve"><value>Privacy: only activity type, session ID, and turn ID travel through a local user-only pipe. Prompts and responses never leave Codex.</value></data>
+  <data name="Activity_RemoveHooks" xml:space="preserve"><value>Remove hooks</value></data>
+  <data name="Activity_CopyHooksTooltip" xml:space="preserve"><value>Copies /hooks and opens Codex</value></data>
+  <data name="Activity_Checking" xml:space="preserve"><value>Checking Codex…</value></data>
+  <data name="Activity_CheckingDescription" xml:space="preserve"><value>Reading the local hook configuration and Codex trust status.</value></data>
+  <data name="Activity_OpenInCodex" xml:space="preserve"><value>Open in Codex</value></data>
+  <data name="Activity_ReviewHooks" xml:space="preserve"><value>Review hooks</value></data>
+  <data name="Activity_SetupRequired" xml:space="preserve"><value>Setup required</value></data>
+  <data name="Activity_SetupRequiredDescription" xml:space="preserve"><value>Install three local lifecycle hooks to animate the taskbar dots while Codex works. You can review the exact hooks.json change before it is written.</value></data>
+  <data name="Activity_UpdateAvailable" xml:space="preserve"><value>Update available</value></data>
+  <data name="Activity_UpdateDescription" xml:space="preserve"><value>Activity handlers from an older widget version are installed. Update them to the faster, path-independent bridge after reviewing the exact change.</value></data>
+  <data name="Activity_ReviewUpdate" xml:space="preserve"><value>Review update</value></data>
+  <data name="Activity_OneStepLeft" xml:space="preserve"><value>One step left</value></data>
+  <data name="Activity_ApprovalDescription" xml:space="preserve"><value>Hooks are installed. Approve their exact definitions once in Codex before they can run.</value></data>
+  <data name="Activity_ApproveInCodex" xml:space="preserve"><value>Approve in Codex</value></data>
+  <data name="Activity_Ready" xml:space="preserve"><value>Activity dots are ready</value></data>
+  <data name="Activity_ReadyDescription" xml:space="preserve"><value>All three hooks are installed and trusted.</value></data>
+  <data name="Activity_ReviewRequired" xml:space="preserve"><value>Review required</value></data>
+  <data name="Activity_ModifiedDescription" xml:space="preserve"><value>Codex paused the changed definitions. Review them again before activity reporting resumes.</value></data>
+  <data name="Activity_ReviewInCodex" xml:space="preserve"><value>Review in Codex</value></data>
+  <data name="Activity_HooksDisabled" xml:space="preserve"><value>Hooks are disabled in Codex</value></data>
+  <data name="Activity_HooksDisabledDescription" xml:space="preserve"><value>Set hooks = true in the [features] section of your Codex config before installing.</value></data>
+  <data name="Activity_StatusUnavailable" xml:space="preserve"><value>Installed · status unavailable</value></data>
+  <data name="Activity_StatusUnavailableDescription" xml:space="preserve"><value>Hooks are installed, but their trust status could not be verified.</value></data>
+  <data name="Activity_StatusUnavailableWithDetail" xml:space="preserve"><value>Hooks are installed, but Codex could not report their trust status. {0}</value></data>
+  <data name="Activity_OpenHooksInCodex" xml:space="preserve"><value>Open hooks in Codex</value></data>
+  <data name="Activity_SetupUnavailable" xml:space="preserve"><value>Setup unavailable</value></data>
+  <data name="Activity_SetupUnavailableDescription" xml:space="preserve"><value>The activity hook configuration could not be read.</value></data>
+  <data name="Activity_SetupErrorDetail" xml:space="preserve"><value>The activity hook setup could not be completed. {0}</value></data>
+  <data name="Activity_StatusTimeout" xml:space="preserve"><value>Codex did not report hook status in time. Check that the CLI is available, then try again.</value></data>
+  <data name="Activity_CodexOpenCopied" xml:space="preserve"><value>Codex is open. Paste /hooks and approve the three definitions. Status refreshes when you return here.</value></data>
+  <data name="Activity_CodexOpenType" xml:space="preserve"><value>Codex is open. Type /hooks and approve the three definitions. Status refreshes when you return here.</value></data>
+  <data name="Activity_ReviewTitle" xml:space="preserve"><value>Review Codex activity hooks</value></data>
+  <data name="Activity_ReviewInstallHeading" xml:space="preserve"><value>Review activity hook installation</value></data>
+  <data name="Activity_ReviewRemoveHeading" xml:space="preserve"><value>Review activity hook removal</value></data>
+  <data name="Activity_ReviewInstallDescription" xml:space="preserve"><value>The widget will write this exact ~/.codex/hooks.json content. Existing hooks and unknown fields are preserved.</value></data>
+  <data name="Activity_ReviewRemoveDescription" xml:space="preserve"><value>Only handlers that exactly match this widget executable will be removed. Other hook definitions are preserved.</value></data>
+  <data name="Activity_InstallHooks" xml:space="preserve"><value>Install hooks</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>Open</value></data>
+  <data name="Tray_Settings" xml:space="preserve"><value>Settings...</value></data>
+  <data name="Tray_DisplayMode" xml:space="preserve"><value>Display mode</value></data>
+  <data name="Tray_DesktopWidget" xml:space="preserve"><value>Desktop widget</value></data>
+  <data name="Tray_TaskbarLabel" xml:space="preserve"><value>Taskbar label</value></data>
+  <data name="Tray_CheckUpdates" xml:space="preserve"><value>Check for updates...</value></data>
+  <data name="Tray_Unavailable" xml:space="preserve"><value>Codex Usage · unavailable</value></data>
+  <data name="Tray_Remaining" xml:space="preserve"><value>Codex · {0}% remaining</value></data>
+  <data name="Taskbar_OpenWidget" xml:space="preserve"><value>Open widget</value></data>
+  <data name="Taskbar_PreviewActivity" xml:space="preserve"><value>Preview activity animation</value></data>
+  <data name="Taskbar_UseDesktopWidget" xml:space="preserve"><value>Use desktop widget</value></data>
+  <data name="Taskbar_UsageUnavailable" xml:space="preserve"><value>Codex usage is currently unavailable.</value></data>
+  <data name="Taskbar_Remaining" xml:space="preserve"><value>{0}: {1}% remaining</value></data>
+  <data name="Taskbar_RemainingWithReset" xml:space="preserve"><value>{0}: {1}% remaining · resets {2}</value></data>
+</root>

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Windows.Media;
 using CodexUsageWidget.Domain;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Views.ViewModels;
 
@@ -10,15 +11,15 @@ public sealed class UsageWidgetViewModel
     {
     }
 
-    public string StatusText { get; private init; } = "Connecting…";
+    public string StatusText { get; private init; } = Strings.Get("Status_Connecting");
 
     public System.Windows.Media.Brush StatusBrush { get; private init; } = BrushFromHex("#D6A15F");
 
     public string HeadlineRemainingText { get; private init; } = "--%";
 
-    public string HeadlineLabel { get; private init; } = "Waiting for Codex";
+    public string HeadlineLabel { get; private init; } = Strings.Get("Status_WaitingForCodex");
 
-    public string UpdatedText { get; private init; } = "Local only · waiting for sync";
+    public string UpdatedText { get; private init; } = Strings.Get("Status_LocalWaiting");
 
     public string? WarningText { get; private init; }
 
@@ -45,22 +46,22 @@ public sealed class UsageWidgetViewModel
 
     public DateTimeOffset? HeadlineResetsAt { get; private init; }
 
-    public static UsageWidgetViewModel Loading(string updatedText = "Local only · waiting for sync") => new()
+    public static UsageWidgetViewModel Loading(string? updatedText = null) => new()
     {
-        UpdatedText = updatedText
+        UpdatedText = updatedText ?? Strings.Get("Status_LocalWaiting")
     };
 
     public static UsageWidgetViewModel Error(string message) => new()
     {
-        StatusText = "Offline",
+        StatusText = Strings.Get("Status_Offline"),
         StatusBrush = BrushFromHex("#E16D76"),
         HeadlineLabel = message,
-        UpdatedText = "Local only · select refresh to retry"
+        UpdatedText = Strings.Get("Status_LocalRetry")
     };
 
     public UsageWidgetViewModel Syncing() => new()
     {
-        StatusText = "Syncing…",
+        StatusText = Strings.Get("Status_Syncing"),
         StatusBrush = BrushFromHex("#D6A15F"),
         HeadlineRemainingText = HeadlineRemainingText,
         HeadlineLabel = HeadlineLabel,
@@ -81,7 +82,7 @@ public sealed class UsageWidgetViewModel
         var generalLimits = BuildLimitViewModels(snapshot.GeneralLimits, includeBucketLabel: false);
         if (generalLimits.Length == 0 || displayedWindow is not { } displayed)
         {
-            return Error("No subscription limits returned. Run codex login first.");
+            return Error(Strings.Get("Status_NoLimits"));
         }
 
         var modelLimits = BuildLimitViewModels(
@@ -91,13 +92,17 @@ public sealed class UsageWidgetViewModel
 
         return new UsageWidgetViewModel
         {
-            StatusText = plan is null ? "Live · ChatGPT" : $"Live · {plan}",
+            StatusText = Strings.Format("Status_LivePlan", plan ?? "ChatGPT"),
             StatusBrush = BrushFromHex("#68B88A"),
             HeadlineRemainingText = $"{Math.Round(displayed.RemainingPercent):0}%",
-            HeadlineLabel = $"{displayed.Label} remaining",
+            HeadlineLabel = Strings.Format(
+                "Status_HeadlineRemaining",
+                UsageLabelLocalizer.Localize(displayed.Label)),
             HeadlineRemainingPercent = displayed.RemainingPercent,
             HeadlineResetsAt = displayed.ResetsAt,
-            UpdatedText = $"Local only · updated {snapshot.FetchedAt:HH:mm:ss}",
+            UpdatedText = Strings.Format(
+                "Status_LocalUpdated",
+                snapshot.FetchedAt.ToString("HH:mm:ss", CultureInfo.CurrentCulture)),
             WarningText = BuildWarning(snapshot.RateLimits.Limits),
             GeneralLimits = generalLimits,
             ModelLimits = modelLimits,
@@ -112,7 +117,9 @@ public sealed class UsageWidgetViewModel
         IEnumerable<UsageLimitBucket> limits,
         bool includeBucketLabel) => limits
         .SelectMany(limit => limit.Windows.Select(window => new UsageLimitViewModel(
-            includeBucketLabel ? $"{limit.Label} · {window.Label}" : window.Label,
+            includeBucketLabel
+                ? $"{limit.Label} · {UsageLabelLocalizer.Localize(window.Label)}"
+                : UsageLabelLocalizer.Localize(window.Label),
             window)))
         .ToArray();
 
@@ -125,29 +132,36 @@ public sealed class UsageWidgetViewModel
         if (general?.Credits is { } credits)
         {
             var value = credits.Unlimited
-                ? "Unlimited"
+                ? Strings.Get("Common_Unlimited")
                 : !string.IsNullOrWhiteSpace(credits.Balance)
-                    ? $"{credits.Balance} remaining"
-                    : credits.HasCredits ? "Available" : "None available";
-            metrics.Add(new DetailMetricViewModel("ChatGPT credits", value));
+                    ? Strings.Format("Usage_CreditsRemaining", credits.Balance)
+                    : credits.HasCredits
+                        ? Strings.Get("Common_Available")
+                        : Strings.Get("Common_NoneAvailable");
+            metrics.Add(new DetailMetricViewModel(Strings.Get("Usage_ChatGptCredits"), value));
         }
 
         if (general?.IndividualLimit is { } spendLimit)
         {
             metrics.Add(new DetailMetricViewModel(
-                "Individual spend limit",
-                $"{spendLimit.Used} of {spendLimit.Limit} · " +
-                $"{Math.Round(spendLimit.RemainingPercent):0}% remaining"));
+                Strings.Get("Usage_IndividualSpendLimit"),
+                Strings.Format(
+                    "Usage_SpendLimitValue",
+                    spendLimit.Used,
+                    spendLimit.Limit,
+                    Math.Round(spendLimit.RemainingPercent))));
             metrics.Add(new DetailMetricViewModel(
-                "Spend limit resets",
+                Strings.Get("Usage_SpendLimitResets"),
                 spendLimit.ResetsAt.ToString("ddd HH:mm", CultureInfo.CurrentCulture)));
         }
 
         if (rateLimits.ResetCredits is { } resetCredits)
         {
             metrics.Add(new DetailMetricViewModel(
-                "Rate-limit resets",
-                $"{resetCredits.AvailableCount:N0} available"));
+                Strings.Get("Usage_RateLimitResets"),
+                Strings.Format(
+                    "Usage_CountAvailable",
+                    resetCredits.AvailableCount.ToString("N0", CultureInfo.CurrentCulture))));
         }
 
         return metrics;
@@ -161,15 +175,15 @@ public sealed class UsageWidgetViewModel
             return reachedState switch
             {
                 "workspace_owner_credits_depleted" or "workspace_member_credits_depleted" =>
-                    "Workspace credits are depleted.",
+                    Strings.Get("Warning_WorkspaceCreditsDepleted"),
                 "workspace_owner_usage_limit_reached" or "workspace_member_usage_limit_reached" =>
-                    "Workspace usage limit reached.",
-                _ => "Codex usage limit reached."
+                    Strings.Get("Warning_WorkspaceUsageLimitReached"),
+                _ => Strings.Get("Warning_UsageLimitReached")
             };
         }
 
         return limits.Any(limit => limit.SpendControlReached == true)
-            ? "Individual spend control reached."
+            ? Strings.Get("Warning_SpendControlReached")
             : null;
     }
 

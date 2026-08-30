@@ -1,3 +1,6 @@
+using System.Globalization;
+using CodexUsageWidget.Localization;
+
 namespace CodexUsageWidget.Application;
 
 public static class UsageTextFormatter
@@ -7,16 +10,17 @@ public static class UsageTextFormatter
         if (message.Contains("not found", StringComparison.OrdinalIgnoreCase) ||
             message.Contains("cannot find", StringComparison.OrdinalIgnoreCase))
         {
-            return "Codex CLI was not found on PATH.";
+            return Strings.Get("Error_CliNotFound");
         }
 
         if (message.Contains("login", StringComparison.OrdinalIgnoreCase) ||
             message.Contains("unauthorized", StringComparison.OrdinalIgnoreCase))
         {
-            return "Run codex login, then refresh.";
+            return Strings.Get("Error_LoginRequired");
         }
 
-        return message.Length > 100 ? message[..100] + "…" : message;
+        var detail = message.Length > 100 ? message[..100] + "…" : message;
+        return Strings.Format("Error_Unexpected", detail);
     }
 
     public static string FormatReset(DateTimeOffset reset, DateTimeOffset? now = null)
@@ -24,15 +28,20 @@ public static class UsageTextFormatter
         var remaining = reset - (now ?? DateTimeOffset.Now);
         if (remaining <= TimeSpan.Zero)
         {
-            return "now";
+            return Strings.Get("Usage_ResetsNow");
         }
 
         if (remaining < TimeSpan.FromHours(24))
         {
-            return $"in {Math.Max(1, (int)Math.Ceiling(remaining.TotalHours))}h · {reset:HH:mm}";
+            return Strings.Format(
+                "Usage_ResetsInHours",
+                Math.Max(1, (int)Math.Ceiling(remaining.TotalHours)),
+                reset.ToString("HH:mm", CultureInfo.CurrentCulture));
         }
 
-        return $"{reset:ddd HH:mm}";
+        return Strings.Format(
+            "Usage_ResetsAt",
+            reset.ToString("ddd HH:mm", CultureInfo.CurrentCulture));
     }
 
     public static string ColorForRemaining(double remainingPercent) => remainingPercent switch

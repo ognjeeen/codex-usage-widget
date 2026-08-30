@@ -70,7 +70,7 @@ public sealed class CodexActivityHookSetupService : IActivityHookSetupService
         {
             return new ActivityHookSetupStatus(
                 ActivityHookSetupState.InstalledStatusUnavailable,
-                $"Codex could not report hook trust status: {ex.Message}");
+                ex.Message);
         }
     }
 
@@ -123,8 +123,6 @@ public sealed class CodexActivityHookSetupService : IActivityHookSetupService
                 new ActivityHookSetupStatus(ActivityHookSetupState.Active),
             CodexHookTrustEvaluation.Modified =>
                 new ActivityHookSetupStatus(ActivityHookSetupState.Modified),
-            _ => new ActivityHookSetupStatus(
-                ActivityHookSetupState.InstalledStatusUnavailable,
-                "The hook definitions are installed, but Codex did not report all expected hooks.")
+            _ => new ActivityHookSetupStatus(ActivityHookSetupState.InstalledStatusUnavailable)
         };
 }

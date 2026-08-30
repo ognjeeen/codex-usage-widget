@@ -42,7 +42,9 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
 11. `AppThemeController` applies the saved system, light, or dark theme plus the selected
     accent palette, and observes Windows theme changes without leaking registry access into
     view code.
-12. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
+12. `AppLanguageController` resolves the saved system, English, or Simplified Chinese
+    preference, while standard .NET resources and a notifying WPF binding refresh existing UI.
+13. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
     activity-hook setup plus immediate theme, accent, widget-layout, displayed-limit, and Windows
     startup preferences. Focused user controls render compact, detailed, and repeated limit-row
     content.

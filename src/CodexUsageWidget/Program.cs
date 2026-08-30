@@ -4,7 +4,9 @@ using System.IO;
 using System.Security;
 using CodexUsageWidget.Infrastructure;
 using CodexUsageWidget.Infrastructure.Codex.Hooks;
+using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget;
 
@@ -28,9 +30,10 @@ internal static class Program
         catch (Exception ex) when (
             ex is IOException or UnauthorizedAccessException or SecurityException or Win32Exception)
         {
+            _ = new AppLanguageController(new LanguagePreferenceStore());
             System.Windows.MessageBox.Show(
-                "Codex Usage Widget could not install itself for the current user. " + ex.Message,
-                "Codex Usage Widget",
+                Strings.Format("App_InstallFailure", ex.Message),
+                Strings.Get("App_Name"),
                 System.Windows.MessageBoxButton.OK,
                 System.Windows.MessageBoxImage.Error);
             return -1;

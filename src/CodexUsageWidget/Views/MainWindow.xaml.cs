@@ -7,6 +7,7 @@ using CodexUsageWidget.Application;
 using CodexUsageWidget.Domain;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
+using CodexUsageWidget.Localization;
 using CodexUsageWidget.Views.ViewModels;
 
 namespace CodexUsageWidget.Views;
@@ -28,6 +29,7 @@ public partial class MainWindow : Window
     private readonly StartupRegistrationService _startupRegistration;
     private readonly TrayIconService _trayIcon;
     private readonly AppThemeController _themeController;
+    private readonly AppLanguageController _languageController;
     private readonly TaskbarLabelWindow _taskbarLabel = new();
     private readonly WidgetVisibilityController _widgetVisibility;
     private readonly MainWindowCloseState _closeState = new();
@@ -52,7 +54,8 @@ public partial class MainWindow : Window
         DisplayedLimitPreferenceStore displayedLimitPreferenceStore,
         StartupRegistrationService startupRegistration,
         TrayIconService trayIcon,
-        AppThemeController themeController)
+        AppThemeController themeController,
+        AppLanguageController languageController)
     {
         _usageMonitor = usageMonitor;
         _activityMonitor = activityMonitor;
@@ -64,6 +67,7 @@ public partial class MainWindow : Window
         _startupRegistration = startupRegistration;
         _trayIcon = trayIcon;
         _themeController = themeController;
+        _languageController = languageController;
         _displayMode = displayModeStore.Load();
         _density = densityStore.Load();
         _displayedLimitPreference = displayedLimitPreferenceStore.Load();
@@ -252,8 +256,8 @@ public partial class MainWindow : Window
             : Visibility.Collapsed;
         DensityGlyphRotation.Angle = _density == WidgetDensity.Detailed ? 180d : 0d;
         DensityButton.ToolTip = _density == WidgetDensity.Detailed
-            ? "Show compact view"
-            : "Show details";
+            ? Strings.Get("Main_ShowCompact")
+            : Strings.Get("Main_ShowDetails");
 
         if (_density == WidgetDensity.Detailed)
         {
@@ -337,7 +341,8 @@ public partial class MainWindow : Window
                 _startupRegistration.IsEnabled,
                 _activityHookSetupService,
                 _codexLauncher,
-                _themeController.AccentPalette)
+                _themeController.AccentPalette,
+                _languageController.Preference)
             {
                 Owner = this
             };
@@ -347,6 +352,7 @@ public partial class MainWindow : Window
             window.WidgetDensityChanged += SetDensity;
             window.DisplayedLimitPreferenceChanged += SetDisplayedLimitPreference;
             window.StartWithWindowsChanged += SetStartupRegistration;
+            window.LanguagePreferenceChanged += SetLanguagePreference;
             window.ShowDialog();
         }
         finally
@@ -395,8 +401,8 @@ public partial class MainWindow : Window
 
         SetStartupRegistrationState(_startupRegistration.IsEnabled);
         System.Windows.MessageBox.Show(
-            "The Windows startup preference could not be updated.",
-            "Codex Usage Widget",
+            Strings.Get("Main_StartupPreferenceError"),
+            Strings.Get("App_Name"),
             MessageBoxButton.OK,
             MessageBoxImage.Warning);
     }
@@ -414,10 +420,24 @@ public partial class MainWindow : Window
         }
 
         System.Windows.MessageBox.Show(
-            "Windows could not open the widget release page.",
-            "Codex Usage Widget",
+            Strings.Get("Main_UpdateOpenError"),
+            Strings.Get("App_Name"),
             MessageBoxButton.OK,
             MessageBoxImage.Warning);
+    }
+
+    private void SetLanguagePreference(LanguagePreference preference)
+    {
+        _languageController.SetPreference(preference);
+        ApplyDensity(repositionBottomEdge: false);
+        if (_latestSnapshot is { } snapshot)
+        {
+            RenderSnapshot(snapshot);
+            return;
+        }
+
+        SetViewModel(UsageWidgetViewModel.Loading());
+        _ = _usageMonitor.RefreshAsync();
     }
 
     private void Widget_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -1,7 +1,8 @@
 <UserControl x:Class="CodexUsageWidget.Views.Controls.ActivityHookSetupControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls">
+             xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
+             xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization">
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -17,11 +18,11 @@
                          Fill="{DynamicResource TextPrimary}" />
             </Canvas>
             <StackPanel Grid.Column="1">
-                <TextBlock Text="Codex activity"
+                <TextBlock Text="{localization:Loc Activity_Title}"
                            FontSize="15"
                            FontWeight="SemiBold"
                            Foreground="{DynamicResource TextPrimary}" />
-                <TextBlock Text="Show when a local Codex turn is running"
+                <TextBlock Text="{localization:Loc Activity_Description}"
                            Margin="0,3,0,0"
                            Style="{StaticResource SupportingText}" />
             </StackPanel>
@@ -53,7 +54,7 @@
                 BorderBrush="{DynamicResource DividerBrush}"
                 BorderThickness="1"
                 CornerRadius="8">
-            <TextBlock Text="Privacy: only activity type, session ID, and turn ID travel through a local user-only pipe. Prompts and responses never leave Codex."
+            <TextBlock Text="{localization:Loc Activity_Privacy}"
                        TextWrapping="Wrap"
                        LineHeight="16"
                        FontSize="10.5"
@@ -73,11 +74,11 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Left">
-                <Button Content="Check again"
+                <Button Content="{localization:Loc Common_CheckAgain}"
                         IsEnabled="{Binding CanRefresh}"
                         Click="RefreshButton_OnClick"
                         Style="{StaticResource DialogButton}" />
-                <Button Content="Remove hooks"
+                <Button Content="{localization:Loc Activity_RemoveHooks}"
                         Margin="8,0,0,0"
                         Visibility="{Binding CanUninstall, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Click="UninstallButton_OnClick"
@@ -92,7 +93,7 @@
                                        Click="InstallButton_OnClick"
                                        Style="{StaticResource PrimaryDialogButton}" />
                 <controls:AccentButton Content="{Binding CodexActionLabel}"
-                                       ToolTip="Copies /hooks and opens Codex"
+                                       ToolTip="{localization:Loc Activity_CopyHooksTooltip}"
                                        Visibility="{Binding CanOpenCodex, Converter={StaticResource BooleanToVisibilityConverter}}"
                                        Click="OpenCodexButton_OnClick"
                                        Style="{StaticResource PrimaryDialogButton}" />

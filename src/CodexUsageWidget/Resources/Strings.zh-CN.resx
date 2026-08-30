@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="App_Name" xml:space="preserve"><value>Codex 用量小组件</value></data>
+  <data name="App_MainTitle" xml:space="preserve"><value>Codex 用量</value></data>
+  <data name="App_InstallFailure" xml:space="preserve"><value>Codex 用量小组件无法为当前用户完成安装。{0}</value></data>
+  <data name="App_StartupFailure" xml:space="preserve"><value>Codex 用量小组件无法启动。请查看以下目录中的日志：{0}</value></data>
+  <data name="Common_Available" xml:space="preserve"><value>可用</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="Common_CheckAgain" xml:space="preserve"><value>重新检查</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>关闭</value></data>
+  <data name="Common_Exit" xml:space="preserve"><value>退出</value></data>
+  <data name="Common_NoneAvailable" xml:space="preserve"><value>暂无可用额度</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>刷新</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>设置</value></data>
+  <data name="Common_Unlimited" xml:space="preserve"><value>不限量</value></data>
+  <data name="Main_ActivityRunning" xml:space="preserve"><value>Codex 任务正在运行</value></data>
+  <data name="Main_RefreshUsage" xml:space="preserve"><value>刷新用量</value></data>
+  <data name="Main_ShowCompact" xml:space="preserve"><value>显示紧凑视图</value></data>
+  <data name="Main_ShowDetails" xml:space="preserve"><value>显示详情</value></data>
+  <data name="Main_ToggleLayout" xml:space="preserve"><value>切换小组件布局</value></data>
+  <data name="Main_UseTaskbarLabel" xml:space="preserve"><value>使用任务栏标签</value></data>
+  <data name="Main_StartupPreferenceError" xml:space="preserve"><value>无法更新开机启动设置。</value></data>
+  <data name="Main_UpdateOpenError" xml:space="preserve"><value>Windows 无法打开小组件的发布页面。</value></data>
+  <data name="Status_Connecting" xml:space="preserve"><value>正在连接…</value></data>
+  <data name="Status_WaitingForCodex" xml:space="preserve"><value>正在等待 Codex</value></data>
+  <data name="Status_LocalWaiting" xml:space="preserve"><value>仅限本机 · 等待同步</value></data>
+  <data name="Status_Offline" xml:space="preserve"><value>离线</value></data>
+  <data name="Status_LocalRetry" xml:space="preserve"><value>仅限本机 · 请选择刷新后重试</value></data>
+  <data name="Status_Syncing" xml:space="preserve"><value>正在同步…</value></data>
+  <data name="Status_LivePlan" xml:space="preserve"><value>实时 · {0}</value></data>
+  <data name="Status_HeadlineRemaining" xml:space="preserve"><value>剩余 {0}</value></data>
+  <data name="Status_LocalUpdated" xml:space="preserve"><value>仅限本机 · 更新于 {0}</value></data>
+  <data name="Status_NoLimits" xml:space="preserve"><value>未返回订阅用量限制。请先运行 codex login。</value></data>
+  <data name="Error_CliNotFound" xml:space="preserve"><value>在 PATH 中找不到 Codex CLI。</value></data>
+  <data name="Error_LoginRequired" xml:space="preserve"><value>请运行 codex login，然后刷新。</value></data>
+  <data name="Error_ResponseTimeout" xml:space="preserve"><value>Codex 响应超时。</value></data>
+  <data name="Error_Unexpected" xml:space="preserve"><value>无法读取 Codex 用量。{0}</value></data>
+  <data name="Warning_WorkspaceCreditsDepleted" xml:space="preserve"><value>工作区额度已用尽。</value></data>
+  <data name="Warning_WorkspaceUsageLimitReached" xml:space="preserve"><value>已达到工作区用量限制。</value></data>
+  <data name="Warning_UsageLimitReached" xml:space="preserve"><value>已达到 Codex 用量限制。</value></data>
+  <data name="Warning_SpendControlReached" xml:space="preserve"><value>已达到个人消费限制。</value></data>
+  <data name="Usage_FiveHourLimit" xml:space="preserve"><value>5 小时限制</value></data>
+  <data name="Usage_WeeklyLimit" xml:space="preserve"><value>每周限制</value></data>
+  <data name="Usage_DayLimit" xml:space="preserve"><value>{0} 天限制</value></data>
+  <data name="Usage_HourLimit" xml:space="preserve"><value>{0} 小时限制</value></data>
+  <data name="Usage_MinuteLimit" xml:space="preserve"><value>{0} 分钟限制</value></data>
+  <data name="Usage_PrimaryLimit" xml:space="preserve"><value>主要限制</value></data>
+  <data name="Usage_SecondaryLimit" xml:space="preserve"><value>次要限制</value></data>
+  <data name="Usage_UsedPercent" xml:space="preserve"><value>已用 {0}%</value></data>
+  <data name="Usage_RemainingPercent" xml:space="preserve"><value>剩余 {0}%</value></data>
+  <data name="Usage_ResetUnavailable" xml:space="preserve"><value>暂无重置时间</value></data>
+  <data name="Usage_ResetsNow" xml:space="preserve"><value>现在重置</value></data>
+  <data name="Usage_ResetsInHours" xml:space="preserve"><value>{0} 小时后重置 · {1}</value></data>
+  <data name="Usage_ResetsAt" xml:space="preserve"><value>{0} 重置</value></data>
+  <data name="Usage_CreditsRemaining" xml:space="preserve"><value>剩余 {0}</value></data>
+  <data name="Usage_ChatGptCredits" xml:space="preserve"><value>ChatGPT 额度</value></data>
+  <data name="Usage_IndividualSpendLimit" xml:space="preserve"><value>个人消费限制</value></data>
+  <data name="Usage_SpendLimitValue" xml:space="preserve"><value>已用 {0} / {1} · 剩余 {2}%</value></data>
+  <data name="Usage_SpendLimitResets" xml:space="preserve"><value>消费限制重置时间</value></data>
+  <data name="Usage_RateLimitResets" xml:space="preserve"><value>用量限制重置次数</value></data>
+  <data name="Usage_CountAvailable" xml:space="preserve"><value>可用 {0}</value></data>
+  <data name="Usage_SectionOverview" xml:space="preserve"><value>概览</value></data>
+  <data name="Usage_SectionCreditsLimits" xml:space="preserve"><value>额度与限制</value></data>
+  <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>TOKEN 活动</value></data>
+  <data name="Usage_NotQuotaConsumption" xml:space="preserve"><value>不计入用量额度</value></data>
+  <data name="Usage_SectionModelLimits" xml:space="preserve"><value>模型专属限制</value></data>
+  <data name="Token_Lifetime" xml:space="preserve"><value>累计 Token</value></data>
+  <data name="Token_PeakDaily" xml:space="preserve"><value>单日 Token 峰值</value></data>
+  <data name="Token_LongestTurn" xml:space="preserve"><value>最长任务时长</value></data>
+  <data name="Token_CurrentStreak" xml:space="preserve"><value>当前连续天数</value></data>
+  <data name="Token_LongestStreak" xml:space="preserve"><value>最长连续天数</value></data>
+  <data name="Token_Days" xml:space="preserve"><value>{0} 天</value></data>
+  <data name="Token_Count" xml:space="preserve"><value>{0} Token</value></data>
+  <data name="Token_ChartPeak" xml:space="preserve"><value>图表峰值的 {0}%</value></data>
+  <data name="Token_DurationHoursMinutes" xml:space="preserve"><value>{0} 小时 {1} 分钟</value></data>
+  <data name="Token_DurationMinutes" xml:space="preserve"><value>{0} 分钟</value></data>
+  <data name="Settings_Description" xml:space="preserve"><value>选择 Codex 用量小组件的外观和行为。</value></data>
+  <data name="Settings_SectionGeneral" xml:space="preserve"><value>常规</value></data>
+  <data name="Settings_StartWithWindows" xml:space="preserve"><value>开机启动</value></data>
+  <data name="Settings_StartWithWindowsDescription" xml:space="preserve"><value>登录 Windows 时启动小组件</value></data>
+  <data name="Settings_Theme_Title" xml:space="preserve"><value>主题</value></data>
+  <data name="Settings_Theme_Description" xml:space="preserve"><value>跟随 Windows 主题，或固定使用一种主题。</value></data>
+  <data name="Settings_Theme_System" xml:space="preserve"><value>跟随 Windows</value></data>
+  <data name="Settings_Theme_SystemDescription" xml:space="preserve"><value>随 Windows 应用主题切换</value></data>
+  <data name="Settings_Theme_SystemAutomation" xml:space="preserve"><value>使用 Windows 主题</value></data>
+  <data name="Settings_Theme_Light" xml:space="preserve"><value>浅色</value></data>
+  <data name="Settings_Theme_LightDescription" xml:space="preserve"><value>浅色界面和深色文字</value></data>
+  <data name="Settings_Theme_LightAutomation" xml:space="preserve"><value>使用浅色主题</value></data>
+  <data name="Settings_Theme_Dark" xml:space="preserve"><value>深色</value></data>
+  <data name="Settings_Theme_DarkDescription" xml:space="preserve"><value>深色界面和浅色文字</value></data>
+  <data name="Settings_Theme_DarkAutomation" xml:space="preserve"><value>使用深色主题</value></data>
+  <data name="Settings_Accent_Title" xml:space="preserve"><value>强调色</value></data>
+  <data name="Settings_Accent_Blue" xml:space="preserve"><value>蓝色</value></data>
+  <data name="Settings_Accent_Violet" xml:space="preserve"><value>紫色</value></data>
+  <data name="Settings_Accent_Teal" xml:space="preserve"><value>青色</value></data>
+  <data name="Settings_Accent_Emerald" xml:space="preserve"><value>翠绿色</value></data>
+  <data name="Settings_Accent_Pink" xml:space="preserve"><value>粉色</value></data>
+  <data name="Settings_Accent_Automation" xml:space="preserve"><value>使用{0}强调色</value></data>
+  <data name="Settings_Accent_BlueAutomation" xml:space="preserve"><value>使用蓝色强调色</value></data>
+  <data name="Settings_Accent_VioletAutomation" xml:space="preserve"><value>使用紫色强调色</value></data>
+  <data name="Settings_Accent_TealAutomation" xml:space="preserve"><value>使用青色强调色</value></data>
+  <data name="Settings_Accent_EmeraldAutomation" xml:space="preserve"><value>使用翠绿色强调色</value></data>
+  <data name="Settings_Accent_PinkAutomation" xml:space="preserve"><value>使用粉色强调色</value></data>
+  <data name="Settings_Layout_Title" xml:space="preserve"><value>小组件布局</value></data>
+  <data name="Settings_Layout_Description" xml:space="preserve"><value>选择桌面小组件显示的信息量。</value></data>
+  <data name="Settings_Layout_Compact" xml:space="preserve"><value>紧凑</value></data>
+  <data name="Settings_Layout_CompactDescription" xml:space="preserve"><value>快速查看用量摘要</value></data>
+  <data name="Settings_Layout_CompactAutomation" xml:space="preserve"><value>使用紧凑布局</value></data>
+  <data name="Settings_Layout_Detailed" xml:space="preserve"><value>详情</value></data>
+  <data name="Settings_Layout_DetailedDescription" xml:space="preserve"><value>显示完整用量明细</value></data>
+  <data name="Settings_Layout_DetailedAutomation" xml:space="preserve"><value>使用详情布局</value></data>
+  <data name="Settings_SectionUsage" xml:space="preserve"><value>用量</value></data>
+  <data name="Settings_DisplayedLimit_Title" xml:space="preserve"><value>显示的限制</value></data>
+  <data name="Settings_DisplayedLimit_Description" xml:space="preserve"><value>选择小组件、任务栏标签和托盘图标显示的限制。</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourDescription" xml:space="preserve"><value>显示全局五小时用量窗口</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourAutomation" xml:space="preserve"><value>显示 5 小时限制</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourUnavailable" xml:space="preserve"><value>Codex 未返回此账户的全局 5 小时限制。</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyDescription" xml:space="preserve"><value>显示全局每周用量窗口</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyAutomation" xml:space="preserve"><value>显示每周限制</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrained" xml:space="preserve"><value>剩余额度最少</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedDescription" xml:space="preserve"><value>显示当前剩余比例最低的可用限制</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>显示剩余额度最少的限制</value></data>
+  <data name="Settings_SectionFeatures" xml:space="preserve"><value>功能</value></data>
+  <data name="Settings_Language_Title" xml:space="preserve"><value>语言</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>跟随 Windows 显示语言，或固定使用一种语言。</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>跟随 Windows</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>支持简体中文时使用中文，否则使用英语</value></data>
+  <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>跟随 Windows 显示语言</value></data>
+  <data name="Settings_Language_English" xml:space="preserve"><value>English</value></data>
+  <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>始终使用英语</value></data>
+  <data name="Settings_Language_EnglishAutomation" xml:space="preserve"><value>使用英语</value></data>
+  <data name="Settings_Language_Chinese" xml:space="preserve"><value>简体中文</value></data>
+  <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>始终使用简体中文</value></data>
+  <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>使用简体中文</value></data>
+  <data name="Activity_Title" xml:space="preserve"><value>Codex 运行状态</value></data>
+  <data name="Activity_Description" xml:space="preserve"><value>Codex 本地任务运行时显示状态点</value></data>
+  <data name="Activity_Privacy" xml:space="preserve"><value>隐私说明：只有活动类型、会话 ID 和任务 ID 会通过仅限当前用户的本地管道传输。提示词和回复始终留在 Codex 中。</value></data>
+  <data name="Activity_RemoveHooks" xml:space="preserve"><value>移除钩子</value></data>
+  <data name="Activity_CopyHooksTooltip" xml:space="preserve"><value>复制 /hooks 并打开 Codex</value></data>
+  <data name="Activity_Checking" xml:space="preserve"><value>正在检查 Codex…</value></data>
+  <data name="Activity_CheckingDescription" xml:space="preserve"><value>正在读取本地钩子配置和 Codex 信任状态。</value></data>
+  <data name="Activity_OpenInCodex" xml:space="preserve"><value>在 Codex 中打开</value></data>
+  <data name="Activity_ReviewHooks" xml:space="preserve"><value>检查钩子</value></data>
+  <data name="Activity_SetupRequired" xml:space="preserve"><value>需要设置</value></data>
+  <data name="Activity_SetupRequiredDescription" xml:space="preserve"><value>安装三个本地生命周期钩子，以便 Codex 工作时显示任务栏状态点。写入前可以检查 hooks.json 的确切改动。</value></data>
+  <data name="Activity_UpdateAvailable" xml:space="preserve"><value>有可用更新</value></data>
+  <data name="Activity_UpdateDescription" xml:space="preserve"><value>已安装旧版小组件的活动处理程序。检查确切改动后，可将其更新为更快且不依赖路径的桥接程序。</value></data>
+  <data name="Activity_ReviewUpdate" xml:space="preserve"><value>检查更新</value></data>
+  <data name="Activity_OneStepLeft" xml:space="preserve"><value>还差一步</value></data>
+  <data name="Activity_ApprovalDescription" xml:space="preserve"><value>钩子已安装。需要在 Codex 中批准一次确切定义，钩子才能运行。</value></data>
+  <data name="Activity_ApproveInCodex" xml:space="preserve"><value>在 Codex 中批准</value></data>
+  <data name="Activity_Ready" xml:space="preserve"><value>运行状态点已就绪</value></data>
+  <data name="Activity_ReadyDescription" xml:space="preserve"><value>三个钩子均已安装并受信任。</value></data>
+  <data name="Activity_ReviewRequired" xml:space="preserve"><value>需要检查</value></data>
+  <data name="Activity_ModifiedDescription" xml:space="preserve"><value>Codex 已暂停改动过的定义。请重新检查，活动报告随后会恢复。</value></data>
+  <data name="Activity_ReviewInCodex" xml:space="preserve"><value>在 Codex 中检查</value></data>
+  <data name="Activity_HooksDisabled" xml:space="preserve"><value>Codex 中的钩子已禁用</value></data>
+  <data name="Activity_HooksDisabledDescription" xml:space="preserve"><value>安装前，请在 Codex 配置的 [features] 部分设置 hooks = true。</value></data>
+  <data name="Activity_StatusUnavailable" xml:space="preserve"><value>已安装 · 状态不可用</value></data>
+  <data name="Activity_StatusUnavailableDescription" xml:space="preserve"><value>钩子已安装，但无法验证其信任状态。</value></data>
+  <data name="Activity_StatusUnavailableWithDetail" xml:space="preserve"><value>钩子已安装，但 Codex 无法返回其信任状态。{0}</value></data>
+  <data name="Activity_OpenHooksInCodex" xml:space="preserve"><value>在 Codex 中打开钩子</value></data>
+  <data name="Activity_SetupUnavailable" xml:space="preserve"><value>设置不可用</value></data>
+  <data name="Activity_SetupUnavailableDescription" xml:space="preserve"><value>无法读取活动钩子配置。</value></data>
+  <data name="Activity_SetupErrorDetail" xml:space="preserve"><value>无法完成活动钩子设置。{0}</value></data>
+  <data name="Activity_StatusTimeout" xml:space="preserve"><value>Codex 未及时返回钩子状态。请检查 CLI 是否可用，然后重试。</value></data>
+  <data name="Activity_CodexOpenCopied" xml:space="preserve"><value>Codex 已打开。请粘贴 /hooks 并批准三个定义。返回此处时会刷新状态。</value></data>
+  <data name="Activity_CodexOpenType" xml:space="preserve"><value>Codex 已打开。请输入 /hooks 并批准三个定义。返回此处时会刷新状态。</value></data>
+  <data name="Activity_ReviewTitle" xml:space="preserve"><value>检查 Codex 活动钩子</value></data>
+  <data name="Activity_ReviewInstallHeading" xml:space="preserve"><value>检查活动钩子安装</value></data>
+  <data name="Activity_ReviewRemoveHeading" xml:space="preserve"><value>检查活动钩子移除</value></data>
+  <data name="Activity_ReviewInstallDescription" xml:space="preserve"><value>小组件将写入以下确切的 ~/.codex/hooks.json 内容。现有钩子和未知字段会保留。</value></data>
+  <data name="Activity_ReviewRemoveDescription" xml:space="preserve"><value>只会移除与此小组件可执行文件完全匹配的处理程序。其他钩子定义会保留。</value></data>
+  <data name="Activity_InstallHooks" xml:space="preserve"><value>安装钩子</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>打开</value></data>
+  <data name="Tray_Settings" xml:space="preserve"><value>设置...</value></data>
+  <data name="Tray_DisplayMode" xml:space="preserve"><value>显示模式</value></data>
+  <data name="Tray_DesktopWidget" xml:space="preserve"><value>桌面小组件</value></data>
+  <data name="Tray_TaskbarLabel" xml:space="preserve"><value>任务栏标签</value></data>
+  <data name="Tray_CheckUpdates" xml:space="preserve"><value>检查更新...</value></data>
+  <data name="Tray_Unavailable" xml:space="preserve"><value>Codex 用量 · 暂不可用</value></data>
+  <data name="Tray_Remaining" xml:space="preserve"><value>Codex · 剩余 {0}%</value></data>
+  <data name="Taskbar_OpenWidget" xml:space="preserve"><value>打开小组件</value></data>
+  <data name="Taskbar_PreviewActivity" xml:space="preserve"><value>预览活动动画</value></data>
+  <data name="Taskbar_UseDesktopWidget" xml:space="preserve"><value>使用桌面小组件</value></data>
+  <data name="Taskbar_UsageUnavailable" xml:space="preserve"><value>Codex 用量当前不可用。</value></data>
+  <data name="Taskbar_Remaining" xml:space="preserve"><value>{0}：剩余 {1}%</value></data>
+  <data name="Taskbar_RemainingWithReset" xml:space="preserve"><value>{0}：剩余 {1}% · {2} 重置</value></data>
+</root>

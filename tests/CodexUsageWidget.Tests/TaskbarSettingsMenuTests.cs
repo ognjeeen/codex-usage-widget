@@ -1,14 +1,17 @@
+using System.Globalization;
 using System.Runtime.ExceptionServices;
 using System.Windows.Controls;
 using System.Windows.Media;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
+using CodexUsageWidget.Localization;
 using CodexUsageWidget.Views;
 using CodexUsageWidget.Views.Controls;
 
 namespace CodexUsageWidget.Tests;
 
+[Collection("Localization")]
 public sealed class TaskbarSettingsMenuTests
 {
     [Fact]
@@ -19,7 +22,9 @@ public sealed class TaskbarSettingsMenuTests
         {
             try
             {
-                var application = new App();
+                var application = new App(new AppLanguageController(
+                    LanguagePreference.English,
+                    CultureInfo.GetCultureInfo("en-US")));
                 application.InitializeComponent();
                 var themeTestDirectory = Path.Combine(
                     Path.GetTempPath(),
@@ -128,6 +133,16 @@ public sealed class TaskbarSettingsMenuTests
                     codexLauncher: new StubCodexLauncher(),
                     accentPalette: AccentPalette.Violet);
                 Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
+                var systemLanguageOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("SystemLanguageOption"));
+                Assert.True(systemLanguageOption.IsChecked);
+                LanguagePreference? changedLanguage = null;
+                usageSettings.LanguagePreferenceChanged += preference =>
+                    changedLanguage = preference;
+                var chineseLanguageOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("SimplifiedChineseLanguageOption"));
+                chineseLanguageOption.IsChecked = true;
+                Assert.Equal(LanguagePreference.SimplifiedChinese, changedLanguage);
                 var activityDotsHost = Assert.IsType<ContentControl>(
                     usageSettings.FindName("ActivityDotsHost"));
                 Assert.IsType<ActivityHookSetupControl>(activityDotsHost.Content);
@@ -259,6 +274,15 @@ public sealed class TaskbarSettingsMenuTests
         if (failure is not null)
         {
             ExceptionDispatchInfo.Capture(failure).Throw();
+        }
+
+        try
+        {
+            Strings.Current.SetCulture(CultureInfo.GetCultureInfo("zh-CN"));
+        }
+        finally
+        {
+            Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
         }
     }
 

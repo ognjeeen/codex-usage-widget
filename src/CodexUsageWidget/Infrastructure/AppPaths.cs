@@ -18,6 +18,8 @@ public static class AppPaths
 
     public static string ThemePreferenceFile => Path.Combine(LocalDataDirectory, "theme.txt");
 
+    public static string LanguagePreferenceFile => Path.Combine(LocalDataDirectory, "language.txt");
+
     public static string AccentPaletteFile => Path.Combine(LocalDataDirectory, "accent-palette.txt");
 
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");

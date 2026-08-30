@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using CodexUsageWidget.Application;
+using CodexUsageWidget.Localization;
 using CodexUsageWidget.Views.ViewModels;
 
 namespace CodexUsageWidget.Views.Controls;
@@ -18,9 +19,14 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
     private readonly ICodexLauncher _codexLauncher;
     private readonly CancellationTokenSource _lifetime = new();
     private Window? _hostWindow;
+    private ActivityHookSetupStatus? _lastStatus;
+    private string? _errorMessage;
+    private string? _errorResourceKey;
+    private bool? _instructionCommandCopied;
     private bool _refreshInProgress;
     private bool _refreshTrustOnActivation;
-    private bool _disposed;
+    private bool _stringsSubscribed;
+    private volatile bool _disposed;
 
     public ActivityHookSetupControl(
         IActivityHookSetupService setupService,
@@ -38,29 +44,54 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
 
     private async void ActivityHookSetupControlOnLoaded(object sender, RoutedEventArgs e)
     {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (!_stringsSubscribed)
+        {
+            Strings.Current.PropertyChanged += StringsOnPropertyChanged;
+            _stringsSubscribed = true;
+        }
+
         _hostWindow = Window.GetWindow(this);
         if (_hostWindow is not null)
         {
             _hostWindow.Activated += HostWindowOnActivated;
+            _hostWindow.Closed += HostWindowOnClosed;
         }
 
         await RefreshStatusAsync();
     }
 
-    private void ActivityHookSetupControlOnUnloaded(object sender, RoutedEventArgs e)
-    {
-        if (_hostWindow is not null)
-        {
-            _hostWindow.Activated -= HostWindowOnActivated;
-            _hostWindow = null;
-        }
+    private void ActivityHookSetupControlOnUnloaded(object sender, RoutedEventArgs e) =>
+        DisposeControl();
 
+    private void HostWindowOnClosed(object? sender, EventArgs e) =>
+        DisposeControl();
+
+    private void DisposeControl()
+    {
         if (_disposed)
         {
             return;
         }
 
         _disposed = true;
+        if (_hostWindow is not null)
+        {
+            _hostWindow.Activated -= HostWindowOnActivated;
+            _hostWindow.Closed -= HostWindowOnClosed;
+            _hostWindow = null;
+        }
+
+        if (_stringsSubscribed)
+        {
+            Strings.Current.PropertyChanged -= StringsOnPropertyChanged;
+            _stringsSubscribed = false;
+        }
+
         _lifetime.Cancel();
         _lifetime.Dispose();
     }
@@ -82,6 +113,10 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
         }
 
         _refreshInProgress = true;
+        _lastStatus = null;
+        _errorMessage = null;
+        _errorResourceKey = null;
+        _instructionCommandCopied = null;
         DataContext = ActivityHookSetupViewModel.Loading();
         InstructionText.Text = string.Empty;
         InstructionText.Visibility = Visibility.Collapsed;
@@ -90,6 +125,7 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(_lifetime.Token);
             timeout.CancelAfter(StatusTimeout);
             var status = await _setupService.GetStatusAsync(timeout.Token);
+            _lastStatus = status;
             var viewModel = ActivityHookSetupViewModel.FromStatus(status);
             DataContext = viewModel;
             if (_refreshTrustOnActivation && !viewModel.CanOpenCodex)
@@ -102,12 +138,11 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
         }
         catch (OperationCanceledException)
         {
-            DataContext = ActivityHookSetupViewModel.Error(
-                "Codex did not report hook status in time. Check that the CLI is available, then try again.");
+            SetError(resourceKey: "Activity_StatusTimeout");
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException or UnauthorizedAccessException)
         {
-            DataContext = ActivityHookSetupViewModel.Error(ex.Message);
+            SetError(message: ex.Message);
         }
         finally
         {
@@ -149,7 +184,7 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException or UnauthorizedAccessException)
         {
-            DataContext = ActivityHookSetupViewModel.Error(ex.Message);
+            SetError(message: ex.Message);
         }
     }
 
@@ -160,16 +195,64 @@ public partial class ActivityHookSetupControl : System.Windows.Controls.UserCont
         try
         {
             _codexLauncher.OpenInteractive();
-            InstructionText.Text = commandCopied
-                ? "Codex is open. Paste /hooks and approve the three definitions. Status refreshes when you return here."
-                : "Codex is open. Type /hooks and approve the three definitions. Status refreshes when you return here.";
-            InstructionText.Visibility = Visibility.Visible;
+            _instructionCommandCopied = commandCopied;
+            SetInstructionText(commandCopied);
         }
         catch (Exception ex) when (ex is Win32Exception or FileNotFoundException or InvalidOperationException)
         {
             _refreshTrustOnActivation = false;
-            DataContext = ActivityHookSetupViewModel.Error(ex.Message);
+            SetError(message: ex.Message);
         }
+    }
+
+    private void StringsOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != "Item[]" || _disposed)
+        {
+            return;
+        }
+
+        if (!Dispatcher.CheckAccess())
+        {
+            if (!Dispatcher.HasShutdownStarted && !Dispatcher.HasShutdownFinished)
+            {
+                _ = Dispatcher.BeginInvoke(
+                    () => StringsOnPropertyChanged(sender, e));
+            }
+
+            return;
+        }
+
+        DataContext = _lastStatus is not null
+            ? ActivityHookSetupViewModel.FromStatus(_lastStatus)
+            : _errorResourceKey is not null
+                ? ActivityHookSetupViewModel.Error(Strings.Get(_errorResourceKey))
+                : _errorMessage is not null
+                    ? ActivityHookSetupViewModel.Error(
+                        Strings.Format("Activity_SetupErrorDetail", _errorMessage))
+                    : ActivityHookSetupViewModel.Loading();
+        if (_instructionCommandCopied is { } commandCopied)
+        {
+            SetInstructionText(commandCopied);
+        }
+    }
+
+    private void SetError(string? message = null, string? resourceKey = null)
+    {
+        _lastStatus = null;
+        _errorMessage = message;
+        _errorResourceKey = resourceKey;
+        DataContext = ActivityHookSetupViewModel.Error(
+            resourceKey is null
+                ? Strings.Format("Activity_SetupErrorDetail", message!)
+                : Strings.Get(resourceKey));
+    }
+
+    private void SetInstructionText(bool commandCopied)
+    {
+        InstructionText.Text = Strings.Get(
+            commandCopied ? "Activity_CodexOpenCopied" : "Activity_CodexOpenType");
+        InstructionText.Visibility = Visibility.Visible;
     }
 
     private static bool TryCopyHooksCommand()

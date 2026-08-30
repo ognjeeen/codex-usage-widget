@@ -1,7 +1,8 @@
 <UserControl x:Class="CodexUsageWidget.Views.Controls.DetailedUsageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls">
+             xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
+             xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization">
     <ScrollViewer x:Name="DetailsScrollViewer"
                   Margin="16,4,10,8"
                   Padding="0,0,4,0"
@@ -16,7 +17,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="OVERVIEW" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="{localization:Loc Usage_SectionOverview}" Style="{StaticResource SectionTitle}" />
                         <TextBlock Grid.Column="1"
                                    Text="{Binding HeadlineRemainingText}"
                                    FontFamily="{StaticResource UiFont}"
@@ -46,7 +47,7 @@
             <Border Visibility="{Binding HasAccountMetrics, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource SectionCard}">
                 <StackPanel>
-                    <TextBlock Text="CREDITS &amp; LIMITS"
+                    <TextBlock Text="{localization:Loc Usage_SectionCreditsLimits}"
                                Margin="0,0,0,9"
                                Style="{StaticResource SectionTitle}" />
                     <ItemsControl ItemsSource="{Binding AccountMetrics}">
@@ -82,9 +83,9 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="TOKEN ACTIVITY" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="{localization:Loc Usage_SectionTokenActivity}" Style="{StaticResource SectionTitle}" />
                         <TextBlock Grid.Column="1"
-                                   Text="Not quota consumption"
+                                   Text="{localization:Loc Usage_NotQuotaConsumption}"
                                    Style="{StaticResource SupportingText}"
                                    FontSize="10.5"
                                    Foreground="{DynamicResource TextTertiary}" />
@@ -169,7 +170,7 @@
             <Border Visibility="{Binding HasModelLimits, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource SectionCard}">
                 <StackPanel>
-                    <TextBlock Text="MODEL-SPECIFIC LIMITS"
+                    <TextBlock Text="{localization:Loc Usage_SectionModelLimits}"
                                Margin="0,0,0,8"
                                Style="{StaticResource SectionTitle}" />
                     <ItemsControl ItemsSource="{Binding ModelLimits}">

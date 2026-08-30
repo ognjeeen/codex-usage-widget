@@ -22,6 +22,7 @@ public partial class SettingsWindow : Window
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
         AccentPalette accentPalette = AccentPalette.Blue,
+        LanguagePreference languagePreference = LanguagePreference.System,
         IWindowWorkAreaProvider? workAreaProvider = null)
     {
         _workAreaProvider = workAreaProvider ?? new WindowWorkAreaProvider();
@@ -36,6 +37,7 @@ public partial class SettingsWindow : Window
         SetDisplayedLimitPreference(displayedLimitPreference);
         SetFiveHourLimitAvailability(fiveHourLimitAvailable);
         SetStartWithWindowsEnabled(startWithWindowsEnabled);
+        SetLanguagePreference(languagePreference);
         _suppressChangeEvents = false;
     }
 
@@ -48,6 +50,8 @@ public partial class SettingsWindow : Window
     public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
 
     public event Action<bool>? StartWithWindowsChanged;
+
+    public event Action<LanguagePreference>? LanguagePreferenceChanged;
 
     public ThemePreference SelectedTheme =>
         LightThemeOption.IsChecked == true
@@ -80,6 +84,13 @@ public partial class SettingsWindow : Window
             : WidgetDensity.Compact;
 
     public bool StartWithWindowsEnabled => StartWithWindowsOption.IsChecked == true;
+
+    public LanguagePreference SelectedLanguage =>
+        EnglishLanguageOption.IsChecked == true
+            ? LanguagePreference.English
+            : SimplifiedChineseLanguageOption.IsChecked == true
+                ? LanguagePreference.SimplifiedChinese
+                : LanguagePreference.System;
 
     protected override void OnSourceInitialized(EventArgs e)
     {
@@ -126,6 +137,17 @@ public partial class SettingsWindow : Window
         var previousSuppression = _suppressChangeEvents;
         _suppressChangeEvents = true;
         StartWithWindowsOption.IsChecked = enabled;
+        _suppressChangeEvents = previousSuppression;
+    }
+
+    public void SetLanguagePreference(LanguagePreference preference)
+    {
+        var previousSuppression = _suppressChangeEvents;
+        _suppressChangeEvents = true;
+        SystemLanguageOption.IsChecked = preference == LanguagePreference.System;
+        EnglishLanguageOption.IsChecked = preference == LanguagePreference.English;
+        SimplifiedChineseLanguageOption.IsChecked =
+            preference == LanguagePreference.SimplifiedChinese;
         _suppressChangeEvents = previousSuppression;
     }
 
@@ -190,6 +212,14 @@ public partial class SettingsWindow : Window
         if (!_suppressChangeEvents)
         {
             StartWithWindowsChanged?.Invoke(StartWithWindowsEnabled);
+        }
+    }
+
+    private void LanguageOption_OnChecked(object sender, RoutedEventArgs e)
+    {
+        if (!_suppressChangeEvents)
+        {
+            LanguagePreferenceChanged?.Invoke(SelectedLanguage);
         }
     }
 }

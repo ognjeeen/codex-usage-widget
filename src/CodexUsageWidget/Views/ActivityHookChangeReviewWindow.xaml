@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
-        Title="Review Codex activity hooks"
+        xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization"
+        Title="{localization:Loc Activity_ReviewTitle}"
         Width="620"
         Height="520"
         ResizeMode="NoResize"
@@ -32,7 +33,7 @@
                         Height="28"
                         Margin="12,-4,-4,0"
                         VerticalAlignment="Top"
-                        ToolTip="Close"
+                        ToolTip="{localization:Loc Common_Close}"
                         IsCancel="True"
                         Style="{StaticResource IconButton}">
                     <Path Width="10"
@@ -64,7 +65,7 @@
                         Margin="0,16,0,0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                <Button Content="Cancel"
+                <Button Content="{localization:Loc Common_Cancel}"
                         Margin="0,0,8,0"
                         IsCancel="True"
                         Style="{StaticResource DialogButton}" />

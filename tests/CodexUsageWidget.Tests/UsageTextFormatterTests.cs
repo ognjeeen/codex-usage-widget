@@ -18,7 +18,7 @@ public sealed class UsageTextFormatterTests
 
         var result = UsageTextFormatter.FormatReset(reset, now);
 
-        Assert.Equal("in 3h · 12:10", result);
+        Assert.Equal("Resets in 3h · 12:10", result);
     }
 
     [Theory]

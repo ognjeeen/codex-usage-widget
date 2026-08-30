@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 using CodexUsageWidget.Application;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Views;
 
@@ -13,13 +14,15 @@ public partial class ActivityHookChangeReviewWindow : Window
 
         var installing = preview.Kind == ActivityHookChangeKind.Install;
         HeadingText.Text = installing
-            ? "Review activity hook installation"
-            : "Review activity hook removal";
+            ? Strings.Get("Activity_ReviewInstallHeading")
+            : Strings.Get("Activity_ReviewRemoveHeading");
         DescriptionText.Text = installing
-            ? "The widget will write this exact ~/.codex/hooks.json content. Existing hooks and unknown fields are preserved."
-            : "Only handlers that exactly match this widget executable will be removed. Other hook definitions are preserved.";
+            ? Strings.Get("Activity_ReviewInstallDescription")
+            : Strings.Get("Activity_ReviewRemoveDescription");
         ProposedContentText.Text = preview.ProposedContent;
-        ApplyButton.Content = installing ? "Install hooks" : "Remove hooks";
+        ApplyButton.Content = installing
+            ? Strings.Get("Activity_InstallHooks")
+            : Strings.Get("Activity_RemoveHooks");
         if (!installing)
         {
             ApplyButton.Style = (Style)FindResource("DangerDialogButton");

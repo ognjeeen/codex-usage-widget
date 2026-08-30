@@ -1,4 +1,5 @@
 using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Localization;
 using Forms = System.Windows.Forms;
 
 namespace CodexUsageWidget.Infrastructure.Windows;
@@ -7,9 +8,16 @@ public sealed class TrayIconService : IDisposable
 {
     private readonly Forms.NotifyIcon _notifyIcon;
     private readonly Forms.ContextMenuStrip _menu;
+    private readonly Forms.ToolStripMenuItem _openItem;
+    private readonly Forms.ToolStripMenuItem _refreshItem;
+    private readonly Forms.ToolStripMenuItem _settingsItem;
+    private readonly Forms.ToolStripMenuItem _displayModeItem;
     private readonly Forms.ToolStripMenuItem _desktopWidgetModeItem;
     private readonly Forms.ToolStripMenuItem _taskbarIndicatorModeItem;
+    private readonly Forms.ToolStripMenuItem _updateItem;
+    private readonly Forms.ToolStripMenuItem _exitItem;
     private System.Drawing.Icon _currentIcon;
+    private double? _remainingPercent;
     private bool _disposed;
 
     public TrayIconService()
@@ -18,33 +26,47 @@ public sealed class TrayIconService : IDisposable
         {
             ShowItemToolTips = true
         };
-        menu.Items.Add("Open", null, (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty));
-        menu.Items.Add("Refresh", null, (_, _) => RefreshRequested?.Invoke(this, EventArgs.Empty));
-        menu.Items.Add(
-            "Settings...",
+        _openItem = new Forms.ToolStripMenuItem(
+            null,
+            null,
+            (_, _) => OpenRequested?.Invoke(this, EventArgs.Empty));
+        _refreshItem = new Forms.ToolStripMenuItem(
+            null,
+            null,
+            (_, _) => RefreshRequested?.Invoke(this, EventArgs.Empty));
+        _settingsItem = new Forms.ToolStripMenuItem(
+            null,
             null,
             (_, _) => SettingsRequested?.Invoke(this, EventArgs.Empty));
+        menu.Items.Add(_openItem);
+        menu.Items.Add(_refreshItem);
+        menu.Items.Add(_settingsItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
 
-        var displayModeMenu = new Forms.ToolStripMenuItem("Display mode");
+        _displayModeItem = new Forms.ToolStripMenuItem();
         _desktopWidgetModeItem = new Forms.ToolStripMenuItem(
-            "Desktop widget",
+            null,
             null,
             (_, _) => DesktopModeRequested?.Invoke(this, EventArgs.Empty));
         _taskbarIndicatorModeItem = new Forms.ToolStripMenuItem(
-            "Taskbar label",
+            null,
             null,
             (_, _) => TaskbarModeRequested?.Invoke(this, EventArgs.Empty));
-        displayModeMenu.DropDownItems.Add(_desktopWidgetModeItem);
-        displayModeMenu.DropDownItems.Add(_taskbarIndicatorModeItem);
-        menu.Items.Add(displayModeMenu);
+        _displayModeItem.DropDownItems.Add(_desktopWidgetModeItem);
+        _displayModeItem.DropDownItems.Add(_taskbarIndicatorModeItem);
+        menu.Items.Add(_displayModeItem);
 
-        menu.Items.Add(
-            "Check for updates...",
+        _updateItem = new Forms.ToolStripMenuItem(
+            null,
             null,
             (_, _) => UpdateCheckRequested?.Invoke(this, EventArgs.Empty));
+        menu.Items.Add(_updateItem);
         menu.Items.Add(new Forms.ToolStripSeparator());
-        menu.Items.Add("Exit", null, (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
+        _exitItem = new Forms.ToolStripMenuItem(
+            null,
+            null,
+            (_, _) => ExitRequested?.Invoke(this, EventArgs.Empty));
+        menu.Items.Add(_exitItem);
 
         _currentIcon = UsageIconFactory.Create(null);
         _menu = menu;
@@ -56,6 +78,8 @@ public sealed class TrayIconService : IDisposable
             ContextMenuStrip = menu
         };
         _notifyIcon.MouseClick += NotifyIconOnMouseClick;
+        Strings.Current.PropertyChanged += StringsOnPropertyChanged;
+        RefreshLocalizedText();
         SetTheme(EffectiveTheme.Dark);
     }
 
@@ -114,15 +138,37 @@ public sealed class TrayIconService : IDisposable
 
     public void UpdateUsage(double? remainingPercent)
     {
+        _remainingPercent = remainingPercent;
         _notifyIcon.Text = remainingPercent is null
-            ? "Codex Usage · unavailable"
-            : $"Codex · {Math.Round(remainingPercent.Value):0}% remaining";
+            ? Strings.Get("Tray_Unavailable")
+            : Strings.Format("Tray_Remaining", Math.Round(remainingPercent.Value));
 
         var nextIcon = UsageIconFactory.Create(remainingPercent);
         var previousIcon = _currentIcon;
         _currentIcon = nextIcon;
         _notifyIcon.Icon = nextIcon;
         previousIcon.Dispose();
+    }
+
+    private void StringsOnPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Item[]")
+        {
+            RefreshLocalizedText();
+        }
+    }
+
+    private void RefreshLocalizedText()
+    {
+        _openItem.Text = Strings.Get("Tray_Open");
+        _refreshItem.Text = Strings.Get("Common_Refresh");
+        _settingsItem.Text = Strings.Get("Tray_Settings");
+        _displayModeItem.Text = Strings.Get("Tray_DisplayMode");
+        _desktopWidgetModeItem.Text = Strings.Get("Tray_DesktopWidget");
+        _taskbarIndicatorModeItem.Text = Strings.Get("Tray_TaskbarLabel");
+        _updateItem.Text = Strings.Get("Tray_CheckUpdates");
+        _exitItem.Text = Strings.Get("Common_Exit");
+        UpdateUsage(_remainingPercent);
     }
 
     private void NotifyIconOnMouseClick(object? sender, Forms.MouseEventArgs e)
@@ -141,6 +187,7 @@ public sealed class TrayIconService : IDisposable
         }
 
         _disposed = true;
+        Strings.Current.PropertyChanged -= StringsOnPropertyChanged;
         _notifyIcon.MouseClick -= NotifyIconOnMouseClick;
         _notifyIcon.Visible = false;
         _notifyIcon.ContextMenuStrip?.Dispose();

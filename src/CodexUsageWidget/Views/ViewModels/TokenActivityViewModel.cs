@@ -1,5 +1,6 @@
 using System.Globalization;
 using CodexUsageWidget.Domain;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Views.ViewModels;
 
@@ -22,25 +23,25 @@ public sealed class TokenActivityViewModel
     private static List<DetailMetricViewModel> BuildMetrics(TokenActivitySummary activity)
     {
         var metrics = new List<DetailMetricViewModel>();
-        AddMetric(metrics, "Lifetime tokens", FormatNumber(activity.LifetimeTokens));
-        AddMetric(metrics, "Peak daily tokens", FormatNumber(activity.PeakDailyTokens));
+        AddMetric(metrics, Strings.Get("Token_Lifetime"), FormatNumber(activity.LifetimeTokens));
+        AddMetric(metrics, Strings.Get("Token_PeakDaily"), FormatNumber(activity.PeakDailyTokens));
         AddMetric(
             metrics,
-            "Longest turn",
+            Strings.Get("Token_LongestTurn"),
             activity.LongestRunningTurnSeconds is { } seconds
                 ? FormatDuration(seconds)
                 : null);
         AddMetric(
             metrics,
-            "Current streak",
+            Strings.Get("Token_CurrentStreak"),
             activity.CurrentStreakDays is { } currentStreak
-                ? $"{currentStreak:N0} days"
+                ? Strings.Format("Token_Days", currentStreak.ToString("N0", CultureInfo.CurrentCulture))
                 : null);
         AddMetric(
             metrics,
-            "Longest streak",
+            Strings.Get("Token_LongestStreak"),
             activity.LongestStreakDays is { } longestStreak
-                ? $"{longestStreak:N0} days"
+                ? Strings.Format("Token_Days", longestStreak.ToString("N0", CultureInfo.CurrentCulture))
                 : null);
         return metrics;
     }
@@ -59,8 +60,10 @@ public sealed class TokenActivityViewModel
             .Select(item => new DailyUsageBarViewModel(
                 Math.Max(3d, 44d * item.Tokens / maximum),
                 item.Date.ToString("dddd, MMMM d", CultureInfo.CurrentCulture),
-                $"{item.Tokens.ToString("N0", CultureInfo.CurrentCulture)} tokens",
-                $"{100d * item.Tokens / maximum:0}% of chart peak"))
+                Strings.Format(
+                    "Token_Count",
+                    item.Tokens.ToString("N0", CultureInfo.CurrentCulture)),
+                Strings.Format("Token_ChartPeak", Math.Round(100d * item.Tokens / maximum))))
             .ToArray();
     }
 
@@ -83,7 +86,12 @@ public sealed class TokenActivityViewModel
     {
         var duration = TimeSpan.FromSeconds(Math.Max(0, seconds));
         return duration.TotalHours >= 1
-            ? $"{(int)duration.TotalHours}h {duration.Minutes}m"
-            : $"{Math.Max(1, (int)Math.Ceiling(duration.TotalMinutes))}m";
+            ? Strings.Format(
+                "Token_DurationHoursMinutes",
+                (int)duration.TotalHours,
+                duration.Minutes)
+            : Strings.Format(
+                "Token_DurationMinutes",
+                Math.Max(1, (int)Math.Ceiling(duration.TotalMinutes)));
     }
 }

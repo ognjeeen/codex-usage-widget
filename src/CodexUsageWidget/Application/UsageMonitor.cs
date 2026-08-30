@@ -1,4 +1,5 @@
 using CodexUsageWidget.Domain;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Application;
 
@@ -67,7 +68,7 @@ public sealed class UsageMonitor : IAsyncDisposable
         }
         catch (OperationCanceledException) when (!_lifetime.IsCancellationRequested)
         {
-            RefreshFailed?.Invoke("Codex did not respond in time.");
+            RefreshFailed?.Invoke(Strings.Get("Error_ResponseTimeout"));
         }
         catch (Exception ex)
         {
