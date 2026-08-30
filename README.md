@@ -14,7 +14,7 @@ The widget requires Windows 10 version 1809 or newer, the Codex CLI on `PATH`, a
 completed local sign-in.
 
 1. Download the
-   [latest Windows x64 portable release](https://github.com/sleepless-ted/codex-usage-widget-left/releases/latest/download/codex-usage-widget-win-x64.zip).
+   [latest Windows x64 portable release](https://github.com/sleepless-ted/codex-usage-widget/releases/latest/download/codex-usage-widget-win-x64.zip).
 2. Start `CodexUsageWidget.exe` after extraction or directly from the ZIP.
 3. If usage does not appear, confirm that `codex --version` works in PowerShell and run
    `codex login`.
