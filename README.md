@@ -64,7 +64,7 @@ subscription percentage.
 
 ![Codex Usage Widget mini indicator preview](docs/images/taskbar-label.png)
 
-Select the `−` button to switch to the mini indicator. In **Settings**, use the horizontal and vertical sliders under **Mini indicator** to place it anywhere on the screen. Right-click the indicator or tray icon to refresh, change the display mode, open Settings, check for updates, or exit. Theme, accent color, widget layout, displayed limit, and Start with Windows changes apply as soon as they are selected.
+Select the `−` button to switch to the mini indicator. In **Settings**, use the horizontal and vertical sliders under **Mini indicator** to place it anywhere on the screen. At 100% vertical, the indicator starts at the top of the taskbar so it can overlap it. Right-click the indicator or tray icon to refresh, change the display mode, open Settings, check for updates, or exit. Theme, accent color, widget layout, displayed limit, and Start with Windows changes apply as soon as they are selected.
 
 ## Activity dots
 

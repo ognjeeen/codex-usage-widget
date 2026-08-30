@@ -56,15 +56,15 @@ public sealed class TaskbarWindowInteropTests
         var workArea = new System.Drawing.Rectangle(100, 200, 1000, 600);
 
         var topLeft = TaskbarWindowInterop.CalculateWorkAreaPosition(
-            workArea, 200, 50, 16, new IndicatorPosition(0, 0));
+            workArea, 200, 50, 16, new IndicatorPosition(0, 0), verticalMaximum: 800);
         var bottomRight = TaskbarWindowInterop.CalculateWorkAreaPosition(
-            workArea, 200, 50, 16, new IndicatorPosition(100, 100));
+            workArea, 200, 50, 16, new IndicatorPosition(100, 100), verticalMaximum: 800);
         var middle = TaskbarWindowInterop.CalculateWorkAreaPosition(
-            workArea, 200, 50, 16, new IndicatorPosition(50, 50));
+            workArea, 200, 50, 16, new IndicatorPosition(50, 50), verticalMaximum: 800);
 
         Assert.Equal(new System.Drawing.Point(116, 216), topLeft);
-        Assert.Equal(new System.Drawing.Point(884, 734), bottomRight);
-        Assert.Equal(new System.Drawing.Point(500, 475), middle);
+        Assert.Equal(new System.Drawing.Point(884, 800), bottomRight);
+        Assert.Equal(new System.Drawing.Point(500, 508), middle);
     }
     private static IntPtr FindNextChild(
         Dictionary<IntPtr, IntPtr[]> children,

@@ -49,8 +49,13 @@ public static class TaskbarWindowInterop
         var width = (int)Math.Round(logicalWidth * scale);
         var height = (int)Math.Round(logicalHeight * scale);
         var margin = (int)Math.Round(ScreenEdgeMarginLogicalPixels * scale);
-        var workArea = Forms.Screen.FromHandle(taskbar).WorkingArea;
-        var location = CalculateWorkAreaPosition(workArea, width, height, margin, position);
+        var screen = Forms.Screen.FromHandle(taskbar);
+        var workArea = screen.WorkingArea;
+        var verticalMaximum = workArea.Bottom < screen.Bounds.Bottom
+            ? workArea.Bottom
+            : workArea.Bottom - height - margin;
+        var location = CalculateWorkAreaPosition(
+            workArea, width, height, margin, position, verticalMaximum);
 
         SetWindowPos(
             windowHandle,
@@ -67,14 +72,16 @@ public static class TaskbarWindowInterop
         int width,
         int height,
         int margin,
-        IndicatorPosition position)
+        IndicatorPosition position,
+        int verticalMaximum)
     {
         var clamped = position.Clamp();
         var horizontalRange = Math.Max(0, workArea.Width - width - 2 * margin);
-        var verticalRange = Math.Max(0, workArea.Height - height - 2 * margin);
+        var minimumTop = workArea.Top + margin;
+        var verticalRange = Math.Max(0, verticalMaximum - minimumTop);
         var left = workArea.Left + margin + (int)Math.Round(
             horizontalRange * clamped.HorizontalPercent / 100d);
-        var top = workArea.Top + margin + (int)Math.Round(
+        var top = minimumTop + (int)Math.Round(
             verticalRange * clamped.VerticalPercent / 100d);
         return new System.Drawing.Point(left, top);
     }

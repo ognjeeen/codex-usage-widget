@@ -519,10 +519,10 @@
                                   <ColumnDefinition Width="*" />
                                   <ColumnDefinition Width="Auto" />
                               </Grid.ColumnDefinitions>
-                              <TextBlock Text="Horizontal (left to right)" FontWeight="SemiBold" />
+                              <TextBlock Text="Horizontal (left to right)" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" />
                               <TextBlock x:Name="HorizontalIndicatorPositionValue"
                                          Grid.Column="1"
-                                         Foreground="{DynamicResource TextSecondary}" />
+                                         Foreground="{DynamicResource TextPrimary}" />
                           </Grid>
                           <Slider x:Name="HorizontalIndicatorPositionSlider"
                                   Margin="0,7,0,14"
@@ -537,10 +537,10 @@
                                   <ColumnDefinition Width="*" />
                                   <ColumnDefinition Width="Auto" />
                               </Grid.ColumnDefinitions>
-                              <TextBlock Text="Vertical (top to bottom)" FontWeight="SemiBold" />
+                              <TextBlock Text="Vertical (top to bottom)" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" />
                               <TextBlock x:Name="VerticalIndicatorPositionValue"
                                          Grid.Column="1"
-                                         Foreground="{DynamicResource TextSecondary}" />
+                                         Foreground="{DynamicResource TextPrimary}" />
                           </Grid>
                           <Slider x:Name="VerticalIndicatorPositionSlider"
                                   Margin="0,7,0,0"
