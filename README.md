@@ -14,7 +14,7 @@ The widget requires Windows 10 version 1809 or newer, the Codex CLI on `PATH`, a
 completed local sign-in.
 
 1. Download the
-   [latest Windows x64 portable release](https://github.com/ognjeeen/codex-usage-widget/releases/latest/download/codex-usage-widget-win-x64.zip).
+   [latest Windows x64 portable release](https://github.com/sleepless-ted/codex-usage-widget-left/releases/latest/download/codex-usage-widget-win-x64.zip).
 2. Start `CodexUsageWidget.exe` after extraction or directly from the ZIP.
 3. If usage does not appear, confirm that `codex --version` works in PowerShell and run
    `codex login`.
@@ -39,7 +39,7 @@ of `codex.cmd` or `codex.exe`.
   including credits, spend controls, earned resets, token activity, and model-specific limits
   when Codex returns them
 - System, light, and dark themes with five preset accent colors selected from Settings
-- A movable, always-on-top desktop widget and a compact bottom-left screen indicator
+- A movable, always-on-top desktop widget and a compact screen indicator with a persistent X/Y position
 - Live task activity dots based on official local Codex lifecycle hooks
 - Automatic refresh every two minutes plus live rate-limit notifications
 - Fullscreen-aware taskbar behavior, per-monitor DPI support, and optional start with Windows
@@ -50,7 +50,7 @@ of `codex.cmd` or `codex.exe`.
 **Desktop widget.** Shows the selected limit as the headline and keeps every general limit
 visible below it. Compact mode focuses on limits; Details adds account and token activity.
 
-**Bottom-left indicator.** Shows the same selected percentage in the bottom-left corner of the screen.
+**Mini indicator.** Shows the same selected percentage at the saved X/Y position on the screen.
 The tray icon and its tooltip follow that selection too.
 
 Choose `5h limit`, `Weekly limit`, or `Most constrained` in **Settings** under **Usage**.
@@ -62,13 +62,9 @@ widget falls back to an available window when Codex does not return the selected
 Token activity is informational. Token counts do not map directly to the remaining
 subscription percentage.
 
-![Codex Usage Widget taskbar label preview](docs/images/taskbar-label.png)
+![Codex Usage Widget mini indicator preview](docs/images/taskbar-label.png)
 
-Select the `−` button to switch to the bottom-left indicator. Right-click the indicator or
-tray icon to refresh, change the display mode, open Settings, check for updates, or exit.
-The Settings window opens from the gear button on the widget too. Theme, accent color,
-widget layout, displayed limit, and Start with Windows changes apply as soon as they are
-selected.
+Select the `−` button to switch to the mini indicator. In **Settings**, use the horizontal and vertical sliders under **Mini indicator** to place it anywhere on the screen. Right-click the indicator or tray icon to refresh, change the display mode, open Settings, check for updates, or exit. Theme, accent color, widget layout, displayed limit, and Start with Windows changes apply as soon as they are selected.
 
 ## Activity dots
 
@@ -98,6 +94,7 @@ The application writes only under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `app\<version>\CodexUsageWidget.exe`: stable copy used after a direct ZIP launch
 - `display-mode.txt`: desktop or taskbar display preference
 - `widget-density.txt`: compact or detailed widget preference
+- `indicator-position.txt`: mini indicator horizontal and vertical position
 - `displayed-limit.txt`: selected summary limit
 - `theme.txt`: system, light, or dark theme preference
 - `accent-palette.txt`: selected preset accent color

@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     private readonly DisplayModeStore _displayModeStore;
     private readonly WidgetDensityStore _densityStore;
     private readonly DisplayedLimitPreferenceStore _displayedLimitPreferenceStore;
+    private readonly IndicatorPositionStore _indicatorPositionStore;
     private readonly StartupRegistrationService _startupRegistration;
     private readonly TrayIconService _trayIcon;
     private readonly AppThemeController _themeController;
@@ -35,6 +36,7 @@ public partial class MainWindow : Window
     private WidgetDisplayMode _displayMode;
     private WidgetDensity _density;
     private DisplayedLimitPreference _displayedLimitPreference;
+    private IndicatorPosition _indicatorPosition;
     private UsageSnapshot? _latestSnapshot;
     private UsageWidgetViewModel _viewModel = UsageWidgetViewModel.Loading();
     private bool _isRealActivityActive;
@@ -50,6 +52,7 @@ public partial class MainWindow : Window
         DisplayModeStore displayModeStore,
         WidgetDensityStore densityStore,
         DisplayedLimitPreferenceStore displayedLimitPreferenceStore,
+        IndicatorPositionStore indicatorPositionStore,
         StartupRegistrationService startupRegistration,
         TrayIconService trayIcon,
         AppThemeController themeController)
@@ -61,14 +64,17 @@ public partial class MainWindow : Window
         _displayModeStore = displayModeStore;
         _densityStore = densityStore;
         _displayedLimitPreferenceStore = displayedLimitPreferenceStore;
+        _indicatorPositionStore = indicatorPositionStore;
         _startupRegistration = startupRegistration;
         _trayIcon = trayIcon;
         _themeController = themeController;
         _displayMode = displayModeStore.Load();
         _density = densityStore.Load();
         _displayedLimitPreference = displayedLimitPreferenceStore.Load();
+        _indicatorPosition = indicatorPositionStore.Load();
         _widgetVisibility = new WidgetVisibilityController(() => IsVisible, ShowWidget, Hide);
 
+        _taskbarLabel.SetPosition(_indicatorPosition);
         InitializeComponent();
         DataContext = _viewModel;
         ApplyDensity(repositionBottomEdge: false);
@@ -337,7 +343,8 @@ public partial class MainWindow : Window
                 _startupRegistration.IsEnabled,
                 _activityHookSetupService,
                 _codexLauncher,
-                _themeController.AccentPalette)
+                _themeController.AccentPalette,
+                _indicatorPosition)
             {
                 Owner = this
             };
@@ -347,6 +354,7 @@ public partial class MainWindow : Window
             window.WidgetDensityChanged += SetDensity;
             window.DisplayedLimitPreferenceChanged += SetDisplayedLimitPreference;
             window.StartWithWindowsChanged += SetStartupRegistration;
+            window.IndicatorPositionChanged += SetIndicatorPosition;
             window.ShowDialog();
         }
         finally
@@ -358,6 +366,13 @@ public partial class MainWindow : Window
                 Hide();
             }
         }
+    }
+
+    private void SetIndicatorPosition(IndicatorPosition position)
+    {
+        _indicatorPosition = position.Clamp();
+        _indicatorPositionStore.Save(_indicatorPosition);
+        _taskbarLabel.SetPosition(_indicatorPosition);
     }
 
     private void SetDisplayMode(WidgetDisplayMode mode)

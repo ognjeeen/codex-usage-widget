@@ -1,3 +1,4 @@
+using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
 
 namespace CodexUsageWidget.Tests;
@@ -49,6 +50,22 @@ public sealed class TaskbarWindowInteropTests
         Assert.Equal(IntPtr.Zero, result);
     }
 
+    [Fact]
+    public void CalculatesPositionAcrossTheUsableWorkArea()
+    {
+        var workArea = new System.Drawing.Rectangle(100, 200, 1000, 600);
+
+        var topLeft = TaskbarWindowInterop.CalculateWorkAreaPosition(
+            workArea, 200, 50, 16, new IndicatorPosition(0, 0));
+        var bottomRight = TaskbarWindowInterop.CalculateWorkAreaPosition(
+            workArea, 200, 50, 16, new IndicatorPosition(100, 100));
+        var middle = TaskbarWindowInterop.CalculateWorkAreaPosition(
+            workArea, 200, 50, 16, new IndicatorPosition(50, 50));
+
+        Assert.Equal(new System.Drawing.Point(116, 216), topLeft);
+        Assert.Equal(new System.Drawing.Point(884, 734), bottomRight);
+        Assert.Equal(new System.Drawing.Point(500, 475), middle);
+    }
     private static IntPtr FindNextChild(
         Dictionary<IntPtr, IntPtr[]> children,
         IntPtr parent,

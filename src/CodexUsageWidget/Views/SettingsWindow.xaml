@@ -498,6 +498,62 @@
                   </RadioButton>
               </Grid>
 
+              <StackPanel x:Name="MiniIndicatorPositionSection" Margin="0,12,0,16">
+                  <TextBlock Text="MINI INDICATOR" Style="{StaticResource SectionTitle}" />
+                  <TextBlock Text="Position"
+                             Margin="0,8,0,0"
+                             FontSize="15"
+                             FontWeight="SemiBold"
+                             Foreground="{DynamicResource TextPrimary}" />
+                  <TextBlock Text="Move the small Codex indicator anywhere on the screen."
+                             Margin="0,3,0,10"
+                             Style="{StaticResource SupportingText}" />
+                  <Border Padding="14"
+                          Background="{DynamicResource CardBackground}"
+                          BorderBrush="{DynamicResource CardBorder}"
+                          BorderThickness="1"
+                          CornerRadius="9">
+                      <StackPanel>
+                          <Grid>
+                              <Grid.ColumnDefinitions>
+                                  <ColumnDefinition Width="*" />
+                                  <ColumnDefinition Width="Auto" />
+                              </Grid.ColumnDefinitions>
+                              <TextBlock Text="Horizontal (left to right)" FontWeight="SemiBold" />
+                              <TextBlock x:Name="HorizontalIndicatorPositionValue"
+                                         Grid.Column="1"
+                                         Foreground="{DynamicResource TextSecondary}" />
+                          </Grid>
+                          <Slider x:Name="HorizontalIndicatorPositionSlider"
+                                  Margin="0,7,0,14"
+                                  Minimum="0"
+                                  Maximum="100"
+                                  TickFrequency="1"
+                                  IsSnapToTickEnabled="True"
+                                  AutomationProperties.Name="Mini indicator horizontal position"
+                                  ValueChanged="IndicatorPositionSlider_OnValueChanged" />
+                          <Grid>
+                              <Grid.ColumnDefinitions>
+                                  <ColumnDefinition Width="*" />
+                                  <ColumnDefinition Width="Auto" />
+                              </Grid.ColumnDefinitions>
+                              <TextBlock Text="Vertical (top to bottom)" FontWeight="SemiBold" />
+                              <TextBlock x:Name="VerticalIndicatorPositionValue"
+                                         Grid.Column="1"
+                                         Foreground="{DynamicResource TextSecondary}" />
+                          </Grid>
+                          <Slider x:Name="VerticalIndicatorPositionSlider"
+                                  Margin="0,7,0,0"
+                                  Minimum="0"
+                                  Maximum="100"
+                                  TickFrequency="1"
+                                  IsSnapToTickEnabled="True"
+                                  AutomationProperties.Name="Mini indicator vertical position"
+                                  ValueChanged="IndicatorPositionSlider_OnValueChanged" />
+                      </StackPanel>
+                  </Border>
+              </StackPanel>
+
               <Border Height="1"
                       Margin="0,2,0,10"
                       Background="{DynamicResource DividerBrush}" />

@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using CodexUsageWidget.Infrastructure.Settings;
 using Forms = System.Windows.Forms;
 
 namespace CodexUsageWidget.Infrastructure.Windows;
@@ -29,10 +30,11 @@ public static class TaskbarWindowInterop
         }
     }
 
-    public static void PositionAtBottomLeftOfWorkArea(
+    public static void PositionAtWorkAreaPosition(
         IntPtr windowHandle,
         double logicalWidth,
-        double logicalHeight)
+        double logicalHeight,
+        IndicatorPosition position)
     {
         var taskbar = FindWindow("Shell_TrayWnd", null);
         if (taskbar == IntPtr.Zero)
@@ -48,17 +50,33 @@ public static class TaskbarWindowInterop
         var height = (int)Math.Round(logicalHeight * scale);
         var margin = (int)Math.Round(ScreenEdgeMarginLogicalPixels * scale);
         var workArea = Forms.Screen.FromHandle(taskbar).WorkingArea;
-        var left = workArea.Left + margin;
-        var top = workArea.Bottom - height - margin;
+        var location = CalculateWorkAreaPosition(workArea, width, height, margin, position);
 
         SetWindowPos(
             windowHandle,
             HwndTopmost,
-            left,
-            top,
+            location.X,
+            location.Y,
             width,
             height,
             SwpNoActivate);
+    }
+
+    internal static System.Drawing.Point CalculateWorkAreaPosition(
+        System.Drawing.Rectangle workArea,
+        int width,
+        int height,
+        int margin,
+        IndicatorPosition position)
+    {
+        var clamped = position.Clamp();
+        var horizontalRange = Math.Max(0, workArea.Width - width - 2 * margin);
+        var verticalRange = Math.Max(0, workArea.Height - height - 2 * margin);
+        var left = workArea.Left + margin + (int)Math.Round(
+            horizontalRange * clamped.HorizontalPercent / 100d);
+        var top = workArea.Top + margin + (int)Math.Round(
+            verticalRange * clamped.VerticalPercent / 100d);
+        return new System.Drawing.Point(left, top);
     }
 
     private static void EnsureOwnedByTaskbar(IntPtr windowHandle, IntPtr taskbarHandle)

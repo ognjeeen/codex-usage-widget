@@ -18,6 +18,7 @@ public partial class TaskbarLabelWindow : Window
     private readonly WindowChangeWatcher _windowChangeWatcher;
     private ExternalMouseDownWatcher? _contextMenuDismissWatcher;
     private IntPtr _windowHandle;
+    private IndicatorPosition _position = IndicatorPosition.BottomLeft;
     private bool _labelRequested;
     private bool _isTaskActive;
     private bool _isClosed;
@@ -127,6 +128,12 @@ public partial class TaskbarLabelWindow : Window
         }
     }
 
+    public void SetPosition(IndicatorPosition position)
+    {
+        _position = position.Clamp();
+        Reposition();
+    }
+
     public void SetActivityState(bool isActive)
     {
         if (_isTaskActive == isActive)
@@ -181,7 +188,7 @@ public partial class TaskbarLabelWindow : Window
     {
         if (_windowHandle != IntPtr.Zero)
         {
-            TaskbarWindowInterop.PositionAtBottomLeftOfWorkArea(_windowHandle, Width, Height);
+            TaskbarWindowInterop.PositionAtWorkAreaPosition(_windowHandle, Width, Height, _position);
         }
     }
 

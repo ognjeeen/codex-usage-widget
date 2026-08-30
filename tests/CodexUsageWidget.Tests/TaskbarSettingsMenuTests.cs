@@ -126,7 +126,8 @@ public sealed class TaskbarSettingsMenuTests
                     startWithWindowsEnabled: true,
                     activityHookSetupService: new StubActivityHookSetupService(),
                     codexLauncher: new StubCodexLauncher(),
-                    accentPalette: AccentPalette.Violet);
+                    accentPalette: AccentPalette.Violet,
+                    indicatorPosition: new IndicatorPosition(30, 70));
                 Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
                 var activityDotsHost = Assert.IsType<ContentControl>(
                     usageSettings.FindName("ActivityDotsHost"));
@@ -183,6 +184,20 @@ public sealed class TaskbarSettingsMenuTests
                 detailedLayoutOption.IsChecked = true;
 
                 Assert.Equal(WidgetDensity.Detailed, changedDensity);
+
+                var horizontalPositionSlider = Assert.IsType<Slider>(
+                    usageSettings.FindName("HorizontalIndicatorPositionSlider"));
+                var verticalPositionSlider = Assert.IsType<Slider>(
+                    usageSettings.FindName("VerticalIndicatorPositionSlider"));
+                Assert.Equal(30d, horizontalPositionSlider.Value);
+                Assert.Equal(70d, verticalPositionSlider.Value);
+                IndicatorPosition? changedIndicatorPosition = null;
+                usageSettings.IndicatorPositionChanged += position =>
+                    changedIndicatorPosition = position;
+                horizontalPositionSlider.Value = 61d;
+                verticalPositionSlider.Value = 23d;
+
+                Assert.Equal(new IndicatorPosition(61, 23), changedIndicatorPosition);
                 usageSettings.Close();
 
                 var constrainedSettings = new SettingsWindow(

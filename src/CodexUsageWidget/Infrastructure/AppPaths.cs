@@ -12,6 +12,8 @@ public static class AppPaths
 
     public static string WidgetDensityFile => Path.Combine(LocalDataDirectory, "widget-density.txt");
 
+    public static string IndicatorPositionFile => Path.Combine(LocalDataDirectory, "indicator-position.txt");
+
     public static string DisplayedLimitPreferenceFile => Path.Combine(
         LocalDataDirectory,
         "displayed-limit.txt");

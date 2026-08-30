@@ -82,6 +82,7 @@ public partial class App : System.Windows.Application, IDisposable
                 new DisplayModeStore(),
                 new WidgetDensityStore(),
                 new DisplayedLimitPreferenceStore(),
+                new IndicatorPositionStore(),
                 startupRegistrationService,
                 new TrayIconService(),
                 _themeController);

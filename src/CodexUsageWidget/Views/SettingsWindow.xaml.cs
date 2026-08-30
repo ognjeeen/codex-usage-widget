@@ -22,6 +22,7 @@ public partial class SettingsWindow : Window
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
         AccentPalette accentPalette = AccentPalette.Blue,
+        IndicatorPosition? indicatorPosition = null,
         IWindowWorkAreaProvider? workAreaProvider = null)
     {
         _workAreaProvider = workAreaProvider ?? new WindowWorkAreaProvider();
@@ -36,6 +37,7 @@ public partial class SettingsWindow : Window
         SetDisplayedLimitPreference(displayedLimitPreference);
         SetFiveHourLimitAvailability(fiveHourLimitAvailable);
         SetStartWithWindowsEnabled(startWithWindowsEnabled);
+        SetIndicatorPosition(indicatorPosition ?? IndicatorPosition.BottomLeft);
         _suppressChangeEvents = false;
     }
 
@@ -48,6 +50,8 @@ public partial class SettingsWindow : Window
     public event Action<DisplayedLimitPreference>? DisplayedLimitPreferenceChanged;
 
     public event Action<bool>? StartWithWindowsChanged;
+
+    public event Action<IndicatorPosition>? IndicatorPositionChanged;
 
     public ThemePreference SelectedTheme =>
         LightThemeOption.IsChecked == true
@@ -80,6 +84,10 @@ public partial class SettingsWindow : Window
             : WidgetDensity.Compact;
 
     public bool StartWithWindowsEnabled => StartWithWindowsOption.IsChecked == true;
+
+    public IndicatorPosition SelectedIndicatorPosition => new IndicatorPosition(
+        (int)Math.Round(HorizontalIndicatorPositionSlider.Value),
+        (int)Math.Round(VerticalIndicatorPositionSlider.Value)).Clamp();
 
     protected override void OnSourceInitialized(EventArgs e)
     {
@@ -126,6 +134,17 @@ public partial class SettingsWindow : Window
         var previousSuppression = _suppressChangeEvents;
         _suppressChangeEvents = true;
         StartWithWindowsOption.IsChecked = enabled;
+        _suppressChangeEvents = previousSuppression;
+    }
+
+    public void SetIndicatorPosition(IndicatorPosition position)
+    {
+        var previousSuppression = _suppressChangeEvents;
+        _suppressChangeEvents = true;
+        var clamped = position.Clamp();
+        HorizontalIndicatorPositionSlider.Value = clamped.HorizontalPercent;
+        VerticalIndicatorPositionSlider.Value = clamped.VerticalPercent;
+        UpdateIndicatorPositionLabels(clamped);
         _suppressChangeEvents = previousSuppression;
     }
 
@@ -183,6 +202,22 @@ public partial class SettingsWindow : Window
         {
             WidgetDensityChanged?.Invoke(SelectedWidgetDensity);
         }
+    }
+
+    private void IndicatorPositionSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        var position = SelectedIndicatorPosition;
+        UpdateIndicatorPositionLabels(position);
+        if (!_suppressChangeEvents)
+        {
+            IndicatorPositionChanged?.Invoke(position);
+        }
+    }
+
+    private void UpdateIndicatorPositionLabels(IndicatorPosition position)
+    {
+        HorizontalIndicatorPositionValue.Text = $"{position.HorizontalPercent}%";
+        VerticalIndicatorPositionValue.Text = $"{position.VerticalPercent}%";
     }
 
     private void StartWithWindowsOption_OnChanged(object sender, RoutedEventArgs e)
