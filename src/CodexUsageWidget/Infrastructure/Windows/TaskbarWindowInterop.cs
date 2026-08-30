@@ -11,7 +11,8 @@ public static class TaskbarWindowInterop
     private const long WsExToolWindow = 0x00000080L;
     private const long WsExNoActivate = 0x08000000L;
     private const uint SwpNoActivate = 0x0010;
-    private const int ScreenEdgeMarginLogicalPixels = 16;
+    // Slider extremes place the indicator at the physical screen edges.
+    private const int ScreenEdgeMarginLogicalPixels = 0;
     private const string TrayNotificationWindowClass = "TrayNotifyWnd";
     private static readonly IntPtr HwndTopmost = new(-1);
 
