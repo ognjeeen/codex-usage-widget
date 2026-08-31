@@ -10,6 +10,7 @@ public sealed class Strings : INotifyPropertyChanged
         "CodexUsageWidget.Resources.Strings",
         typeof(Strings).Assembly);
     private CultureInfo _culture = CultureInfo.GetCultureInfo("en-US");
+    private CultureInfo _windowsRegionalCulture = CultureInfo.CurrentCulture;
 
     private Strings()
     {
@@ -22,6 +23,8 @@ public sealed class Strings : INotifyPropertyChanged
     public string this[string key] => Get(key);
 
     public CultureInfo Culture => _culture;
+
+    public CultureInfo WindowsRegionalCulture => _windowsRegionalCulture;
 
     public static string Get(string key) =>
         ResourceManager.GetString(key, Current._culture) ?? key;
@@ -38,9 +41,16 @@ public sealed class Strings : INotifyPropertyChanged
         params object?[] arguments) =>
         string.Format(culture, GetForCulture(key, culture), arguments);
 
-    public void SetCulture(CultureInfo culture)
+    public void SetCulture(
+        CultureInfo culture,
+        CultureInfo? windowsRegionalCulture = null)
     {
         ArgumentNullException.ThrowIfNull(culture);
+        if (windowsRegionalCulture is not null)
+        {
+            _windowsRegionalCulture = windowsRegionalCulture;
+        }
+
         var changed = !string.Equals(
             _culture.Name,
             culture.Name,

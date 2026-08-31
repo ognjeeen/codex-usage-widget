@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,7 +20,7 @@ public partial class MainWindow : Window
     private const double DetailedHeight = 620d;
 
     private readonly UsageMonitor _usageMonitor;
-    private readonly IRateLimitResetConsumer _resetConsumer;
+    private readonly RateLimitResetUseCase _resetUseCase;
     private readonly CodexActivityMonitor _activityMonitor;
     private readonly IActivityHookSetupService _activityHookSetupService;
     private readonly ICodexLauncher _codexLauncher;
@@ -52,7 +51,7 @@ public partial class MainWindow : Window
 
     public MainWindow(
         UsageMonitor usageMonitor,
-        IRateLimitResetConsumer resetConsumer,
+        RateLimitResetUseCase resetUseCase,
         CodexActivityMonitor activityMonitor,
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
@@ -66,7 +65,7 @@ public partial class MainWindow : Window
         TimeFormatPreferenceStore timeFormatPreferenceStore)
     {
         _usageMonitor = usageMonitor;
-        _resetConsumer = resetConsumer;
+        _resetUseCase = resetUseCase;
         _activityMonitor = activityMonitor;
         _activityHookSetupService = activityHookSetupService;
         _codexLauncher = codexLauncher;
@@ -487,37 +486,33 @@ public partial class MainWindow : Window
         DetailedView.SetResetUsePending(pending: true);
         try
         {
-            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(12));
-            var outcome = await _resetConsumer.ConsumeAsync(
-                e.Credit.CreditId,
-                timeout.Token);
-            if (outcome is RateLimitResetOutcome.NothingToReset)
+            var result = await _resetUseCase.UseAsync(e.Credit.CreditId);
+            if (result.Status is RateLimitResetUseStatus.NothingToReset)
             {
                 ShowResetMessage(
                     Strings.Get("Usage_ResetNothingToReset"),
                     MessageBoxImage.Information);
             }
-            else if (outcome is RateLimitResetOutcome.NoCredit)
+            else if (result.Status is RateLimitResetUseStatus.NoCredit)
             {
                 ShowResetMessage(
                     Strings.Get("Usage_ResetNoCredit"),
                     MessageBoxImage.Warning);
             }
-
-            await _usageMonitor.RefreshAsync();
-        }
-        catch (OperationCanceledException)
-        {
-            ShowResetMessage(
-                Strings.Get("Error_ResponseTimeout"),
-                MessageBoxImage.Warning);
-        }
-        catch (Exception ex) when (
-            ex is IOException or InvalidOperationException or UnauthorizedAccessException)
-        {
-            ShowResetMessage(
-                Strings.Format("Usage_ResetFailure", ex.Message),
-                MessageBoxImage.Warning);
+            else if (result.Status is RateLimitResetUseStatus.TimedOut)
+            {
+                ShowResetMessage(
+                    Strings.Get("Error_ResponseTimeout"),
+                    MessageBoxImage.Warning);
+            }
+            else if (result.Status is RateLimitResetUseStatus.Failed)
+            {
+                ShowResetMessage(
+                    Strings.Format(
+                        "Usage_ResetFailure",
+                        result.ErrorMessage ?? string.Empty),
+                    MessageBoxImage.Warning);
+            }
         }
         finally
         {

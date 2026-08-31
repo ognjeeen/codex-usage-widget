@@ -1,4 +1,5 @@
 using System.Globalization;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Application;
 
@@ -7,7 +8,8 @@ public static class TimeTextFormatter
     public static string FormatTime(
         DateTimeOffset value,
         TimeFormatPreference preference = TimeFormatPreference.Automatic,
-        CultureInfo? culture = null)
+        CultureInfo? culture = null,
+        CultureInfo? windowsRegionalCulture = null)
     {
         if (preference == TimeFormatPreference.TwelveHour)
         {
@@ -15,13 +17,17 @@ public static class TimeTextFormatter
         }
 
         var format = preference == TimeFormatPreference.TwentyFourHour ? "HH:mm" : "t";
-        return value.ToString(format, culture ?? CultureInfo.CurrentCulture);
+        var effectiveCulture = preference == TimeFormatPreference.Automatic
+            ? windowsRegionalCulture ?? Strings.Current.WindowsRegionalCulture
+            : culture ?? CultureInfo.CurrentCulture;
+        return value.ToString(format, effectiveCulture);
     }
 
     public static string FormatTimeWithSeconds(
         DateTimeOffset value,
         TimeFormatPreference preference = TimeFormatPreference.Automatic,
-        CultureInfo? culture = null)
+        CultureInfo? culture = null,
+        CultureInfo? windowsRegionalCulture = null)
     {
         if (preference == TimeFormatPreference.TwelveHour)
         {
@@ -29,17 +35,21 @@ public static class TimeTextFormatter
         }
 
         var format = preference == TimeFormatPreference.TwentyFourHour ? "HH:mm:ss" : "T";
-        return value.ToString(format, culture ?? CultureInfo.CurrentCulture);
+        var effectiveCulture = preference == TimeFormatPreference.Automatic
+            ? windowsRegionalCulture ?? Strings.Current.WindowsRegionalCulture
+            : culture ?? CultureInfo.CurrentCulture;
+        return value.ToString(format, effectiveCulture);
     }
 
     public static string FormatDayAndTime(
         DateTimeOffset value,
         TimeFormatPreference preference = TimeFormatPreference.Automatic,
-        CultureInfo? culture = null)
+        CultureInfo? culture = null,
+        CultureInfo? windowsRegionalCulture = null)
     {
         var effectiveCulture = culture ?? CultureInfo.CurrentCulture;
         return $"{value.ToString("ddd", effectiveCulture)} " +
-            FormatTime(value, preference, effectiveCulture);
+            FormatTime(value, preference, effectiveCulture, windowsRegionalCulture);
     }
 
     private static string FormatTwelveHour(

@@ -152,9 +152,9 @@
   <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>Use Simplified Chinese</value></data>
   <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>Time format</value></data>
   <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>Choose how times are shown throughout the widget.</value></data>
-  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>Automatic</value></data>
-  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>Follow the selected language and regional format</value></data>
-  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>Use automatic time format</value></data>
+  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>Use Windows setting</value></data>
+  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>Uses your Windows regional time format</value></data>
+  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>Use Windows time format</value></data>
   <data name="Settings_TimeFormat_TwentyFourHour" xml:space="preserve"><value>24-hour</value></data>
   <data name="Settings_TimeFormat_TwentyFourHourDescription" xml:space="preserve"><value>Show times such as 14:05</value></data>
   <data name="Settings_TimeFormat_TwentyFourHourAutomation" xml:space="preserve"><value>Use 24-hour time format</value></data>

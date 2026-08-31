@@ -1,4 +1,5 @@
 using System.Globalization;
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Domain;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Localization;
@@ -9,6 +10,8 @@ namespace CodexUsageWidget.Tests;
 [Collection("Localization")]
 public sealed class AppLanguageControllerTests : IDisposable
 {
+    private readonly CultureInfo _originalWindowsRegionalCulture =
+        Strings.Current.WindowsRegionalCulture;
     private readonly string _directory = Path.Combine(
         Path.GetTempPath(),
         "CodexUsageWidget.Tests",
@@ -66,9 +69,27 @@ public sealed class AppLanguageControllerTests : IDisposable
         Assert.Equal("星期二, 八月 11", viewModel.DailyBars[0].DateText);
     }
 
+    [Fact]
+    public void AutomaticTimeFormatUsesWindowsRegionalCultureAfterLanguageOverride()
+    {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");
+        _ = new AppLanguageController(
+            LanguagePreference.English,
+            CultureInfo.GetCultureInfo("en-US"));
+        var value = new DateTimeOffset(2030, 8, 31, 14, 5, 0, TimeSpan.Zero);
+
+        var result = TimeTextFormatter.FormatTime(
+            value,
+            TimeFormatPreference.Automatic);
+
+        Assert.Equal("14:05", result);
+    }
+
     public void Dispose()
     {
-        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+        Strings.Current.SetCulture(
+            CultureInfo.GetCultureInfo("en-US"),
+            _originalWindowsRegionalCulture);
         if (Directory.Exists(_directory))
         {
             Directory.Delete(_directory, recursive: true);

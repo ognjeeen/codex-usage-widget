@@ -55,6 +55,17 @@ public sealed class UsageMonitor : IAsyncDisposable
             return;
         }
 
+        await RefreshWithGateHeldAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task RefreshAfterCurrentAsync(CancellationToken cancellationToken = default)
+    {
+        await _refreshGate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        await RefreshWithGateHeldAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task RefreshWithGateHeldAsync(CancellationToken cancellationToken)
+    {
         try
         {
             RefreshStarted?.Invoke();

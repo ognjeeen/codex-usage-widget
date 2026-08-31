@@ -26,5 +26,9 @@ public static class AppPaths
 
     public static string AccentPaletteFile => Path.Combine(LocalDataDirectory, "accent-palette.txt");
 
+    public static string PendingRateLimitResetAttemptFile => Path.Combine(
+        LocalDataDirectory,
+        "pending-rate-limit-reset.json");
+
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");
 }

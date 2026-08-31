@@ -152,9 +152,9 @@
   <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>使用简体中文</value></data>
   <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>时间格式</value></data>
   <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>选择小组件中时间的显示方式。</value></data>
-  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>自动</value></data>
-  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>跟随所选语言和区域格式</value></data>
-  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>使用自动时间格式</value></data>
+  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>跟随 Windows</value></data>
+  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>使用 Windows 区域时间格式</value></data>
+  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>使用 Windows 时间格式</value></data>
   <data name="Settings_TimeFormat_TwentyFourHour" xml:space="preserve"><value>24 小时制</value></data>
   <data name="Settings_TimeFormat_TwentyFourHourDescription" xml:space="preserve"><value>以 14:05 等格式显示时间</value></data>
   <data name="Settings_TimeFormat_TwentyFourHourAutomation" xml:space="preserve"><value>使用 24 小时制</value></data>

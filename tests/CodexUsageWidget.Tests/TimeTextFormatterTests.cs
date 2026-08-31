@@ -20,6 +20,7 @@ public sealed class TimeTextFormatterTests
         var result = TimeTextFormatter.FormatTime(
             value,
             preference,
+            CultureInfo.GetCultureInfo(cultureName),
             CultureInfo.GetCultureInfo(cultureName));
 
         Assert.Equal(expected, result);
@@ -39,6 +40,7 @@ public sealed class TimeTextFormatterTests
         var result = TimeTextFormatter.FormatTimeWithSeconds(
             value,
             preference,
+            CultureInfo.GetCultureInfo(cultureName),
             CultureInfo.GetCultureInfo(cultureName));
 
         Assert.Equal(expected, result);

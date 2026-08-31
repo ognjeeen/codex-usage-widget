@@ -1,13 +1,12 @@
-using System.Collections.Concurrent;
 using CodexUsageWidget.Application;
+using CodexUsageWidget.Infrastructure.Settings;
 
 namespace CodexUsageWidget.Infrastructure.Codex;
 
 public sealed class CodexRateLimitResetConsumer(
-    ICodexAppServerSession session) : IRateLimitResetConsumer
+    ICodexAppServerSession session,
+    RateLimitResetAttemptStore attemptStore) : IRateLimitResetConsumer
 {
-    private readonly ConcurrentDictionary<ResetSelection, string> _pendingAttempts = new();
-
     public async Task<RateLimitResetOutcome> ConsumeAsync(
         string? creditId,
         CancellationToken cancellationToken = default)
@@ -17,10 +16,7 @@ public sealed class CodexRateLimitResetConsumer(
             throw new ArgumentException("Credit ID cannot be empty.", nameof(creditId));
         }
 
-        var selection = new ResetSelection(creditId);
-        var idempotencyKey = _pendingAttempts.GetOrAdd(
-            selection,
-            static _ => Guid.NewGuid().ToString());
+        var idempotencyKey = attemptStore.GetOrCreate(creditId);
         var parameters = new Dictionary<string, object?>
         {
             ["idempotencyKey"] = idempotencyKey
@@ -45,9 +41,7 @@ public sealed class CodexRateLimitResetConsumer(
             var unknownOutcome => throw new InvalidOperationException(
                 $"Unknown rate-limit reset outcome: {unknownOutcome ?? "<null>"}.")
         };
-        _pendingAttempts.TryRemove(selection, out _);
+        attemptStore.Complete(creditId);
         return outcome;
     }
-
-    private readonly record struct ResetSelection(string? CreditId);
 }

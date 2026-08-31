@@ -1,16 +1,22 @@
 using System.Text.Json;
 using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Codex;
+using CodexUsageWidget.Infrastructure.Settings;
 
 namespace CodexUsageWidget.Tests;
 
-public sealed class CodexRateLimitResetConsumerTests
+public sealed class CodexRateLimitResetConsumerTests : IDisposable
 {
+    private readonly string _directory = Path.Combine(
+        Path.GetTempPath(),
+        "CodexUsageWidget.Tests",
+        Guid.NewGuid().ToString("N"));
+
     [Fact]
     public async Task ConsumeUsesSelectedCreditAndReturnsResetOutcome()
     {
         await using var session = new RecordingSession("reset");
-        var consumer = new CodexRateLimitResetConsumer(session);
+        var consumer = CreateConsumer(session);
 
         var outcome = await consumer.ConsumeAsync("reset-2");
 
@@ -27,7 +33,7 @@ public sealed class CodexRateLimitResetConsumerTests
     public async Task RetryingAnUncertainAttemptReusesItsIdempotencyKey()
     {
         await using var session = new UncertainThenSuccessfulSession();
-        var consumer = new CodexRateLimitResetConsumer(session);
+        var consumer = CreateConsumer(session);
 
         await Assert.ThrowsAsync<IOException>(() => consumer.ConsumeAsync("reset-2"));
         var outcome = await consumer.ConsumeAsync("reset-2");
@@ -36,6 +42,20 @@ public sealed class CodexRateLimitResetConsumerTests
         Assert.Equal(2, session.IdempotencyKeys.Count);
         Assert.Equal(session.IdempotencyKeys[0], session.IdempotencyKeys[1]);
     }
+
+    public void Dispose()
+    {
+        if (Directory.Exists(_directory))
+        {
+            Directory.Delete(_directory, recursive: true);
+        }
+    }
+
+    private CodexRateLimitResetConsumer CreateConsumer(ICodexAppServerSession session) =>
+        new(
+            session,
+            new RateLimitResetAttemptStore(
+                Path.Combine(_directory, "pending-rate-limit-reset.json")));
 
     private sealed class RecordingSession(string outcome) : ICodexAppServerSession
     {
