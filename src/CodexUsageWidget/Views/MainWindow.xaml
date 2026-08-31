@@ -123,15 +123,7 @@
                     <Button ToolTip="{localization:Loc Common_Exit}"
                             Style="{StaticResource IconButton}"
                             Click="CloseButton_OnClick">
-                        <Viewbox Width="16" Height="16">
-                            <Canvas Width="16" Height="16">
-                                <Path Data="M5,5 L11,11 M11,5 L5,11"
-                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                                      StrokeThickness="1.4"
-                                      StrokeStartLineCap="Round"
-                                      StrokeEndLineCap="Round" />
-                            </Canvas>
-                        </Viewbox>
+                        <Path Style="{StaticResource CloseGlyph}" />
                     </Button>
                 </StackPanel>
             </Grid>

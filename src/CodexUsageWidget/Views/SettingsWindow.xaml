@@ -250,29 +250,16 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="{localization:Loc Common_Settings}"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Foreground="{DynamicResource TextPrimary}" />
+                               Style="{StaticResource DialogTitle}" />
                     <TextBlock Text="{localization:Loc Settings_Description}"
                                Margin="0,3,0,0"
                                Style="{StaticResource SupportingText}" />
                 </StackPanel>
                 <Button Grid.Column="1"
-                        Width="28"
-                        Height="28"
-                        Margin="12,-4,-4,0"
-                        VerticalAlignment="Top"
                         ToolTip="{localization:Loc Common_Close}"
                         IsCancel="True"
-                        Style="{StaticResource IconButton}">
-                    <Path Width="10"
-                          Height="10"
-                          Data="M 1,1 L 9,9 M 9,1 L 1,9"
-                          Stretch="Fill"
-                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                          StrokeThickness="1.4"
-                          StrokeStartLineCap="Round"
-                          StrokeEndLineCap="Round" />
+                        Style="{StaticResource DialogCloseButton}">
+                    <Path Style="{StaticResource CloseGlyph}" />
                 </Button>
             </Grid>
 
