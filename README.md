@@ -1,5 +1,7 @@
 # Codex Usage Widget
 
+English | [简体中文](README.zh-CN.md)
+
 See the Codex limits available to your account, including 5-hour and weekly windows,
 without opening a browser. Codex Usage Widget runs locally on Windows and reads usage
 through the official Codex CLI app server.
