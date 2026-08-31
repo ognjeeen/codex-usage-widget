@@ -62,6 +62,7 @@
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
                                 <Trigger.EnterActions>
                                     <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
                                         <Storyboard>
@@ -114,6 +115,7 @@
                                 </Trigger.ExitActions>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
                                 <Trigger.EnterActions>
                                     <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
                                         <Storyboard>
@@ -338,8 +340,7 @@
                                       ToolTipService.VerticalOffset="10">
                                     <Grid.ToolTip>
                                         <ToolTip DataContext="{Binding PlacementTarget.DataContext,
-                                                                       RelativeSource={RelativeSource Self}}"
-                                                 Style="{StaticResource TokenActivityToolTip}">
+                                                                       RelativeSource={RelativeSource Self}}">
                                             <StackPanel>
                                                 <TextBlock Text="{Binding DateText}"
                                                            FontSize="10.5"
