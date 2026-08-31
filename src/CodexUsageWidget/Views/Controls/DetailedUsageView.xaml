@@ -3,6 +3,148 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
              xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization">
+    <UserControl.Resources>
+        <Style x:Key="CompactInlineActionButton" TargetType="Button">
+            <Setter Property="MinWidth" Value="66" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Padding" Value="8,0" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="ButtonRoot">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    SnapsToDevicePixels="True" />
+                            <Border x:Name="AccentSurface"
+                                    Background="{DynamicResource AccentPrimaryBrush}"
+                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    IsHitTestVisible="False"
+                                    Opacity="0"
+                                    SnapsToDevicePixels="True" />
+                            <Border x:Name="PressedSurface"
+                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    IsHitTestVisible="False"
+                                    Opacity="0"
+                                    SnapsToDevicePixels="True">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{DynamicResource AccentPrimaryPressedColor}" />
+                                </Border.Background>
+                            </Border>
+                            <Border x:Name="FocusBorder"
+                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    IsHitTestVisible="False"
+                                    Opacity="0"
+                                    SnapsToDevicePixels="True" />
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center">
+                                <ContentPresenter.RenderTransform>
+                                    <TranslateTransform Y="-1" />
+                                </ContentPresenter.RenderTransform>
+                            </ContentPresenter>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AccentSurface"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.14">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="AccentSurface"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0"
+                                                             Duration="0:0:0.12">
+                                                <DoubleAnimation.EasingFunction>
+                                                    <CubicEase EasingMode="EaseOut" />
+                                                </DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="FocusBorder"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.12" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="FocusBorder"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0"
+                                                             Duration="0:0:0.10" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1"
+                                                             Duration="0:0:0.06" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="0"
+                                                             Duration="0:0:0.08" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ButtonRoot" Property="Opacity" Value="0.45" />
+                                <Setter Property="Cursor" Value="Arrow" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <ScrollViewer x:Name="DetailsScrollViewer"
                   Margin="16,4,10,8"
                   Padding="0,0,4,0"
@@ -72,6 +214,89 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <StackPanel Visibility="{Binding HasResetCredits, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid Margin="0,3,0,0"
+                              DataContext="{Binding ResetCredits}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{localization:Loc Usage_RateLimitResets}"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource SupportingText}" />
+                            <TextBlock Grid.Column="1"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding AvailableText}"
+                                       ToolTip="{Binding ToolTipText}"
+                                       TextAlignment="Right"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="11.5"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource TextPrimary}" />
+                            <Button x:Name="ResetDetailsButton"
+                                    Grid.Column="2"
+                                    Width="24"
+                                    Height="24"
+                                    Margin="4,0,-5,0"
+                                    Visibility="{Binding HasSelectableCredits, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    ToolTip="{localization:Loc Usage_ResetExpandTooltip}"
+                                    AutomationProperties.Name="{localization:Loc Usage_ResetExpandTooltip}"
+                                    Style="{StaticResource IconButton}"
+                                    Click="ResetDetailsButton_OnClick">
+                                <Viewbox Width="14" Height="14">
+                                    <Canvas Width="14" Height="14">
+                                        <Path Data="M3.5,5 L7,8 L10.5,5"
+                                              Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                              StrokeThickness="1.4"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              StrokeLineJoin="Round">
+                                            <Path.RenderTransform>
+                                                <RotateTransform x:Name="ResetDetailsGlyphRotation"
+                                                                 CenterX="7"
+                                                                 CenterY="7" />
+                                            </Path.RenderTransform>
+                                        </Path>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+                        <Border x:Name="ResetDetailsPanel"
+                                Margin="0,7,0,2"
+                                Padding="8,5"
+                                Visibility="Collapsed"
+                                Background="{DynamicResource SubtleSurfaceBrush}"
+                                BorderBrush="{DynamicResource CardBorder}"
+                                BorderThickness="1"
+                                CornerRadius="7"
+                                DataContext="{Binding ResetCredits}">
+                            <ItemsControl x:Name="ResetCreditsItems"
+                                          ItemsSource="{Binding Credits}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Text="{Binding ExpirationText}"
+                                                       Style="{StaticResource SupportingText}"
+                                                       FontSize="10.5"
+                                                       Foreground="{DynamicResource TextSecondary}" />
+                                            <Button Grid.Column="1"
+                                                    Margin="10,0,0,0"
+                                                    Content="{Binding UseButtonText}"
+                                                    Style="{StaticResource CompactInlineActionButton}"
+                                                    Click="UseResetButton_OnClick" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 

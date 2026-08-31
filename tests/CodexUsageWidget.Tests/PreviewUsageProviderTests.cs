@@ -38,6 +38,28 @@ public sealed class PreviewUsageProviderTests
         Assert.Equal(0, wrappedProvider.ReadCount);
     }
 
+    [Fact]
+    public async Task ConsumeRemovesOnlyTheSelectedSyntheticResetWithoutReadingCodex()
+    {
+        var wrappedProvider = new TrackingUsageProvider();
+        var now = new DateTimeOffset(2030, 4, 5, 10, 30, 0, TimeSpan.FromHours(2));
+        await using var provider = new PreviewUsageProvider(
+            wrappedProvider,
+            new FixedTimeProvider(now));
+        var before = await provider.ReadUsageAsync();
+        var selected = Assert.IsAssignableFrom<IReadOnlyList<RateLimitResetCredit>>(
+            Assert.IsType<ResetCreditSummary>(before.RateLimits.ResetCredits).Credits)[1];
+
+        var outcome = await provider.ConsumeAsync(selected.Id);
+        var after = await provider.ReadUsageAsync();
+
+        Assert.Equal(RateLimitResetOutcome.Reset, outcome);
+        var remaining = Assert.IsType<ResetCreditSummary>(after.RateLimits.ResetCredits);
+        Assert.Equal(2, remaining.AvailableCount);
+        Assert.DoesNotContain(remaining.Credits!, credit => credit.Id == selected.Id);
+        Assert.Equal(0, wrappedProvider.ReadCount);
+    }
+
     private sealed class TrackingUsageProvider : IUsageProvider
     {
         public int ReadCount { get; private set; }

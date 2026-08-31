@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,6 +21,7 @@ public partial class MainWindow : Window
     private const double DetailedHeight = 620d;
 
     private readonly UsageMonitor _usageMonitor;
+    private readonly IRateLimitResetConsumer _resetConsumer;
     private readonly CodexActivityMonitor _activityMonitor;
     private readonly IActivityHookSetupService _activityHookSetupService;
     private readonly ICodexLauncher _codexLauncher;
@@ -42,10 +44,13 @@ public partial class MainWindow : Window
     private bool _isRealActivityActive;
     private bool _isActivityPreviewEnabled;
     private bool _isSettingsOpen;
+    private bool _isResetDialogOpen;
+    private bool _resetUsePending;
     private bool _shutdownStarted;
 
     public MainWindow(
         UsageMonitor usageMonitor,
+        IRateLimitResetConsumer resetConsumer,
         CodexActivityMonitor activityMonitor,
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
@@ -58,6 +63,7 @@ public partial class MainWindow : Window
         AppLanguageController languageController)
     {
         _usageMonitor = usageMonitor;
+        _resetConsumer = resetConsumer;
         _activityMonitor = activityMonitor;
         _activityHookSetupService = activityHookSetupService;
         _codexLauncher = codexLauncher;
@@ -90,6 +96,7 @@ public partial class MainWindow : Window
         _usageMonitor.RefreshStarted += UsageMonitorOnRefreshStarted;
         _usageMonitor.SnapshotUpdated += UsageMonitorOnSnapshotUpdated;
         _usageMonitor.RefreshFailed += UsageMonitorOnRefreshFailed;
+        DetailedView.ResetUseRequested += DetailedViewOnResetUseRequested;
         _activityMonitor.ActivityChanged += ActivityMonitorOnActivityChanged;
         _taskbarLabel.OpenRequested += (_, _) =>
             Dispatcher.BeginInvoke(_widgetVisibility.Show, DispatcherPriority.ApplicationIdle);
@@ -440,6 +447,98 @@ public partial class MainWindow : Window
         _ = _usageMonitor.RefreshAsync();
     }
 
+    private async void DetailedViewOnResetUseRequested(
+        object? sender,
+        Controls.RateLimitResetRequestedEventArgs e)
+    {
+        if (_resetUsePending)
+        {
+            return;
+        }
+
+        if (!ShowResetConfirmation(e.Credit))
+        {
+            return;
+        }
+
+        _resetUsePending = true;
+        DetailedView.SetResetUsePending(pending: true);
+        try
+        {
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(12));
+            var outcome = await _resetConsumer.ConsumeAsync(
+                e.Credit.CreditId,
+                timeout.Token);
+            if (outcome is RateLimitResetOutcome.NothingToReset)
+            {
+                ShowResetMessage(
+                    Strings.Get("Usage_ResetNothingToReset"),
+                    MessageBoxImage.Information);
+            }
+            else if (outcome is RateLimitResetOutcome.NoCredit)
+            {
+                ShowResetMessage(
+                    Strings.Get("Usage_ResetNoCredit"),
+                    MessageBoxImage.Warning);
+            }
+
+            await _usageMonitor.RefreshAsync();
+        }
+        catch (OperationCanceledException)
+        {
+            ShowResetMessage(
+                Strings.Get("Error_ResponseTimeout"),
+                MessageBoxImage.Warning);
+        }
+        catch (Exception ex) when (
+            ex is IOException or InvalidOperationException or UnauthorizedAccessException)
+        {
+            ShowResetMessage(
+                Strings.Format("Usage_ResetFailure", ex.Message),
+                MessageBoxImage.Warning);
+        }
+        finally
+        {
+            _resetUsePending = false;
+            DetailedView.SetResetUsePending(pending: false);
+        }
+    }
+
+    private bool ShowResetConfirmation(RateLimitResetCreditViewModel credit)
+    {
+        _isResetDialogOpen = true;
+        try
+        {
+            var confirmation = new RateLimitResetConfirmationWindow(credit)
+            {
+                Owner = this
+            };
+            return confirmation.ShowDialog() == true;
+        }
+        finally
+        {
+            _isResetDialogOpen = false;
+        }
+    }
+
+    private void ShowResetMessage(string message, MessageBoxImage image)
+    {
+        _isResetDialogOpen = true;
+        try
+        {
+            System.Windows.MessageBox.Show(
+                this,
+                message,
+                Strings.Get("Usage_RateLimitResets"),
+                MessageBoxButton.OK,
+                image);
+        }
+        finally
+        {
+            _isResetDialogOpen = false;
+        }
+    }
+
     private void Widget_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ButtonState != MouseButtonState.Pressed ||
@@ -483,10 +582,11 @@ public partial class MainWindow : Window
 
     private void MainWindowOnDeactivated(object? sender, EventArgs e)
     {
-        if (_displayMode == WidgetDisplayMode.TaskbarIndicator &&
-            !_isSettingsOpen)
+        if (_displayMode == WidgetDisplayMode.TaskbarIndicator)
         {
-            _widgetVisibility.HideOnDeactivated(_taskbarLabel.IsPointerOver);
+            _widgetVisibility.HideOnDeactivated(
+                _taskbarLabel.IsPointerOver,
+                ownedDialogOpen: _isSettingsOpen || _isResetDialogOpen);
         }
     }
 

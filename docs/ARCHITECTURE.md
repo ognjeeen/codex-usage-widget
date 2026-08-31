@@ -27,24 +27,26 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
    the widget object graph.
 2. `UsageMonitor` owns refresh scheduling, timeout handling and refresh coalescing.
 3. `CodexUsageProvider` coordinates required rate-limit reads and optional token-activity reads.
-4. `CodexAppServerSession` owns initialized app-server connection lifetime.
-5. `JsonRpcConnection` owns stdin/stdout request correlation and process lifetime.
-6. Endpoint-specific parsers convert Codex payloads into domain records.
-7. A path-independent PowerShell hook bridge forwards minimal lifecycle signals to
+4. `CodexRateLimitResetConsumer` owns explicit earned-reset redemption, including one stable
+   idempotency key for retries until the server returns a definitive outcome.
+5. `CodexAppServerSession` owns initialized app-server connection lifetime.
+6. `JsonRpcConnection` owns stdin/stdout request correlation and process lifetime.
+7. Endpoint-specific parsers convert Codex payloads into domain records.
+8. A path-independent PowerShell hook bridge forwards minimal lifecycle signals to
    `CodexActivityPipeSignalSource` over a current-user-only named pipe;
    `CodexActivityMonitor` owns one active turn per session and emits only final boolean
    transitions.
-8. `CodexActivityHookSetupService` coordinates reviewable hook-file changes and reads
+9. `CodexActivityHookSetupService` coordinates reviewable hook-file changes and reads
    trust state through `hooks/list`; `CodexHookTrustStatusParser` owns the protocol shape.
-9. `ActivityHookSetupControl` presents setup status inside Settings while a separate review
+10. `ActivityHookSetupControl` presents setup status inside Settings while a separate review
    dialog shows the exact proposed file content before installation or removal.
-10. `UsageWidgetViewModel` maps snapshots to immutable presentation state.
-11. `AppThemeController` applies the saved system, light, or dark theme plus the selected
+11. `UsageWidgetViewModel` maps snapshots to immutable presentation state.
+12. `AppThemeController` applies the saved system, light, or dark theme plus the selected
     accent palette, and observes Windows theme changes without leaking registry access into
     view code.
-12. `AppLanguageController` resolves the saved system, English, or Simplified Chinese
+13. `AppLanguageController` resolves the saved system, English, or Simplified Chinese
     preference, while standard .NET resources and a notifying WPF binding refresh existing UI.
-13. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
+14. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
     activity-hook setup plus immediate theme, accent, widget-layout, displayed-limit, and Windows
     startup preferences. Focused user controls render compact, detailed, and repeated limit-row
     content.
@@ -63,6 +65,8 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
 - Failed app-server startup is disposed before a later refresh reconnects.
 - Optional token-activity failures degrade only the detailed activity section; core
   rate-limit monitoring remains available.
+- Usage preview mode owns synthetic reset credits and redemption outcomes, so UI tests and
+  manual preview checks never consume a real account reset.
 - A semaphore prevents concurrent refreshes and a mutex prevents duplicate apps.
 - Activity hook IPC is bounded and local to the current Windows user. The hook path does not
   depend on the release extraction directory and does not start WPF. Accepted clients are

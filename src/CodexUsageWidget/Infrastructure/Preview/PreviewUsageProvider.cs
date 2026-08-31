@@ -3,10 +3,12 @@ using CodexUsageWidget.Domain;
 
 namespace CodexUsageWidget.Infrastructure.Preview;
 
-public sealed class PreviewUsageProvider : IUsageProvider
+public sealed class PreviewUsageProvider : IUsageProvider, IRateLimitResetConsumer
 {
     private readonly IUsageProvider _wrappedProvider;
     private readonly TimeProvider _timeProvider;
+    private readonly object _resetCreditsLock = new();
+    private readonly List<RateLimitResetCredit> _resetCredits;
     private bool _disposed;
 
     public PreviewUsageProvider(
@@ -15,6 +17,13 @@ public sealed class PreviewUsageProvider : IUsageProvider
     {
         _wrappedProvider = wrappedProvider;
         _timeProvider = timeProvider ?? TimeProvider.System;
+        var now = _timeProvider.GetLocalNow();
+        _resetCredits =
+        [
+            CreateResetCredit("preview-reset-1", now, now.AddDays(7)),
+            CreateResetCredit("preview-reset-2", now, now.AddDays(18)),
+            CreateResetCredit("preview-reset-3", now, now.AddDays(32))
+        ];
     }
 
     public event EventHandler? RateLimitsChanged
@@ -35,6 +44,14 @@ public sealed class PreviewUsageProvider : IUsageProvider
         cancellationToken.ThrowIfCancellationRequested();
 
         var now = _timeProvider.GetLocalNow();
+        ResetCreditSummary resetCredits;
+        lock (_resetCreditsLock)
+        {
+            resetCredits = new ResetCreditSummary(
+                _resetCredits.Count,
+                _resetCredits.ToArray());
+        }
+
         var snapshot = new UsageSnapshot(
             new UsageRateLimits(
                 [
@@ -60,12 +77,50 @@ public sealed class PreviewUsageProvider : IUsageProvider
                         SpendControlReached: null)
                 ],
                 PlanType: "preview",
-                ResetCredits: null),
+                ResetCredits: resetCredits),
             TokenActivity: null,
             FetchedAt: now);
 
         return Task.FromResult(snapshot);
     }
+
+    public Task<RateLimitResetOutcome> ConsumeAsync(
+        string? creditId,
+        CancellationToken cancellationToken = default)
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        lock (_resetCreditsLock)
+        {
+            var selected = creditId is null
+                ? _resetCredits
+                    .OrderBy(credit => credit.ExpiresAt is null)
+                    .ThenBy(credit => credit.ExpiresAt)
+                    .FirstOrDefault()
+                : _resetCredits.FirstOrDefault(credit =>
+                    string.Equals(credit.Id, creditId, StringComparison.Ordinal));
+            if (selected is null)
+            {
+                return Task.FromResult(RateLimitResetOutcome.NoCredit);
+            }
+
+            _resetCredits.Remove(selected);
+        }
+
+        return Task.FromResult(RateLimitResetOutcome.Reset);
+    }
+
+    private static RateLimitResetCredit CreateResetCredit(
+        string id,
+        DateTimeOffset grantedAt,
+        DateTimeOffset expiresAt) => new(
+            id,
+            "available",
+            grantedAt,
+            expiresAt,
+            "Rate-limit reset",
+            "Reset an eligible Codex rate-limit window.");
 
     public ValueTask DisposeAsync()
     {

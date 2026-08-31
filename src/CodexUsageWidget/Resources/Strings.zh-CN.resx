@@ -63,6 +63,20 @@
   <data name="Usage_SpendLimitResets" xml:space="preserve"><value>消费限制重置时间</value></data>
   <data name="Usage_RateLimitResets" xml:space="preserve"><value>用量限制重置次数</value></data>
   <data name="Usage_CountAvailable" xml:space="preserve"><value>可用 {0}</value></data>
+  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>下一个重置将于 {0:M月d日 tt h:mm} 到期</value></data>
+  <data name="Usage_ResetExpires" xml:space="preserve"><value>到期时间：{0:M月d日 tt h:mm}</value></data>
+  <data name="Usage_ResetExpirationUnavailable" xml:space="preserve"><value>到期时间不可用</value></data>
+  <data name="Usage_UseReset" xml:space="preserve"><value>使用重置</value></data>
+  <data name="Usage_UseNextReset" xml:space="preserve"><value>使用下一个重置</value></data>
+  <data name="Usage_ResetExpandTooltip" xml:space="preserve"><value>查看可用重置</value></data>
+  <data name="Usage_ResetCollapseTooltip" xml:space="preserve"><value>隐藏可用重置</value></data>
+  <data name="Usage_ResetConfirmTitle" xml:space="preserve"><value>使用此用量限制重置？</value></data>
+  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>此重置将于 {0:M月d日 tt h:mm} 到期。它将应用于符合条件的 Codex 用量限制，使用后无法恢复。</value></data>
+  <data name="Usage_ResetConfirmUnknownExpiration" xml:space="preserve"><value>此重置将应用于符合条件的 Codex 用量限制，使用后无法恢复。</value></data>
+  <data name="Usage_ResetConfirmNext" xml:space="preserve"><value>Codex 将选择下一个可用重置，并将其应用于符合条件的用量限制。使用后无法恢复。</value></data>
+  <data name="Usage_ResetNothingToReset" xml:space="preserve"><value>目前没有可重置的符合条件的 Codex 用量限制。你的重置尚未使用。</value></data>
+  <data name="Usage_ResetNoCredit" xml:space="preserve"><value>此用量限制重置已不可用。</value></data>
+  <data name="Usage_ResetFailure" xml:space="preserve"><value>无法使用用量限制重置：{0}</value></data>
   <data name="Usage_SectionOverview" xml:space="preserve"><value>概览</value></data>
   <data name="Usage_SectionCreditsLimits" xml:space="preserve"><value>额度与限制</value></data>
   <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>TOKEN 活动</value></data>

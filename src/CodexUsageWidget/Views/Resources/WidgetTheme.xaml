@@ -96,21 +96,105 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="ButtonSurface"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="7">
+                    <Grid x:Name="ButtonRoot">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.12">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.14">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="Pressed" GeneratedDuration="0:0:0.06" />
+                                    <VisualTransition From="Pressed" GeneratedDuration="0:0:0.08" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.45"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ButtonSurface"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="7" />
+                        <Border x:Name="HoverSurface"
+                                Background="{DynamicResource IconHoverBrush}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
+                        <Border x:Name="PressedSurface"
+                                Background="{DynamicResource IconPressedBrush}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource IconHoverBrush}" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource IconPressedBrush}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -138,26 +222,112 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="ButtonSurface"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="7">
+                    <Grid x:Name="ButtonRoot">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.12">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.14">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="Pressed" GeneratedDuration="0:0:0.06" />
+                                    <VisualTransition From="Pressed" GeneratedDuration="0:0:0.08" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.45"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ButtonSurface"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7" />
+                        <Border x:Name="HoverSurface"
+                                Background="{DynamicResource ControlHoverBrush}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
+                        <Border x:Name="PressedSurface"
+                                Background="{DynamicResource ControlPressedBrush}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
                         <ContentPresenter HorizontalAlignment="Center"
                                           Margin="{TemplateBinding Padding}"
                                           VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource ControlHoverBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background" Value="{DynamicResource ControlPressedBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.45" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -169,32 +339,112 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:AccentButton}">
-                    <Border x:Name="ButtonSurface"
-                            Background="{Binding PrimaryBrush, RelativeSource={RelativeSource TemplatedParent}}"
-                            BorderBrush="{Binding PrimaryBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="7">
+                    <Grid x:Name="ButtonRoot">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.12">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="MouseOver" GeneratedDuration="0:0:0.14">
+                                        <VisualTransition.GeneratedEasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </VisualTransition.GeneratedEasingFunction>
+                                    </VisualTransition>
+                                    <VisualTransition To="Pressed" GeneratedDuration="0:0:0.06" />
+                                    <VisualTransition From="Pressed" GeneratedDuration="0:0:0.08" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="HoverSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="PressedSurface"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="ButtonRoot"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.45"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="ButtonSurface"
+                                Background="{Binding PrimaryBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderBrush="{Binding PrimaryBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7" />
+                        <Border x:Name="HoverSurface"
+                                Background="{Binding HoverBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderBrush="{Binding HoverBorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
+                        <Border x:Name="PressedSurface"
+                                Background="{Binding PressedBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderBrush="{Binding PrimaryBrush, RelativeSource={RelativeSource TemplatedParent}}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="7"
+                                IsHitTestVisible="False"
+                                Opacity="0" />
                         <ContentPresenter HorizontalAlignment="Center"
                                           Margin="{TemplateBinding Padding}"
                                           VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background"
-                                    Value="{Binding HoverBrush, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="ButtonSurface" Property="BorderBrush"
-                                    Value="{Binding HoverBorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonSurface" Property="Background"
-                                    Value="{Binding PressedBrush, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="ButtonSurface" Property="BorderBrush"
-                                    Value="{Binding PrimaryBrush, RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.45" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

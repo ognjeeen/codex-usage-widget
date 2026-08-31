@@ -1,0 +1,70 @@
+<Window x:Class="CodexUsageWidget.Views.RateLimitResetConfirmationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
+        xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization"
+        Title="{localization:Loc Usage_ResetConfirmTitle}"
+        Width="430"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Style="{StaticResource DialogWindow}">
+    <Border Style="{StaticResource DialogSurface}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid MouseLeftButtonDown="Header_OnMouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{localization:Loc Usage_ResetConfirmTitle}"
+                           VerticalAlignment="Center"
+                           FontSize="19"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource TextPrimary}" />
+                <Button Grid.Column="1"
+                        Width="28"
+                        Height="28"
+                        Margin="12,-4,-4,0"
+                        VerticalAlignment="Top"
+                        ToolTip="{localization:Loc Common_Close}"
+                        IsCancel="True"
+                        Style="{StaticResource IconButton}">
+                    <Path Width="10"
+                          Height="10"
+                          Data="M 1,1 L 9,9 M 9,1 L 1,9"
+                          Stretch="Fill"
+                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                          StrokeThickness="1.4"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round" />
+                </Button>
+            </Grid>
+
+            <TextBlock x:Name="DescriptionText"
+                       Grid.Row="1"
+                       Margin="0,10,0,18"
+                       TextWrapping="Wrap"
+                       Style="{StaticResource SupportingText}"
+                       FontSize="12" />
+
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Content="{localization:Loc Common_Cancel}"
+                        Margin="0,0,8,0"
+                        IsCancel="True"
+                        Style="{StaticResource DialogButton}" />
+                <controls:AccentButton Content="{localization:Loc Usage_UseReset}"
+                                       IsDefault="True"
+                                       Style="{StaticResource PrimaryDialogButton}"
+                                       Click="UseResetButton_OnClick" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

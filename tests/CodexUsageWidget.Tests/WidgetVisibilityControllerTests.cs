@@ -71,4 +71,26 @@ public sealed class WidgetVisibilityControllerTests
         Assert.Equal(0, showCount);
         Assert.Equal(1, hideCount);
     }
+
+    [Fact]
+    public void OwnedDialogSuppressesDeactivation()
+    {
+        var visible = true;
+        var hideCount = 0;
+        var controller = new WidgetVisibilityController(
+            () => visible,
+            () => visible = true,
+            () =>
+            {
+                visible = false;
+                hideCount++;
+            });
+
+        controller.HideOnDeactivated(
+            taskbarInteractionInProgress: false,
+            ownedDialogOpen: true);
+
+        Assert.True(visible);
+        Assert.Equal(0, hideCount);
+    }
 }

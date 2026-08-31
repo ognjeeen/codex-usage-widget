@@ -36,8 +36,8 @@ of `codex.cmd` or `codex.exe`.
 - Remaining percentage and reset time for every general Codex usage window
 - A selectable displayed limit shared by the widget headline, taskbar label, and tray icon
 - Compact and detailed desktop-widget layouts selected from Settings or the quick chevron,
-  including credits, spend controls, earned resets, token activity, and model-specific limits
-  when Codex returns them
+  including credits, spend controls, earned-reset expiration and redemption, token activity,
+  and model-specific limits when Codex returns them
 - System, light, and dark themes with five preset accent colors selected from Settings
 - Automatic Windows-language selection with English fallback, plus English and Simplified
   Chinese overrides in Settings
@@ -63,6 +63,10 @@ widget falls back to an available window when Codex does not return the selected
 
 Token activity is informational. Token counts do not map directly to the remaining
 subscription percentage.
+
+When earned rate-limit resets are available, expand **Rate-limit resets** in the detailed
+widget to see each expiration time. **Use reset** always requires confirmation, consumes the
+selected earned reset, and lets Codex apply it to an eligible rate-limit window.
 
 ![Codex Usage Widget taskbar label preview](docs/images/taskbar-label.png)
 
