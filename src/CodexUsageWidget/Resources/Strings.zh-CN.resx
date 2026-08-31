@@ -126,9 +126,9 @@
   <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>显示剩余额度最少的限制</value></data>
   <data name="Settings_SectionFeatures" xml:space="preserve"><value>功能</value></data>
   <data name="Settings_Language_Title" xml:space="preserve"><value>语言</value></data>
-  <data name="Settings_Language_Description" xml:space="preserve"><value>跟随 Windows 显示语言，或固定使用一种语言。</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>选择英语或简体中文，也可让 Windows 自动选择。</value></data>
   <data name="Settings_Language_System" xml:space="preserve"><value>跟随 Windows</value></data>
-  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>支持简体中文时使用中文，否则使用英语</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Windows 为简体中文时使用简体中文，否则使用英语。</value></data>
   <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>跟随 Windows 显示语言</value></data>
   <data name="Settings_Language_English" xml:space="preserve"><value>English</value></data>
   <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>始终使用英语</value></data>
@@ -176,6 +176,14 @@
   <data name="Activity_ReviewInstallDescription" xml:space="preserve"><value>小组件将写入以下确切的 ~/.codex/hooks.json 内容。现有钩子和未知字段会保留。</value></data>
   <data name="Activity_ReviewRemoveDescription" xml:space="preserve"><value>只会移除与此小组件可执行文件完全匹配的处理程序。其他钩子定义会保留。</value></data>
   <data name="Activity_InstallHooks" xml:space="preserve"><value>安装钩子</value></data>
+  <data name="Activity_CommandAlreadyInstalled" xml:space="preserve"><value>活动钩子已安装。</value></data>
+  <data name="Activity_CommandNoMatching" xml:space="preserve"><value>未找到已安装的匹配活动钩子。</value></data>
+  <data name="Activity_CommandProposed" xml:space="preserve"><value>拟写入的 ~/.codex/hooks.json：</value></data>
+  <data name="Activity_CommandApplyPrompt" xml:space="preserve"><value>应用此更改？[y/N] </value></data>
+  <data name="Activity_CommandNoChanges" xml:space="preserve"><value>未进行任何更改。</value></data>
+  <data name="Activity_CommandInstalled" xml:space="preserve"><value>活动钩子已安装。请使用 /hooks 检查并信任确切定义。</value></data>
+  <data name="Activity_CommandRemoved" xml:space="preserve"><value>已移除匹配的活动钩子。</value></data>
+  <data name="Activity_CommandFailure" xml:space="preserve"><value>活动钩子配置失败：{0}</value></data>
   <data name="Tray_Open" xml:space="preserve"><value>打开</value></data>
   <data name="Tray_Settings" xml:space="preserve"><value>设置...</value></data>
   <data name="Tray_DisplayMode" xml:space="preserve"><value>显示模式</value></data>

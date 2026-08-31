@@ -126,9 +126,9 @@
   <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>Display most constrained limit</value></data>
   <data name="Settings_SectionFeatures" xml:space="preserve"><value>FEATURES</value></data>
   <data name="Settings_Language_Title" xml:space="preserve"><value>Language</value></data>
-  <data name="Settings_Language_Description" xml:space="preserve"><value>Follow the Windows display language or always use one language.</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Choose English or Simplified Chinese, or let Windows decide.</value></data>
   <data name="Settings_Language_System" xml:space="preserve"><value>Use Windows setting</value></data>
-  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Uses Simplified Chinese when supported; otherwise English</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Uses Simplified Chinese when Windows does. Otherwise, uses English.</value></data>
   <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>Use Windows language</value></data>
   <data name="Settings_Language_English" xml:space="preserve"><value>English</value></data>
   <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>Always use English</value></data>
@@ -176,6 +176,14 @@
   <data name="Activity_ReviewInstallDescription" xml:space="preserve"><value>The widget will write this exact ~/.codex/hooks.json content. Existing hooks and unknown fields are preserved.</value></data>
   <data name="Activity_ReviewRemoveDescription" xml:space="preserve"><value>Only handlers that exactly match this widget executable will be removed. Other hook definitions are preserved.</value></data>
   <data name="Activity_InstallHooks" xml:space="preserve"><value>Install hooks</value></data>
+  <data name="Activity_CommandAlreadyInstalled" xml:space="preserve"><value>Activity hooks are already installed.</value></data>
+  <data name="Activity_CommandNoMatching" xml:space="preserve"><value>No matching activity hooks are installed.</value></data>
+  <data name="Activity_CommandProposed" xml:space="preserve"><value>Proposed ~/.codex/hooks.json:</value></data>
+  <data name="Activity_CommandApplyPrompt" xml:space="preserve"><value>Apply this change? [y/N] </value></data>
+  <data name="Activity_CommandNoChanges" xml:space="preserve"><value>No changes were made.</value></data>
+  <data name="Activity_CommandInstalled" xml:space="preserve"><value>Activity hooks installed. Review and trust the exact definitions with /hooks.</value></data>
+  <data name="Activity_CommandRemoved" xml:space="preserve"><value>Matching activity hooks removed.</value></data>
+  <data name="Activity_CommandFailure" xml:space="preserve"><value>Activity hook configuration failed: {0}</value></data>
   <data name="Tray_Open" xml:space="preserve"><value>Open</value></data>
   <data name="Tray_Settings" xml:space="preserve"><value>Settings...</value></data>
   <data name="Tray_DisplayMode" xml:space="preserve"><value>Display mode</value></data>

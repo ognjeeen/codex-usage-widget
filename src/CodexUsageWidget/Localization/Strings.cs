@@ -46,6 +46,8 @@ public sealed class Strings : INotifyPropertyChanged
             culture.Name,
             StringComparison.OrdinalIgnoreCase);
         _culture = culture;
+        CultureInfo.CurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.CurrentUICulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
         if (changed)

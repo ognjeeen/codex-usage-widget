@@ -1,5 +1,7 @@
 using System.IO;
 using System.Text;
+using CodexUsageWidget.Infrastructure.Settings;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Infrastructure.Codex.Hooks;
 
@@ -28,6 +30,8 @@ public static class CodexActivityCommandLine
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
+        _ = new AppLanguageController(new LanguagePreferenceStore());
+
         using var input = new StreamReader(
             inputStream,
             Encoding.UTF8,
@@ -41,16 +45,33 @@ public static class CodexActivityCommandLine
             AutoFlush = true
         };
 
+        return await RunInteractiveAsync(
+            arguments,
+            input,
+            output,
+            new CodexHookConfigurationManager(),
+            cancellationToken).ConfigureAwait(false);
+    }
+
+    internal static async Task<int> RunInteractiveAsync(
+        IReadOnlyList<string> arguments,
+        TextReader input,
+        TextWriter output,
+        CodexHookConfigurationManager manager,
+        CancellationToken cancellationToken = default)
+    {
         try
         {
-            var manager = new CodexHookConfigurationManager();
             var install = arguments[0] == InstallArgument;
             var plan = install
                 ? manager.PlanInstall()
                 : manager.PlanUninstall();
             if (plan.Error is not null)
             {
-                await output.WriteLineAsync(plan.Error).ConfigureAwait(false);
+                var error = plan.ErrorKind == CodexHookConfigurationErrorKind.HooksDisabled
+                    ? Strings.Get("Activity_HooksDisabledDescription")
+                    : Strings.Format("Activity_CommandFailure", plan.Error);
+                await output.WriteLineAsync(error).ConfigureAwait(false);
                 return 1;
             }
 
@@ -58,33 +79,36 @@ public static class CodexActivityCommandLine
             {
                 await output.WriteLineAsync(
                     install
-                        ? "Activity hooks are already installed."
-                        : "No matching activity hooks are installed.").ConfigureAwait(false);
+                        ? Strings.Get("Activity_CommandAlreadyInstalled")
+                        : Strings.Get("Activity_CommandNoMatching")).ConfigureAwait(false);
                 return 0;
             }
 
-            await output.WriteLineAsync("Proposed ~/.codex/hooks.json:").ConfigureAwait(false);
+            await output.WriteLineAsync(Strings.Get("Activity_CommandProposed"))
+                .ConfigureAwait(false);
             await output.WriteLineAsync(plan.ProposedContent).ConfigureAwait(false);
-            await output.WriteAsync("Apply this change? [y/N] ").ConfigureAwait(false);
+            await output.WriteAsync(Strings.Get("Activity_CommandApplyPrompt"))
+                .ConfigureAwait(false);
             var approval = await input.ReadLineAsync(cancellationToken).ConfigureAwait(false);
             if (!string.Equals(approval, "y", StringComparison.OrdinalIgnoreCase) &&
                 !string.Equals(approval, "yes", StringComparison.OrdinalIgnoreCase))
             {
-                await output.WriteLineAsync("No changes were made.").ConfigureAwait(false);
+                await output.WriteLineAsync(Strings.Get("Activity_CommandNoChanges"))
+                    .ConfigureAwait(false);
                 return 0;
             }
 
             manager.Apply(plan);
             await output.WriteLineAsync(
                 install
-                    ? "Activity hooks installed. Review and trust the exact definitions with /hooks."
-                    : "Matching activity hooks removed.").ConfigureAwait(false);
+                    ? Strings.Get("Activity_CommandInstalled")
+                    : Strings.Get("Activity_CommandRemoved")).ConfigureAwait(false);
             return 0;
         }
         catch (Exception ex) when (
             ex is IOException or UnauthorizedAccessException or InvalidOperationException)
         {
-            await output.WriteLineAsync($"Activity hook configuration failed: {ex.Message}")
+            await output.WriteLineAsync(Strings.Format("Activity_CommandFailure", ex.Message))
                 .ConfigureAwait(false);
             return 1;
         }

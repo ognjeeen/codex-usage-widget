@@ -1,6 +1,8 @@
 using System.Globalization;
+using CodexUsageWidget.Domain;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Localization;
+using CodexUsageWidget.Views.ViewModels;
 
 namespace CodexUsageWidget.Tests;
 
@@ -41,6 +43,27 @@ public sealed class AppLanguageControllerTests : IDisposable
         {
             languageChanged |= e.PropertyName == "Item[]";
         }
+    }
+
+    [Fact]
+    public void ManualPreferenceFormatsVisibleDatesUsingSelectedLanguage()
+    {
+        CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
+        var controller = new AppLanguageController(
+            LanguagePreference.SimplifiedChinese,
+            CultureInfo.GetCultureInfo("en-US"));
+        var date = new DateOnly(2026, 8, 11);
+        var activity = new TokenActivitySummary(
+            LifetimeTokens: null,
+            PeakDailyTokens: null,
+            LongestRunningTurnSeconds: null,
+            CurrentStreakDays: null,
+            LongestStreakDays: null,
+            DailyUsage: [new DailyTokenUsage(date, 50_000)]);
+
+        var viewModel = new TokenActivityViewModel(activity);
+
+        Assert.Equal("星期二, 八月 11", viewModel.DailyBars[0].DateText);
     }
 
     public void Dispose()
