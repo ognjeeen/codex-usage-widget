@@ -41,6 +41,7 @@ of `codex.cmd` or `codex.exe`.
 - System, light, and dark themes with five preset accent colors selected from Settings
 - Automatic Windows-language selection with English fallback, plus English and Simplified
   Chinese overrides in Settings
+- Automatic, 24-hour, and 12-hour time formats selected from Settings
 - A movable, always-on-top desktop widget and a compact label beside the notification area
 - Live task activity dots based on official local Codex lifecycle hooks
 - Automatic refresh every two minutes plus live rate-limit notifications
@@ -72,9 +73,9 @@ selected earned reset, and lets Codex apply it to an eligible rate-limit window.
 
 Select the `−` button to move the widget to the taskbar. Right-click the taskbar label or
 tray icon to refresh, change the display mode, open Settings, check for updates, or exit.
-The Settings window opens from the gear button on the widget too. Language, theme, accent
-color, widget layout, displayed limit, and Start with Windows changes apply as soon as they
-are selected.
+The Settings window opens from the gear button on the widget too. Language, time format,
+theme, accent color, widget layout, displayed limit, and Start with Windows changes apply as
+soon as they are selected.
 
 ## Activity dots
 
@@ -108,6 +109,7 @@ The application writes only under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `theme.txt`: system, light, or dark theme preference
 - `accent-palette.txt`: selected preset accent color
 - `language.txt`: system, English, or Simplified Chinese language preference
+- `time-format.txt`: automatic, 24-hour, or 12-hour time preference
 - `logs\codex-usage-widget-YYYYMMDD.log`: diagnostic logs retained for 14 days
 
 The widget displays ChatGPT and Codex subscription limits. It does not display OpenAI API

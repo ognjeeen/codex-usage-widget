@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Infrastructure.Settings;
 using CodexUsageWidget.Infrastructure.Windows;
 using CodexUsageWidget.Localization;
@@ -22,6 +23,7 @@ public partial class TaskbarLabelWindow : Window
     private string? _limitLabel;
     private double? _remainingPercent;
     private DateTimeOffset? _resetsAt;
+    private TimeFormatPreference _timeFormatPreference;
     private bool _labelRequested;
     private bool _isTaskActive;
     private bool _isClosed;
@@ -163,6 +165,12 @@ public partial class TaskbarLabelWindow : Window
                 : System.Windows.Media.Color.FromArgb(24, 255, 255, 255));
     }
 
+    public void SetTimeFormatPreference(TimeFormatPreference preference)
+    {
+        _timeFormatPreference = preference;
+        UpdateUsage(_limitLabel, _remainingPercent, _resetsAt);
+    }
+
     public void UpdateUsage(
         string? limitLabel,
         double? remainingPercent,
@@ -189,7 +197,9 @@ public partial class TaskbarLabelWindow : Window
                 "Taskbar_RemainingWithReset",
                 label,
                 value,
-                resetsAt.Value.ToString("ddd HH:mm", System.Globalization.CultureInfo.CurrentCulture));
+                TimeTextFormatter.FormatDayAndTime(
+                    resetsAt.Value,
+                    _timeFormatPreference));
     }
 
     private void StringsOnPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -1,3 +1,4 @@
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Domain;
 using CodexUsageWidget.Views.ViewModels;
 
@@ -85,6 +86,34 @@ public sealed class UsageWidgetViewModelTests
         var viewModel = UsageWidgetViewModel.FromSnapshot(snapshot, window);
 
         Assert.Equal("Live · Preview", viewModel.StatusText);
+    }
+
+    [Fact]
+    public void FromSnapshotFormatsUpdatedTimeUsingPreference()
+    {
+        var window = new UsageWindow("5h limit", 20, 300, null);
+        var snapshot = new UsageSnapshot(
+            new UsageRateLimits(
+                [new UsageLimitBucket(
+                    "codex",
+                    "Codex",
+                    IsGeneral: true,
+                    [window],
+                    Credits: null,
+                    IndividualLimit: null,
+                    ReachedState: null,
+                    SpendControlReached: null)],
+                "pro",
+                ResetCredits: null),
+            TokenActivity: null,
+            new DateTimeOffset(2030, 8, 31, 14, 5, 9, TimeSpan.Zero));
+
+        var viewModel = UsageWidgetViewModel.FromSnapshot(
+            snapshot,
+            window,
+            TimeFormatPreference.TwelveHour);
+
+        Assert.Equal("Local only · updated 2:05:09 PM", viewModel.UpdatedText);
     }
 
     [Fact]

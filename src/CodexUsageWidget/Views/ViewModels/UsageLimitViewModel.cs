@@ -7,7 +7,10 @@ namespace CodexUsageWidget.Views.ViewModels;
 
 public sealed class UsageLimitViewModel
 {
-    public UsageLimitViewModel(string label, UsageWindow window)
+    public UsageLimitViewModel(
+        string label,
+        UsageWindow window,
+        TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic)
     {
         Label = label;
         UsedPercent = window.UsedPercent;
@@ -18,7 +21,9 @@ public sealed class UsageLimitViewModel
             Math.Round(window.RemainingPercent));
         ResetText = window.ResetsAt is null
             ? Strings.Get("Usage_ResetUnavailable")
-            : UsageTextFormatter.FormatReset(window.ResetsAt.Value);
+            : UsageTextFormatter.FormatReset(
+                window.ResetsAt.Value,
+                timeFormatPreference: timeFormatPreference);
         ProgressBrush = new SolidColorBrush(
             (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(
                 UsageTextFormatter.ColorForRemaining(window.RemainingPercent)));

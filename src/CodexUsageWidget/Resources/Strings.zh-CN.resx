@@ -63,15 +63,15 @@
   <data name="Usage_SpendLimitResets" xml:space="preserve"><value>消费限制重置时间</value></data>
   <data name="Usage_RateLimitResets" xml:space="preserve"><value>用量限制重置次数</value></data>
   <data name="Usage_CountAvailable" xml:space="preserve"><value>可用 {0}</value></data>
-  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>下一个重置将于 {0:M月d日 tt h:mm} 到期</value></data>
-  <data name="Usage_ResetExpires" xml:space="preserve"><value>到期时间：{0:M月d日 tt h:mm}</value></data>
+  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>下一个重置将于 {0:M月d日} {1} 到期</value></data>
+  <data name="Usage_ResetExpires" xml:space="preserve"><value>到期时间：{0:M月d日} {1}</value></data>
   <data name="Usage_ResetExpirationUnavailable" xml:space="preserve"><value>到期时间不可用</value></data>
   <data name="Usage_UseReset" xml:space="preserve"><value>使用重置</value></data>
   <data name="Usage_UseNextReset" xml:space="preserve"><value>使用下一个重置</value></data>
   <data name="Usage_ResetExpandTooltip" xml:space="preserve"><value>查看可用重置</value></data>
   <data name="Usage_ResetCollapseTooltip" xml:space="preserve"><value>隐藏可用重置</value></data>
   <data name="Usage_ResetConfirmTitle" xml:space="preserve"><value>使用此用量限制重置？</value></data>
-  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>此重置将于 {0:M月d日 tt h:mm} 到期。它将应用于符合条件的 Codex 用量限制，使用后无法恢复。</value></data>
+  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>此重置将于 {0:M月d日} {1} 到期。它将应用于符合条件的 Codex 用量限制，使用后无法恢复。</value></data>
   <data name="Usage_ResetConfirmUnknownExpiration" xml:space="preserve"><value>此重置将应用于符合条件的 Codex 用量限制，使用后无法恢复。</value></data>
   <data name="Usage_ResetConfirmNext" xml:space="preserve"><value>Codex 将选择下一个可用重置，并将其应用于符合条件的用量限制。使用后无法恢复。</value></data>
   <data name="Usage_ResetNothingToReset" xml:space="preserve"><value>目前没有可重置的符合条件的 Codex 用量限制。你的重置尚未使用。</value></data>
@@ -150,6 +150,17 @@
   <data name="Settings_Language_Chinese" xml:space="preserve"><value>简体中文</value></data>
   <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>始终使用简体中文</value></data>
   <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>使用简体中文</value></data>
+  <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>时间格式</value></data>
+  <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>选择小组件中时间的显示方式。</value></data>
+  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>自动</value></data>
+  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>跟随所选语言和区域格式</value></data>
+  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>使用自动时间格式</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHour" xml:space="preserve"><value>24 小时制</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourDescription" xml:space="preserve"><value>以 14:05 等格式显示时间</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourAutomation" xml:space="preserve"><value>使用 24 小时制</value></data>
+  <data name="Settings_TimeFormat_TwelveHour" xml:space="preserve"><value>12 小时制</value></data>
+  <data name="Settings_TimeFormat_TwelveHourDescription" xml:space="preserve"><value>以 下午 2:05 等格式显示时间</value></data>
+  <data name="Settings_TimeFormat_TwelveHourAutomation" xml:space="preserve"><value>使用 12 小时制</value></data>
   <data name="Activity_Title" xml:space="preserve"><value>Codex 运行状态</value></data>
   <data name="Activity_Description" xml:space="preserve"><value>Codex 本地任务运行时显示状态点</value></data>
   <data name="Activity_Privacy" xml:space="preserve"><value>隐私说明：只有活动类型、会话 ID 和任务 ID 会通过仅限当前用户的本地管道传输。提示词和回复始终留在 Codex 中。</value></data>

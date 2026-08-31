@@ -103,7 +103,8 @@ public partial class App : System.Windows.Application, IDisposable
                 startupRegistrationService,
                 new TrayIconService(),
                 _themeController,
-                _languageController);
+                _languageController,
+                new TimeFormatPreferenceStore());
             MainWindow = window;
             activityMonitor.StartAsync().GetAwaiter().GetResult();
             window.Show();

@@ -20,6 +20,10 @@ public static class AppPaths
 
     public static string LanguagePreferenceFile => Path.Combine(LocalDataDirectory, "language.txt");
 
+    public static string TimeFormatPreferenceFile => Path.Combine(
+        LocalDataDirectory,
+        "time-format.txt");
+
     public static string AccentPaletteFile => Path.Combine(LocalDataDirectory, "accent-palette.txt");
 
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");

@@ -13,7 +13,7 @@ src/CodexUsageWidget/
 ├── Infrastructure/
 │   ├── Codex/               App-server integration plus lifecycle-hook parsing and local IPC
 │   ├── Logging/             Local file diagnostics
-│   ├── Settings/            Persistent display preference
+│   ├── Settings/            Persistent display and formatting preferences
 │   └── Windows/             Tray icon and taskbar Win32 integration
 └── Views/                   WPF shell, presentation models and focused controls
 tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
@@ -46,10 +46,12 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
     view code.
 13. `AppLanguageController` resolves the saved system, English, or Simplified Chinese
     preference, while standard .NET resources and a notifying WPF binding refresh existing UI.
-14. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
-    activity-hook setup plus immediate theme, accent, widget-layout, displayed-limit, and Windows
-    startup preferences. Focused user controls render compact, detailed, and repeated limit-row
-    content.
+14. `TimeTextFormatter` applies the saved automatic, 24-hour, or 12-hour clock preference to
+    user-visible times while protocol and diagnostic timestamps remain unchanged.
+15. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
+    activity-hook setup plus immediate theme, accent, time-format, widget-layout,
+    displayed-limit, and Windows startup preferences. Focused user controls render compact,
+    detailed, and repeated limit-row content.
 
 ## Dependency direction
 

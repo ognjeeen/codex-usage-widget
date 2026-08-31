@@ -23,7 +23,10 @@ public static class UsageTextFormatter
         return Strings.Format("Error_Unexpected", detail);
     }
 
-    public static string FormatReset(DateTimeOffset reset, DateTimeOffset? now = null)
+    public static string FormatReset(
+        DateTimeOffset reset,
+        DateTimeOffset? now = null,
+        TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic)
     {
         var remaining = reset - (now ?? DateTimeOffset.Now);
         if (remaining <= TimeSpan.Zero)
@@ -36,12 +39,12 @@ public static class UsageTextFormatter
             return Strings.Format(
                 "Usage_ResetsInHours",
                 Math.Max(1, (int)Math.Ceiling(remaining.TotalHours)),
-                reset.ToString("HH:mm", CultureInfo.CurrentCulture));
+                TimeTextFormatter.FormatTime(reset, timeFormatPreference));
         }
 
         return Strings.Format(
             "Usage_ResetsAt",
-            reset.ToString("ddd HH:mm", CultureInfo.CurrentCulture));
+            TimeTextFormatter.FormatDayAndTime(reset, timeFormatPreference));
     }
 
     public static string ColorForRemaining(double remainingPercent) => remainingPercent switch

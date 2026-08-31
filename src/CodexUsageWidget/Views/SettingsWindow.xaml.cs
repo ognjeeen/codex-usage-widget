@@ -23,6 +23,7 @@ public partial class SettingsWindow : Window
         ICodexLauncher codexLauncher,
         AccentPalette accentPalette = AccentPalette.Blue,
         LanguagePreference languagePreference = LanguagePreference.System,
+        TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic,
         IWindowWorkAreaProvider? workAreaProvider = null)
     {
         _workAreaProvider = workAreaProvider ?? new WindowWorkAreaProvider();
@@ -38,6 +39,7 @@ public partial class SettingsWindow : Window
         SetFiveHourLimitAvailability(fiveHourLimitAvailable);
         SetStartWithWindowsEnabled(startWithWindowsEnabled);
         SetLanguagePreference(languagePreference);
+        SetTimeFormatPreference(timeFormatPreference);
         _suppressChangeEvents = false;
     }
 
@@ -52,6 +54,8 @@ public partial class SettingsWindow : Window
     public event Action<bool>? StartWithWindowsChanged;
 
     public event Action<LanguagePreference>? LanguagePreferenceChanged;
+
+    public event Action<TimeFormatPreference>? TimeFormatPreferenceChanged;
 
     public ThemePreference SelectedTheme =>
         LightThemeOption.IsChecked == true
@@ -91,6 +95,13 @@ public partial class SettingsWindow : Window
             : SimplifiedChineseLanguageOption.IsChecked == true
                 ? LanguagePreference.SimplifiedChinese
                 : LanguagePreference.System;
+
+    public TimeFormatPreference SelectedTimeFormat =>
+        TwentyFourHourTimeOption.IsChecked == true
+            ? TimeFormatPreference.TwentyFourHour
+            : TwelveHourTimeOption.IsChecked == true
+                ? TimeFormatPreference.TwelveHour
+                : TimeFormatPreference.Automatic;
 
     protected override void OnSourceInitialized(EventArgs e)
     {
@@ -148,6 +159,16 @@ public partial class SettingsWindow : Window
         EnglishLanguageOption.IsChecked = preference == LanguagePreference.English;
         SimplifiedChineseLanguageOption.IsChecked =
             preference == LanguagePreference.SimplifiedChinese;
+        _suppressChangeEvents = previousSuppression;
+    }
+
+    public void SetTimeFormatPreference(TimeFormatPreference preference)
+    {
+        var previousSuppression = _suppressChangeEvents;
+        _suppressChangeEvents = true;
+        AutomaticTimeOption.IsChecked = preference == TimeFormatPreference.Automatic;
+        TwentyFourHourTimeOption.IsChecked = preference == TimeFormatPreference.TwentyFourHour;
+        TwelveHourTimeOption.IsChecked = preference == TimeFormatPreference.TwelveHour;
         _suppressChangeEvents = previousSuppression;
     }
 
@@ -220,6 +241,14 @@ public partial class SettingsWindow : Window
         if (!_suppressChangeEvents)
         {
             LanguagePreferenceChanged?.Invoke(SelectedLanguage);
+        }
+    }
+
+    private void TimeFormatOption_OnChecked(object sender, RoutedEventArgs e)
+    {
+        if (!_suppressChangeEvents)
+        {
+            TimeFormatPreferenceChanged?.Invoke(SelectedTimeFormat);
         }
     }
 }

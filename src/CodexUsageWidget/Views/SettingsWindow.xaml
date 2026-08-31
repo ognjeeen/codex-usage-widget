@@ -337,6 +337,56 @@
                 </StackPanel>
 
                 <StackPanel Margin="0,18,0,14">
+                    <TextBlock Text="{localization:Loc Settings_TimeFormat_Title}"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimary}" />
+                    <TextBlock Text="{localization:Loc Settings_TimeFormat_Description}"
+                               Margin="0,3,0,0"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource SupportingText}" />
+                </StackPanel>
+
+                <StackPanel>
+                    <RadioButton x:Name="AutomaticTimeOption"
+                                 GroupName="TimeFormat"
+                                 AutomationProperties.Name="{localization:Loc Settings_TimeFormat_AutomaticAutomation}"
+                                 Checked="TimeFormatOption_OnChecked"
+                                 Style="{StaticResource SettingsOptionCard}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_Automatic}" FontWeight="SemiBold" />
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_AutomaticDescription}"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource SupportingText}" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="TwentyFourHourTimeOption"
+                                 GroupName="TimeFormat"
+                                 AutomationProperties.Name="{localization:Loc Settings_TimeFormat_TwentyFourHourAutomation}"
+                                 Checked="TimeFormatOption_OnChecked"
+                                 Style="{StaticResource SettingsOptionCard}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_TwentyFourHour}" FontWeight="SemiBold" />
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_TwentyFourHourDescription}"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource SupportingText}" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="TwelveHourTimeOption"
+                                 GroupName="TimeFormat"
+                                 AutomationProperties.Name="{localization:Loc Settings_TimeFormat_TwelveHourAutomation}"
+                                 Checked="TimeFormatOption_OnChecked"
+                                 Style="{StaticResource SettingsOptionCard}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_TwelveHour}" FontWeight="SemiBold" />
+                            <TextBlock Text="{localization:Loc Settings_TimeFormat_TwelveHourDescription}"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource SupportingText}" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <StackPanel Margin="0,18,0,14">
                     <TextBlock Text="{localization:Loc Settings_Theme_Title}"
                                FontSize="15"
                                FontWeight="SemiBold"

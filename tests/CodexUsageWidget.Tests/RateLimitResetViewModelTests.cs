@@ -1,4 +1,5 @@
 using System.Globalization;
+using CodexUsageWidget.Application;
 using CodexUsageWidget.Domain;
 using CodexUsageWidget.Localization;
 using CodexUsageWidget.Views.ViewModels;
@@ -69,6 +70,15 @@ public sealed class RateLimitResetViewModelTests : IDisposable
                 Assert.Equal("Expiration unavailable", reset.ExpirationText);
                 Assert.Equal("Use next reset", reset.UseButtonText);
             });
+
+        var twentyFourHourViewModel = UsageWidgetViewModel.FromSnapshot(
+            snapshot,
+            window,
+            TimeFormatPreference.TwentyFourHour);
+        var twentyFourHourResets = Assert.IsType<RateLimitResetSummaryViewModel>(
+            twentyFourHourViewModel.ResetCredits);
+        Assert.Equal("Next reset expires Sep 7 at 08:47", twentyFourHourResets.ToolTipText);
+        Assert.Equal("Expires Sep 7 at 08:47", twentyFourHourResets.Credits[0].ExpirationText);
     }
 
     public void Dispose() =>

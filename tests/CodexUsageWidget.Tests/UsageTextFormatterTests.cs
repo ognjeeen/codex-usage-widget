@@ -1,8 +1,11 @@
+using System.Globalization;
 using CodexUsageWidget.Application;
+using CodexUsageWidget.Localization;
 
 namespace CodexUsageWidget.Tests;
 
-public sealed class UsageTextFormatterTests
+[Collection("Localization")]
+public sealed class UsageTextFormatterTests : IDisposable
 {
     [Theory]
     [InlineData("codex executable not found", "Codex CLI was not found on PATH.")]
@@ -13,12 +16,27 @@ public sealed class UsageTextFormatterTests
     [Fact]
     public void FormatResetUsesCeilingForRemainingHours()
     {
-        var now = new DateTimeOffset(2030, 1, 1, 10, 0, 0, TimeSpan.Zero);
+        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+        var now = new DateTimeOffset(2030, 1, 1, 12, 0, 0, TimeSpan.Zero);
         var reset = now.AddHours(2).AddMinutes(10);
 
         var result = UsageTextFormatter.FormatReset(reset, now);
 
-        Assert.Equal("Resets in 3h · 12:10", result);
+        Assert.Equal("Resets in 3h · 2:10 PM", result);
+    }
+
+    [Fact]
+    public void FormatResetHonorsTwentyFourHourPreference()
+    {
+        var now = new DateTimeOffset(2030, 8, 31, 12, 0, 0, TimeSpan.Zero);
+        var reset = now.AddHours(2).AddMinutes(10);
+
+        var result = UsageTextFormatter.FormatReset(
+            reset,
+            now,
+            TimeFormatPreference.TwentyFourHour);
+
+        Assert.Equal("Resets in 3h · 14:10", result);
     }
 
     [Theory]
@@ -27,4 +45,7 @@ public sealed class UsageTextFormatterTests
     [InlineData(26, "#E7E7E7")]
     public void ColorForRemainingUsesThresholds(double remaining, string expected) =>
         Assert.Equal(expected, UsageTextFormatter.ColorForRemaining(remaining));
+
+    public void Dispose() =>
+        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
 }

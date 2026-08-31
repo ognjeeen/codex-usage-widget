@@ -50,6 +50,14 @@ public sealed class TaskbarSettingsMenuTests
                     window.FindName("ActivityDots"));
                 var activityDotBrush = Assert.IsType<SolidColorBrush>(activityDots.DotBrush);
                 Assert.Equal(Color.FromRgb(32, 33, 36), activityDotBrush.Color);
+                window.SetTimeFormatPreference(TimeFormatPreference.TwentyFourHour);
+                window.UpdateUsage(
+                    "Weekly limit",
+                    15,
+                    new DateTimeOffset(2030, 8, 31, 14, 5, 0, TimeSpan.Zero));
+                var labelSurface = Assert.IsType<Border>(
+                    window.FindName("LabelSurface"));
+                Assert.Contains("Sat 14:05", Assert.IsType<string>(labelSurface.ToolTip));
 
                 Assert.Contains(
                     menu.Items.OfType<MenuItem>(),
@@ -131,7 +139,8 @@ public sealed class TaskbarSettingsMenuTests
                     startWithWindowsEnabled: true,
                     activityHookSetupService: new StubActivityHookSetupService(),
                     codexLauncher: new StubCodexLauncher(),
-                    accentPalette: AccentPalette.Violet);
+                    accentPalette: AccentPalette.Violet,
+                    timeFormatPreference: TimeFormatPreference.TwentyFourHour);
                 Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
                 var systemLanguageOption = Assert.IsType<RadioButton>(
                     usageSettings.FindName("SystemLanguageOption"));
@@ -143,6 +152,16 @@ public sealed class TaskbarSettingsMenuTests
                     usageSettings.FindName("SimplifiedChineseLanguageOption"));
                 chineseLanguageOption.IsChecked = true;
                 Assert.Equal(LanguagePreference.SimplifiedChinese, changedLanguage);
+                var twentyFourHourOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("TwentyFourHourTimeOption"));
+                Assert.True(twentyFourHourOption.IsChecked);
+                TimeFormatPreference? changedTimeFormat = null;
+                usageSettings.TimeFormatPreferenceChanged += preference =>
+                    changedTimeFormat = preference;
+                var twelveHourOption = Assert.IsType<RadioButton>(
+                    usageSettings.FindName("TwelveHourTimeOption"));
+                twelveHourOption.IsChecked = true;
+                Assert.Equal(TimeFormatPreference.TwelveHour, changedTimeFormat);
                 var activityDotsHost = Assert.IsType<ContentControl>(
                     usageSettings.FindName("ActivityDotsHost"));
                 Assert.IsType<ActivityHookSetupControl>(activityDotsHost.Content);

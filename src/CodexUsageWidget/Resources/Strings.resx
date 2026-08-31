@@ -63,15 +63,15 @@
   <data name="Usage_SpendLimitResets" xml:space="preserve"><value>Spend limit resets</value></data>
   <data name="Usage_RateLimitResets" xml:space="preserve"><value>Rate-limit resets</value></data>
   <data name="Usage_CountAvailable" xml:space="preserve"><value>{0} available</value></data>
-  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>Next reset expires {0:MMM d 'at' h:mm tt}</value></data>
-  <data name="Usage_ResetExpires" xml:space="preserve"><value>Expires {0:MMM d 'at' h:mm tt}</value></data>
+  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>Next reset expires {0:MMM d} at {1}</value></data>
+  <data name="Usage_ResetExpires" xml:space="preserve"><value>Expires {0:MMM d} at {1}</value></data>
   <data name="Usage_ResetExpirationUnavailable" xml:space="preserve"><value>Expiration unavailable</value></data>
   <data name="Usage_UseReset" xml:space="preserve"><value>Use reset</value></data>
   <data name="Usage_UseNextReset" xml:space="preserve"><value>Use next reset</value></data>
   <data name="Usage_ResetExpandTooltip" xml:space="preserve"><value>View available resets</value></data>
   <data name="Usage_ResetCollapseTooltip" xml:space="preserve"><value>Hide available resets</value></data>
   <data name="Usage_ResetConfirmTitle" xml:space="preserve"><value>Use this rate-limit reset?</value></data>
-  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>This reset expires {0:MMM d 'at' h:mm tt}. It will be applied to an eligible Codex limit and cannot be recovered.</value></data>
+  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>This reset expires {0:MMM d} at {1}. It will be applied to an eligible Codex limit and cannot be recovered.</value></data>
   <data name="Usage_ResetConfirmUnknownExpiration" xml:space="preserve"><value>This reset will be applied to an eligible Codex limit and cannot be recovered.</value></data>
   <data name="Usage_ResetConfirmNext" xml:space="preserve"><value>Codex will select the next available reset. It will be applied to an eligible Codex limit and cannot be recovered.</value></data>
   <data name="Usage_ResetNothingToReset" xml:space="preserve"><value>No eligible Codex limit can be reset right now. Your reset was not used.</value></data>
@@ -150,6 +150,17 @@
   <data name="Settings_Language_Chinese" xml:space="preserve"><value>简体中文</value></data>
   <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>Always use Simplified Chinese</value></data>
   <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>Use Simplified Chinese</value></data>
+  <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>Time format</value></data>
+  <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>Choose how times are shown throughout the widget.</value></data>
+  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>Automatic</value></data>
+  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>Follow the selected language and regional format</value></data>
+  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>Use automatic time format</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHour" xml:space="preserve"><value>24-hour</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourDescription" xml:space="preserve"><value>Show times such as 14:05</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourAutomation" xml:space="preserve"><value>Use 24-hour time format</value></data>
+  <data name="Settings_TimeFormat_TwelveHour" xml:space="preserve"><value>12-hour</value></data>
+  <data name="Settings_TimeFormat_TwelveHourDescription" xml:space="preserve"><value>Show times such as 2:05 PM</value></data>
+  <data name="Settings_TimeFormat_TwelveHourAutomation" xml:space="preserve"><value>Use 12-hour time format</value></data>
   <data name="Activity_Title" xml:space="preserve"><value>Codex activity</value></data>
   <data name="Activity_Description" xml:space="preserve"><value>Show when a local Codex turn is running</value></data>
   <data name="Activity_Privacy" xml:space="preserve"><value>Privacy: only activity type, session ID, and turn ID travel through a local user-only pipe. Prompts and responses never leave Codex.</value></data>
