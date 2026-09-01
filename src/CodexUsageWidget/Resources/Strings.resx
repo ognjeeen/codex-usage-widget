@@ -82,6 +82,24 @@
   <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>TOKEN ACTIVITY</value></data>
   <data name="Usage_NotQuotaConsumption" xml:space="preserve"><value>Not quota consumption</value></data>
   <data name="Usage_SectionModelLimits" xml:space="preserve"><value>MODEL-SPECIFIC LIMITS</value></data>
+  <data name="Usage_SectionPace" xml:space="preserve"><value>USAGE PACE</value></data>
+  <data name="Pace_LocalHistory" xml:space="preserve"><value>Since last reset</value></data>
+  <data name="Pace_Collecting" xml:space="preserve"><value>Collecting history</value></data>
+  <data name="Pace_TrackingStarted" xml:space="preserve"><value>Tracking started</value></data>
+  <data name="Pace_FirstTrendAfterReadings" xml:space="preserve"><value>First trend after the next readings</value></data>
+  <data name="Pace_NeedsShortHistory" xml:space="preserve"><value>Projection after 1h of local observations</value></data>
+  <data name="Pace_NeedsLongHistory" xml:space="preserve"><value>Projection after 24h of local observations</value></data>
+  <data name="Pace_UsedInObservation" xml:space="preserve"><value>{0}% used · {1} observed</value></data>
+  <data name="Pace_NoChangeInObservation" xml:space="preserve"><value>No change · {0} observed</value></data>
+  <data name="Pace_HoursShort" xml:space="preserve"><value>{0}h</value></data>
+  <data name="Pace_HoursMinutesShort" xml:space="preserve"><value>{0}h {1}m</value></data>
+  <data name="Pace_MinutesShort" xml:space="preserve"><value>{0}m</value></data>
+  <data name="Pace_UsedPerDay" xml:space="preserve"><value>{0}% used per day</value></data>
+  <data name="Pace_ProjectedRemaining" xml:space="preserve"><value>At current pace: about {0}% left before reset</value></data>
+  <data name="Pace_ProjectedExhaustion" xml:space="preserve"><value>At current pace, may run out {0}</value></data>
+  <data name="Pace_PointReadout" xml:space="preserve"><value>{0} · {1}% remaining · +{2}% since previous</value></data>
+  <data name="Pace_PointFirstReadout" xml:space="preserve"><value>{0} · {1}% remaining · first reading</value></data>
+  <data name="Pace_ChartAutomation" xml:space="preserve"><value>Usage history chart. Hover for recorded values.</value></data>
   <data name="Token_Lifetime" xml:space="preserve"><value>Lifetime tokens</value></data>
   <data name="Token_PeakDaily" xml:space="preserve"><value>Peak daily tokens</value></data>
   <data name="Token_LongestTurn" xml:space="preserve"><value>Longest turn</value></data>

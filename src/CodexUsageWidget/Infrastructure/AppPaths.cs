@@ -30,5 +30,9 @@ public static class AppPaths
         LocalDataDirectory,
         "pending-rate-limit-reset.json");
 
+    public static string UsageHistoryFile => Path.Combine(
+        LocalDataDirectory,
+        "usage-history.json");
+
     public static string LogDirectory => Path.Combine(LocalDataDirectory, "logs");
 }

@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     private const double DetailedHeight = 620d;
 
     private readonly UsageMonitor _usageMonitor;
+    private readonly UsageHistoryTracker _usageHistoryTracker;
     private readonly RateLimitResetUseCase _resetUseCase;
     private readonly CodexActivityMonitor _activityMonitor;
     private readonly IActivityHookSetupService _activityHookSetupService;
@@ -41,6 +42,7 @@ public partial class MainWindow : Window
     private DisplayedLimitPreference _displayedLimitPreference;
     private TimeFormatPreference _timeFormatPreference;
     private UsageSnapshot? _latestSnapshot;
+    private UsagePaceSummary _latestUsagePace = UsagePaceSummary.Empty;
     private UsageWidgetViewModel _viewModel = UsageWidgetViewModel.Loading();
     private bool _isRealActivityActive;
     private bool _isActivityPreviewEnabled;
@@ -51,6 +53,7 @@ public partial class MainWindow : Window
 
     public MainWindow(
         UsageMonitor usageMonitor,
+        UsageHistoryTracker usageHistoryTracker,
         RateLimitResetUseCase resetUseCase,
         CodexActivityMonitor activityMonitor,
         IActivityHookSetupService activityHookSetupService,
@@ -65,6 +68,7 @@ public partial class MainWindow : Window
         TimeFormatPreferenceStore timeFormatPreferenceStore)
     {
         _usageMonitor = usageMonitor;
+        _usageHistoryTracker = usageHistoryTracker;
         _resetUseCase = resetUseCase;
         _activityMonitor = activityMonitor;
         _activityHookSetupService = activityHookSetupService;
@@ -157,8 +161,11 @@ public partial class MainWindow : Window
     private void UsageMonitorOnRefreshStarted() =>
         Dispatcher.BeginInvoke(() => SetViewModel(_viewModel.Syncing()));
 
-    private void UsageMonitorOnSnapshotUpdated(UsageSnapshot snapshot) =>
-        Dispatcher.BeginInvoke(() => RenderSnapshot(snapshot));
+    private void UsageMonitorOnSnapshotUpdated(UsageSnapshot snapshot)
+    {
+        var usagePace = _usageHistoryTracker.Record(snapshot);
+        Dispatcher.BeginInvoke(() => RenderSnapshot(snapshot, usagePace));
+    }
 
     private void UsageMonitorOnRefreshFailed(string message) =>
         Dispatcher.BeginInvoke(() => RenderError(message));
@@ -177,14 +184,16 @@ public partial class MainWindow : Window
         _taskbarLabel.SetActivityState(isActive);
     }
 
-    private void RenderSnapshot(UsageSnapshot snapshot)
+    private void RenderSnapshot(UsageSnapshot snapshot, UsagePaceSummary usagePace)
     {
         _latestSnapshot = snapshot;
+        _latestUsagePace = usagePace;
         var displayedWindow = ResolveDisplayedWindow(snapshot);
         var nextViewModel = UsageWidgetViewModel.FromSnapshot(
             snapshot,
             displayedWindow,
-            _timeFormatPreference);
+            _timeFormatPreference,
+            usagePace);
         SetViewModel(nextViewModel);
         if (_density == WidgetDensity.Detailed)
         {
@@ -218,7 +227,7 @@ public partial class MainWindow : Window
 
         if (_latestSnapshot is { } snapshot)
         {
-            RenderSnapshot(snapshot);
+            RenderSnapshot(snapshot, _latestUsagePace);
         }
     }
 
@@ -449,7 +458,7 @@ public partial class MainWindow : Window
         ApplyDensity(repositionBottomEdge: false);
         if (_latestSnapshot is { } snapshot)
         {
-            RenderSnapshot(snapshot);
+            RenderSnapshot(snapshot, _latestUsagePace);
             return;
         }
 
@@ -464,7 +473,7 @@ public partial class MainWindow : Window
         _taskbarLabel.SetTimeFormatPreference(preference);
         if (_latestSnapshot is { } snapshot)
         {
-            RenderSnapshot(snapshot);
+            RenderSnapshot(snapshot, _latestUsagePace);
         }
     }
 

@@ -188,6 +188,137 @@
                 </StackPanel>
             </Border>
 
+            <Border Visibility="{Binding HasUsagePace, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Padding="12,12,12,8"
+                    Style="{StaticResource SectionCard}">
+                <StackPanel>
+                    <Grid Margin="0,0,0,9">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{localization:Loc Usage_SectionPace}"
+                                   Style="{StaticResource SectionTitle}" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{localization:Loc Pace_LocalHistory}"
+                                   Style="{StaticResource SupportingText}"
+                                   FontSize="10.5"
+                                   Foreground="{DynamicResource TextTertiary}" />
+                    </Grid>
+
+                    <ItemsControl Margin="0,0,0,-12"
+                                  ItemsSource="{Binding UsagePace.Limits}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Margin" Value="0,3,0,0" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="1" />
+                                    </Grid.RowDefinitions>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Label}"
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextPrimary}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="12,0,0,0"
+                                                   Text="{Binding PaceText}"
+                                                   FontSize="11.5"
+                                                   FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground"
+                                                            Value="{Binding ProgressBrush}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                                                            <Setter Property="Foreground"
+                                                                    Value="{DynamicResource UsageNormalBrush}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ChartPoints.Count}" Value="0">
+                                                            <Setter Property="Foreground"
+                                                                    Value="{DynamicResource TextSecondary}" />
+                                                            <Setter Property="FontWeight" Value="Medium" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <controls:UsagePaceChart Grid.Row="1"
+                                                             Margin="0,5,0,1">
+                                        <controls:UsagePaceChart.Style>
+                                            <Style TargetType="controls:UsagePaceChart">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ChartPoints.Count}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </controls:UsagePaceChart.Style>
+                                    </controls:UsagePaceChart>
+
+                                    <Grid Grid.Row="2" Margin="0,2,0,5">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ProjectionText}" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Ellipse Width="5"
+                                                 Height="5"
+                                                 Margin="0,1,7,0"
+                                                 VerticalAlignment="Center"
+                                                 Fill="{DynamicResource TextTertiary}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding ProjectionText}"
+                                                   FontSize="10.5">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock"
+                                                       BasedOn="{StaticResource SupportingText}">
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource TextSecondary}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasWarning}" Value="True">
+                                                            <Setter Property="Foreground"
+                                                                    Value="{DynamicResource NoticeForegroundBrush}" />
+                                                            <Setter Property="FontWeight" Value="SemiBold" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Grid>
+
+                                    <Border Grid.Row="3"
+                                            Background="{DynamicResource DividerBrush}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
             <Border Visibility="{Binding HasAccountMetrics, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource SectionCard}">
                 <StackPanel>

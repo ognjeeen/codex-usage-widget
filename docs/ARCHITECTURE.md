@@ -8,7 +8,7 @@ dependency-injection package.
 
 ```text
 src/CodexUsageWidget/
-├── Application/             Refresh orchestration, activity state and presentation formatting
+├── Application/             Refresh orchestration, usage history, activity state and formatting
 ├── Domain/                  Rate-limit, credit, spend-control and activity models
 ├── Infrastructure/
 │   ├── Codex/               App-server integration plus lifecycle-hook parsing and local IPC
@@ -25,7 +25,10 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
    launch from a temporary ZIP location is copied atomically to a versioned per-user app
    directory and relaunched; `App` then acquires the single-instance mutex and constructs
    the widget object graph.
-2. `UsageMonitor` owns refresh scheduling, timeout handling and refresh coalescing.
+2. `UsageMonitor` owns refresh scheduling, timeout handling and refresh coalescing. After each
+   successful snapshot, `UsageHistoryTracker` retains seven days of rate-limit percentages,
+   identifies reset boundaries, and returns the current cycle with pace results only after a
+   representative observation period.
 3. `CodexUsageProvider` coordinates required rate-limit reads and optional token-activity reads.
 4. `RateLimitResetUseCase` coordinates explicit redemption, normalizes failures for the view,
    and waits for a fresh usage read after every definitive outcome.
@@ -54,7 +57,7 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
 16. `MainWindow` remains a window-lifecycle shell while the Settings window coordinates
     activity-hook setup plus immediate theme, accent, time-format, widget-layout,
     displayed-limit, and Windows startup preferences. Focused user controls render compact,
-    detailed, and repeated limit-row content.
+    detailed, repeated limit-row, and interactive usage-chart content.
 
 ## Dependency direction
 
@@ -70,6 +73,9 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
 - Failed app-server startup is disposed before a later refresh reconnects.
 - Optional token-activity failures degrade only the detailed activity section; core
   rate-limit monitoring remains available.
+- Usage history contains only timestamps, rate-limit percentages, window durations and reset
+  times. `UsageHistoryStore` replaces its local JSON file atomically, and preview mode uses an
+  in-memory store so synthetic data never reaches the user's history.
 - Usage preview mode owns synthetic reset credits and redemption outcomes, so UI tests and
   manual preview checks never consume a real account reset.
 - Redemption writes its idempotency key before contacting Codex, preserves it across app

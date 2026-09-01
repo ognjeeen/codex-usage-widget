@@ -1,0 +1,117 @@
+<UserControl x:Class="CodexUsageWidget.Views.Controls.UsagePaceChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization"
+             Height="62"
+             Focusable="False"
+             AutomationProperties.Name="{localization:Loc Pace_ChartAutomation}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="PlotHost"
+              Background="Transparent"
+              Cursor="Cross"
+              MouseMove="PlotHost_OnMouseMove"
+              MouseLeave="PlotHost_OnMouseLeave">
+            <Viewbox Stretch="Fill"
+                     StretchDirection="Both"
+                     IsHitTestVisible="False">
+                <Canvas Width="280" Height="42">
+                    <Line X1="0" Y1="12" X2="280" Y2="12"
+                          Stroke="{DynamicResource DividerBrush}"
+                          StrokeThickness="0.7" />
+                    <Line X1="0" Y1="30" X2="280" Y2="30"
+                          Stroke="{DynamicResource DividerBrush}"
+                          StrokeThickness="0.7" />
+                    <Polygon Points="{Binding AreaPoints}"
+                             Opacity="0.09">
+                        <Polygon.Style>
+                            <Style TargetType="Polygon">
+                                <Setter Property="Fill" Value="{Binding ProgressBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                                        <Setter Property="Fill"
+                                                Value="{DynamicResource UsageNormalBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Polygon.Style>
+                    </Polygon>
+                    <Polyline Points="{Binding ChartPoints}"
+                              StrokeThickness="2"
+                              StrokeLineJoin="Round"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round">
+                        <Polyline.Style>
+                            <Style TargetType="Polyline">
+                                <Setter Property="Stroke" Value="{Binding ProgressBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                                        <Setter Property="Stroke"
+                                                Value="{DynamicResource UsageNormalBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Polyline.Style>
+                    </Polyline>
+                    <Ellipse Width="6"
+                             Height="6"
+                             Canvas.Left="{Binding CurrentPointLeft}"
+                             Canvas.Top="{Binding CurrentPointTop}">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="{Binding ProgressBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                                        <Setter Property="Fill"
+                                                Value="{DynamicResource UsageNormalBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+                </Canvas>
+            </Viewbox>
+
+            <Canvas IsHitTestVisible="False">
+                <Line x:Name="HoverGuide"
+                      Visibility="Collapsed"
+                      Y1="0"
+                      Stroke="{DynamicResource TextTertiary}"
+                      StrokeThickness="1"
+                      StrokeDashArray="2,2" />
+                <Ellipse x:Name="HoverMarker"
+                         Width="9"
+                         Height="9"
+                         Visibility="Collapsed"
+                         Stroke="{DynamicResource WidgetSurfaceBrush}"
+                         StrokeThickness="2">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="{Binding ProgressBrush}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsNormal}" Value="True">
+                                    <Setter Property="Fill"
+                                            Value="{DynamicResource UsageNormalBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </Canvas>
+        </Grid>
+
+        <TextBlock x:Name="HoverReadout"
+                   Grid.Row="1"
+                   Margin="0,3,0,0"
+                   Visibility="Hidden"
+                   IsHitTestVisible="False"
+                   FontSize="10"
+                   TextTrimming="CharacterEllipsis"
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource TextPrimary}" />
+    </Grid>
+</UserControl>

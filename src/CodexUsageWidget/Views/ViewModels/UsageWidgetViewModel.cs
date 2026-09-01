@@ -37,6 +37,8 @@ public sealed class UsageWidgetViewModel
 
     public TokenActivityViewModel? TokenActivity { get; private init; }
 
+    public UsagePaceViewModel? UsagePace { get; private init; }
+
     public bool HasWarning => WarningText is not null;
 
     public bool HasModelLimits => ModelLimits.Count > 0;
@@ -46,6 +48,8 @@ public sealed class UsageWidgetViewModel
     public bool HasResetCredits => ResetCredits is not null;
 
     public bool HasTokenActivity => TokenActivity is not null;
+
+    public bool HasUsagePace => UsagePace is { Limits.Count: > 0 };
 
     public double? HeadlineRemainingPercent { get; private init; }
 
@@ -77,6 +81,7 @@ public sealed class UsageWidgetViewModel
         AccountMetrics = AccountMetrics,
         ResetCredits = ResetCredits,
         TokenActivity = TokenActivity,
+        UsagePace = UsagePace,
         HeadlineRemainingPercent = HeadlineRemainingPercent,
         HeadlineResetsAt = HeadlineResetsAt
     };
@@ -84,7 +89,8 @@ public sealed class UsageWidgetViewModel
     public static UsageWidgetViewModel FromSnapshot(
         UsageSnapshot snapshot,
         UsageWindow? displayedWindow,
-        TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic)
+        TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic,
+        UsagePaceSummary? usagePace = null)
     {
         var generalLimits = BuildLimitViewModels(
             snapshot.GeneralLimits,
@@ -125,7 +131,10 @@ public sealed class UsageWidgetViewModel
                 timeFormatPreference),
             TokenActivity = snapshot.TokenActivity is null
                 ? null
-                : new TokenActivityViewModel(snapshot.TokenActivity)
+                : new TokenActivityViewModel(snapshot.TokenActivity),
+            UsagePace = usagePace is null
+                ? null
+                : new UsagePaceViewModel(usagePace, timeFormatPreference)
         };
     }
 

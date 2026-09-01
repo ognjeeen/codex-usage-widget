@@ -82,6 +82,24 @@
   <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>TOKEN 活动</value></data>
   <data name="Usage_NotQuotaConsumption" xml:space="preserve"><value>不计入用量额度</value></data>
   <data name="Usage_SectionModelLimits" xml:space="preserve"><value>模型专属限制</value></data>
+  <data name="Usage_SectionPace" xml:space="preserve"><value>用量速度</value></data>
+  <data name="Pace_LocalHistory" xml:space="preserve"><value>自上次重置以来</value></data>
+  <data name="Pace_Collecting" xml:space="preserve"><value>正在收集历史</value></data>
+  <data name="Pace_TrackingStarted" xml:space="preserve"><value>已开始跟踪</value></data>
+  <data name="Pace_FirstTrendAfterReadings" xml:space="preserve"><value>后续读数到达后显示首个趋势</value></data>
+  <data name="Pace_NeedsShortHistory" xml:space="preserve"><value>本地观察 1 小时后提供预测</value></data>
+  <data name="Pace_NeedsLongHistory" xml:space="preserve"><value>本地观察 24 小时后提供预测</value></data>
+  <data name="Pace_UsedInObservation" xml:space="preserve"><value>已用 {0}% · 已观察 {1}</value></data>
+  <data name="Pace_NoChangeInObservation" xml:space="preserve"><value>无变化 · 已观察 {0}</value></data>
+  <data name="Pace_HoursShort" xml:space="preserve"><value>{0} 小时</value></data>
+  <data name="Pace_HoursMinutesShort" xml:space="preserve"><value>{0} 小时 {1} 分钟</value></data>
+  <data name="Pace_MinutesShort" xml:space="preserve"><value>{0} 分钟</value></data>
+  <data name="Pace_UsedPerDay" xml:space="preserve"><value>每天使用 {0}%</value></data>
+  <data name="Pace_ProjectedRemaining" xml:space="preserve"><value>按当前速度，重置前约剩余 {0}%</value></data>
+  <data name="Pace_ProjectedExhaustion" xml:space="preserve"><value>按当前速度，可能在 {0} 用尽</value></data>
+  <data name="Pace_PointReadout" xml:space="preserve"><value>{0} · 剩余 {1}% · 较上次 +{2}%</value></data>
+  <data name="Pace_PointFirstReadout" xml:space="preserve"><value>{0} · 剩余 {1}% · 首次记录</value></data>
+  <data name="Pace_ChartAutomation" xml:space="preserve"><value>用量历史图表。悬停可查看记录值。</value></data>
   <data name="Token_Lifetime" xml:space="preserve"><value>累计 Token</value></data>
   <data name="Token_PeakDaily" xml:space="preserve"><value>单日 Token 峰值</value></data>
   <data name="Token_LongestTurn" xml:space="preserve"><value>最长任务时长</value></data>

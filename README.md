@@ -39,7 +39,8 @@ of `codex.cmd` or `codex.exe`.
 - A selectable displayed limit shared by the widget headline, taskbar label, and tray icon
 - Compact and detailed desktop-widget layouts selected from Settings or the quick chevron,
   including credits, spend controls, earned-reset expiration and redemption, token activity,
-  and model-specific limits when Codex returns them
+  model-specific limits, and hoverable current-cycle rate-limit history with observed pace
+  and a conditional weekly projection
 - System, light, and dark themes with five preset accent colors selected from Settings
 - Automatic Windows-language selection with English fallback, plus English and Simplified
   Chinese overrides in Settings
@@ -114,6 +115,8 @@ The application writes only under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `time-format.txt`: Windows regional, 24-hour, or 12-hour time preference
 - `pending-rate-limit-reset.json`: an unfinished reset attempt kept until Codex returns a
   definitive outcome, so a retry cannot consume another reset
+- `usage-history.json`: successful rate-limit percentages and reset times retained for seven
+  days to calculate local pace and projections
 - `logs\codex-usage-widget-YYYYMMDD.log`: diagnostic logs retained for 14 days
 
 The widget displays ChatGPT and Codex subscription limits. It does not display OpenAI API

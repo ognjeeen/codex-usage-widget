@@ -53,6 +53,7 @@ public partial class App : System.Windows.Application, IDisposable
             var appServerSession = new CodexAppServerSession();
             var codexUsageProvider = new CodexUsageProvider(appServerSession);
             IUsageProvider usageProvider = codexUsageProvider;
+            IUsageHistoryStore usageHistoryStore = new UsageHistoryStore();
             IRateLimitResetConsumer resetConsumer =
                 new CodexRateLimitResetConsumer(
                     appServerSession,
@@ -64,12 +65,14 @@ public partial class App : System.Windows.Application, IDisposable
                 usagePreviewEnabled = true;
                 var previewProvider = new PreviewUsageProvider(codexUsageProvider);
                 usageProvider = previewProvider;
+                usageHistoryStore = new PreviewUsageHistoryStore();
                 resetConsumer = previewProvider;
                 _logger.Info("Usage preview mode is active.");
             }
 #endif
             var usageMonitor = new UsageMonitor(usageProvider);
             usageMonitor.DiagnosticMessage += (_, message) => _logger.Info(message);
+            var usageHistoryTracker = new UsageHistoryTracker(usageHistoryStore);
             var resetUseCase = new RateLimitResetUseCase(resetConsumer, usageMonitor);
 
             activityMonitor = new CodexActivityMonitor(new CodexActivityPipeSignalSource());
@@ -96,6 +99,7 @@ public partial class App : System.Windows.Application, IDisposable
 
             var window = new MainWindow(
                 usageMonitor,
+                usageHistoryTracker,
                 resetUseCase,
                 activityMonitor,
                 activityHookSetupService,
