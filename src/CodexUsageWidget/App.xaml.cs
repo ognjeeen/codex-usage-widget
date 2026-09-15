@@ -72,7 +72,9 @@ public partial class App : System.Windows.Application, IDisposable
             usageMonitor.DiagnosticMessage += (_, message) => _logger.Info(message);
             var resetUseCase = new RateLimitResetUseCase(resetConsumer, usageMonitor);
 
-            activityMonitor = new CodexActivityMonitor(new CodexActivityPipeSignalSource());
+            activityMonitor = new CodexActivityMonitor(
+                new CodexActivityPipeSignalSource(),
+                new CodexTurnCompletionReader(appServerSession));
             activityMonitor.DiagnosticMessage += (_, message) => _logger.Info(message);
             var processPath = Environment.ProcessPath ??
                 throw new InvalidOperationException("Cannot determine the widget executable path.");

@@ -14,8 +14,9 @@ state in memory.
 - A completion animation after the final active turn finishes
 
 The widget accepts only the lifecycle event type and the session and turn identifiers
-provided by Codex. It does not collect prompts, responses, transcript contents, transcript
-paths, or model output.
+provided by Codex hooks. While activity is present, it also checks turn completion metadata
+through the official local app-server protocol, with turn items omitted. It does not collect
+prompts, responses, transcript contents, transcript paths, or model output.
 
 ## Set up in the widget
 
@@ -73,10 +74,21 @@ Each session owns at most one active turn. A later `UserPromptSubmit` replaces a
 turn in that session, and a late `Stop` for the old turn cannot clear the new one. Duplicate
 events are harmless. `SessionEnd` removes only the matching session.
 
-If Codex terminates without sending a final lifecycle event, a later turn in the same session
-replaces the stale turn. Restarting the widget also clears all in-memory activity state. The
-widget does not use an arbitrary timeout because legitimate Codex tasks can run for a long
-time.
+While activity is present, the widget checks every 15 seconds whether each tracked turn has
+finished. It uses `thread/turns/list` with `itemsView: "notLoaded"`, follows pagination, and
+clears a turn only when its exact identifier has a terminal status and an explicit completion
+timestamp. A late result cannot clear a newer turn in the same session. No checks are sent
+while idle, and each turn's check has a five-second request timeout.
+
+This requires a Codex CLI that supports `thread/turns/list` and completion timestamps, verified
+with CLI 0.154.0. Unsupported requests, unavailable history, missing turns, and failed checks
+leave hook activity unchanged. In particular, a separate app-server can reconstruct a running
+turn as `interrupted` without a completion timestamp; that is not evidence of completion.
+
+If Codex terminates without recording completion or sending a final lifecycle event, a later
+turn in the same session replaces the stale turn. Restarting the widget also clears all
+in-memory activity state. The widget never expires activity solely because a task has run
+for a long time.
 
 If the widget is closed, the hook bridge exits successfully after a short connection attempt
 and Codex continues normally.
