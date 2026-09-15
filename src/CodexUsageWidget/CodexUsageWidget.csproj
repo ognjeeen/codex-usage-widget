@@ -20,6 +20,7 @@
     <DefineConstants Condition="'$(EnableUsagePreview)' == 'true'">$(DefineConstants);USAGE_PREVIEW</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Resource Include="Assets\Fonts\*.otf" />
     <None Include="..\..\LICENSE" Link="LICENSE" CopyToPublishDirectory="PreserveNewest" />
     <None Include="..\..\README.md" Link="README.md" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>

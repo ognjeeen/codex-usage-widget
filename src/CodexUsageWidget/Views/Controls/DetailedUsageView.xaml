@@ -4,244 +4,351 @@
              xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
              xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization">
     <UserControl.Resources>
-        <Style x:Key="CompactInlineActionButton" TargetType="Button">
+        <Style x:Key="CompactInlineActionButton"
+               TargetType="Button"
+               BasedOn="{StaticResource IconButton}">
+            <Setter Property="Width" Value="66" />
             <Setter Property="MinWidth" Value="66" />
             <Setter Property="Height" Value="24" />
             <Setter Property="Padding" Value="8,0" />
-            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
-            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
             <Setter Property="FontSize" Value="10" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid x:Name="ButtonRoot">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="6"
-                                    SnapsToDevicePixels="True" />
-                            <Border x:Name="AccentSurface"
-                                    Background="{DynamicResource AccentPrimaryBrush}"
-                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="6"
-                                    IsHitTestVisible="False"
-                                    Opacity="0"
-                                    SnapsToDevicePixels="True" />
-                            <Border x:Name="PressedSurface"
-                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="6"
-                                    IsHitTestVisible="False"
-                                    Opacity="0"
-                                    SnapsToDevicePixels="True">
-                                <Border.Background>
-                                    <SolidColorBrush Color="{DynamicResource AccentPrimaryPressedColor}" />
-                                </Border.Background>
-                            </Border>
-                            <Border x:Name="FocusBorder"
-                                    BorderBrush="{DynamicResource AccentPrimaryBorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="6"
-                                    IsHitTestVisible="False"
-                                    Opacity="0"
-                                    SnapsToDevicePixels="True" />
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              Margin="{TemplateBinding Padding}"
-                                              VerticalAlignment="Center">
-                                <ContentPresenter.RenderTransform>
-                                    <TranslateTransform Y="-1" />
-                                </ContentPresenter.RenderTransform>
-                            </ContentPresenter>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="AccentSurface"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="1"
-                                                             Duration="0:0:0.14">
-                                                <DoubleAnimation.EasingFunction>
-                                                    <CubicEase EasingMode="EaseOut" />
-                                                </DoubleAnimation.EasingFunction>
-                                            </DoubleAnimation>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="AccentSurface"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="0"
-                                                             Duration="0:0:0.12">
-                                                <DoubleAnimation.EasingFunction>
-                                                    <CubicEase EasingMode="EaseOut" />
-                                                </DoubleAnimation.EasingFunction>
-                                            </DoubleAnimation>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="FocusBorder"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="1"
-                                                             Duration="0:0:0.12" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="FocusBorder"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="0"
-                                                             Duration="0:0:0.10" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Foreground" Value="{DynamicResource AccentForegroundBrush}" />
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="PressedSurface"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="1"
-                                                             Duration="0:0:0.06" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="PressedSurface"
-                                                             Storyboard.TargetProperty="Opacity"
-                                                             To="0"
-                                                             Duration="0:0:0.08" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ButtonRoot" Property="Opacity" Value="0.45" />
-                                <Setter Property="Cursor" Value="Arrow" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        </Style>
+        <Style x:Key="DetailProgress"
+               TargetType="ProgressBar"
+               BasedOn="{StaticResource UsageProgress}">
+            <Setter Property="Height" Value="7" />
+            <Setter Property="Background" Value="{DynamicResource ProgressTrackBrush}" />
         </Style>
     </UserControl.Resources>
+
     <ScrollViewer x:Name="DetailsScrollViewer"
-                  Margin="16,4,10,8"
-                  Padding="0,0,4,0"
-                  VerticalScrollBarVisibility="Auto"
+                  Margin="14,5,9,5"
+                  Padding="0"
+                  VerticalScrollBarVisibility="Hidden"
                   HorizontalScrollBarVisibility="Disabled"
                   Style="{StaticResource SlimScrollViewer}">
         <StackPanel>
-            <Border Style="{StaticResource SectionCard}">
-                <StackPanel>
-                    <Grid Margin="0,0,0,8">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{localization:Loc Usage_SectionOverview}" Style="{StaticResource SectionTitle}" />
-                        <TextBlock Grid.Column="1"
-                                   Text="{Binding HeadlineRemainingText}"
-                                   FontFamily="{StaticResource UiFont}"
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimary}" />
-                    </Grid>
-                    <Border Visibility="{Binding HasWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Margin="0,0,0,8"
-                            Padding="9,6"
-                            Background="{DynamicResource NoticeBackgroundBrush}"
-                            CornerRadius="6">
-                        <TextBlock Text="{Binding WarningText}"
-                                   Style="{StaticResource SupportingText}"
-                                   Foreground="{DynamicResource NoticeForegroundBrush}" />
-                    </Border>
-                    <ItemsControl ItemsSource="{Binding GeneralLimits}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <controls:UsageLimitRow />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+            <Border Visibility="{Binding HasWarning, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Margin="0,0,0,10"
+                    Padding="12,8"
+                    Background="{DynamicResource NoticeBackgroundBrush}"
+                    CornerRadius="10">
+                <TextBlock Text="{Binding WarningText}"
+                           FontFamily="{StaticResource UiFont}"
+                           FontSize="12"
+                           Foreground="{DynamicResource NoticeForegroundBrush}" />
             </Border>
 
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Margin="0"
+                        Padding="14"
+                        CornerRadius="16"
+                        Style="{StaticResource SectionCard}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="30"
+                                    Height="30"
+                                    CornerRadius="9"
+                                    Background="{DynamicResource SubtleSurfaceBrush}">
+                                <Viewbox Width="21" Height="21">
+                                    <Canvas Width="25" Height="25">
+                                        <Ellipse Canvas.Left="3.5"
+                                                 Canvas.Top="3.5"
+                                                 Width="18"
+                                                 Height="18"
+                                                 Stroke="{DynamicResource TextPrimary}"
+                                                 StrokeThickness="2" />
+                                        <Path Data="M12.5,7.5 V12.2 L15.7,14.2"
+                                              Stroke="{DynamicResource TextPrimary}"
+                                              StrokeThickness="2"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round"
+                                              StrokeLineJoin="Round" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Border>
+                            <TextBlock Grid.Column="1"
+                                       Margin="9,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding PrimaryLimitLabel}"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextPrimary}" />
+                        </Grid>
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,8,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding PrimaryRemainingNumberText}"
+                                       Margin="0,3,0,-3"
+                                       FontFamily="{StaticResource NumericFont}"
+                                       FontSize="50"
+                                       FontWeight="Bold"
+                                       Typography.NumeralAlignment="Tabular"
+                                       Foreground="{Binding PrimaryRemainingBrush}" />
+                            <TextBlock Text="%"
+                                       Margin="2,0,0,6"
+                                       VerticalAlignment="Bottom"
+                                       FontFamily="{StaticResource NumericFont}"
+                                       FontSize="25"
+                                       FontWeight="Bold"
+                                       Foreground="{Binding PrimaryRemainingBrush}" />
+                            <TextBlock Text="{localization:Loc Usage_RemainingShort}"
+                                       Margin="6,0,0,7"
+                                       VerticalAlignment="Bottom"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="#6B6B6B" />
+                        </StackPanel>
+                        <ProgressBar Grid.Row="2"
+                                     Margin="0,8,0,0"
+                                     Maximum="100"
+                                     Value="{Binding PrimaryRemainingPercent, Mode=OneWay}"
+                                     Foreground="{Binding PrimaryProgressBrush}"
+                                     Style="{StaticResource DetailProgress}" />
+                        <StackPanel Grid.Row="3"
+                                    Margin="0,8,0,0"
+                                    Orientation="Horizontal">
+                            <Viewbox Width="20" Height="20" Margin="0,0,7,0">
+                                <Canvas Width="25" Height="25">
+                                    <Ellipse Canvas.Left="3.5"
+                                             Canvas.Top="3.5"
+                                             Width="18"
+                                             Height="18"
+                                             Stroke="{DynamicResource TextSecondary}"
+                                             StrokeThickness="2" />
+                                    <Path Data="M12.5,7.5 V12.2 L15.7,14.2"
+                                          Stroke="{DynamicResource TextSecondary}"
+                                          StrokeThickness="2"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="{Binding PrimaryResetText}"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="13"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource TextSecondary}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2"
+                        Margin="0"
+                        Padding="14"
+                        CornerRadius="16"
+                        Style="{StaticResource SectionCard}"
+                        Visibility="{Binding HasWeeklyLimit, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="30"
+                                    Height="30"
+                                    CornerRadius="9"
+                                    Background="{DynamicResource SubtleSurfaceBrush}">
+                                <Viewbox Width="21" Height="21">
+                                    <Canvas Width="25" Height="25">
+                                        <Rectangle Canvas.Left="3.5"
+                                                   Canvas.Top="5.5"
+                                                   Width="18"
+                                                   Height="16"
+                                                   RadiusX="2"
+                                                   RadiusY="2"
+                                                   Stroke="{DynamicResource TextPrimary}"
+                                                   StrokeThickness="2" />
+                                        <Path Data="M3.5,10 H21.5 M8,3 V7 M17,3 V7"
+                                              Stroke="{DynamicResource TextPrimary}"
+                                              StrokeThickness="2"
+                                              StrokeStartLineCap="Round"
+                                              StrokeEndLineCap="Round" />
+                                    </Canvas>
+                                </Viewbox>
+                            </Border>
+                            <TextBlock Grid.Column="1"
+                                       Margin="9,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Text="{localization:Loc Usage_WeeklyLimit}"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextPrimary}" />
+                        </Grid>
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,8,0,0"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding WeeklyRemainingNumberText}"
+                                       Margin="0,3,0,-3"
+                                       FontFamily="{StaticResource NumericFont}"
+                                       FontSize="50"
+                                       FontWeight="Bold"
+                                       Typography.NumeralAlignment="Tabular"
+                                       Foreground="{Binding WeeklyRemainingBrush}" />
+                            <TextBlock Text="%"
+                                       Margin="2,0,0,6"
+                                       VerticalAlignment="Bottom"
+                                       FontFamily="{StaticResource NumericFont}"
+                                       FontSize="25"
+                                       FontWeight="Bold"
+                                       Foreground="{Binding WeeklyRemainingBrush}" />
+                            <TextBlock Text="{localization:Loc Usage_RemainingShort}"
+                                       Margin="6,0,0,7"
+                                       VerticalAlignment="Bottom"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="15"
+                                       FontWeight="Medium"
+                                       Foreground="#6B6B6B" />
+                        </StackPanel>
+                        <ProgressBar Grid.Row="2"
+                                     Margin="0,8,0,0"
+                                     Maximum="100"
+                                     Value="{Binding WeeklyRemainingPercent, Mode=OneWay}"
+                                     Foreground="{Binding WeeklyProgressBrush}"
+                                     Style="{StaticResource DetailProgress}" />
+                        <StackPanel Grid.Row="3"
+                                    Margin="0,8,0,0"
+                                    Orientation="Horizontal">
+                            <Viewbox Width="20" Height="20" Margin="0,0,7,0">
+                                <Canvas Width="25" Height="25">
+                                    <Rectangle Canvas.Left="3.5"
+                                               Canvas.Top="5.5"
+                                               Width="18"
+                                               Height="16"
+                                               RadiusX="2"
+                                               RadiusY="2"
+                                               Stroke="{DynamicResource TextSecondary}"
+                                               StrokeThickness="2" />
+                                    <Path Data="M3.5,10 H21.5 M8,3 V7 M17,3 V7"
+                                          Stroke="{DynamicResource TextSecondary}"
+                                          StrokeThickness="2"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round" />
+                                </Canvas>
+                            </Viewbox>
+                            <TextBlock Text="{Binding WeeklyResetText}"
+                                       VerticalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="13"
+                                       FontWeight="Medium"
+                                       Foreground="{DynamicResource TextSecondary}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
             <Border Visibility="{Binding HasAccountMetrics, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Margin="0,0,0,8"
+                    Padding="14,9"
                     Style="{StaticResource SectionCard}">
-                <StackPanel>
-                    <TextBlock Text="{localization:Loc Usage_SectionCreditsLimits}"
-                               Margin="0,0,0,9"
-                               Style="{StaticResource SectionTitle}" />
-                    <ItemsControl ItemsSource="{Binding AccountMetrics}">
+                <Grid MinHeight="52">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.25*" />
+                        <ColumnDefinition Width="1" />
+                        <ColumnDefinition Width="1.6*" />
+                        <ColumnDefinition Width="1" />
+                        <ColumnDefinition Width="1.35*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{localization:Loc Usage_SectionCreditsLimits}"
+                                       FontFamily="{StaticResource UiFont}"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{DynamicResource TextPrimary}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Border Grid.Column="1"
+                            Width="1"
+                            Margin="0,2"
+                            Background="{DynamicResource DividerBrush}" />
+                    <ItemsControl Grid.Column="2"
+                                  Margin="12,0"
+                                  VerticalAlignment="Center"
+                                  ItemsSource="{Binding AccountMetrics}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,3">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                                <StackPanel Margin="0,0,18,0">
                                     <TextBlock Text="{Binding Label}"
-                                               Style="{StaticResource SupportingText}" />
-                                    <TextBlock Grid.Column="1"
-                                               Margin="12,0,0,0"
-                                               Text="{Binding Value}"
-                                               TextAlignment="Right"
                                                FontFamily="{StaticResource UiFont}"
-                                               FontSize="11.5"
-                                               FontWeight="Medium"
+                                               FontSize="12"
+                                               Foreground="{DynamicResource TextSecondary}" />
+                                    <TextBlock Text="{Binding Value}"
+                                               Margin="0,2,0,0"
+                                               FontFamily="{StaticResource UiFont}"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
                                                Foreground="{DynamicResource TextPrimary}" />
-                                </Grid>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <StackPanel Visibility="{Binding HasResetCredits, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Grid Margin="0,3,0,0"
-                              DataContext="{Binding ResetCredits}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{localization:Loc Usage_RateLimitResets}"
+                    <Border Grid.Column="3"
+                            Width="1"
+                            Margin="0,2"
+                            Background="{DynamicResource DividerBrush}" />
+                    <StackPanel Grid.Column="4"
+                                Margin="12,0,0,0"
+                                VerticalAlignment="Center"
+                                DataContext="{Binding ResetCredits}"
+                                Visibility="{Binding DataContext.HasResetCredits,
+                                                     RelativeSource={RelativeSource AncestorType={x:Type UserControl}},
+                                                     Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="{localization:Loc Usage_RateLimitResets}"
+                                   FontFamily="{StaticResource UiFont}"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextSecondary}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding AvailableText}"
+                                       Margin="0,2,0,0"
                                        VerticalAlignment="Center"
-                                       Style="{StaticResource SupportingText}" />
-                            <TextBlock Grid.Column="1"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Text="{Binding AvailableText}"
-                                       ToolTip="{Binding ToolTipText}"
-                                       TextAlignment="Right"
                                        FontFamily="{StaticResource UiFont}"
-                                       FontSize="11.5"
-                                       FontWeight="Medium"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
                                        Foreground="{DynamicResource TextPrimary}" />
                             <Button x:Name="ResetDetailsButton"
-                                    Grid.Column="2"
                                     Width="24"
                                     Height="24"
-                                    Margin="4,0,-5,0"
+                                    Margin="8,0,0,0"
+                                    Opacity="0"
                                     Visibility="{Binding HasSelectableCredits, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     ToolTip="{localization:Loc Usage_ResetExpandTooltip}"
                                     AutomationProperties.Name="{localization:Loc Usage_ResetExpandTooltip}"
@@ -264,7 +371,7 @@
                                     </Canvas>
                                 </Viewbox>
                             </Button>
-                        </Grid>
+                        </StackPanel>
                         <Border x:Name="ResetDetailsPanel"
                                 Margin="0,7,0,2"
                                 Padding="8,5"
@@ -299,94 +406,206 @@
                             </ItemsControl>
                         </Border>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </Border>
 
             <Border Visibility="{Binding HasTokenActivity, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Margin="0"
+                    Padding="14"
                     Style="{StaticResource SectionCard}">
                 <StackPanel>
-                    <Grid Margin="0,0,0,9">
+                    <Grid Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{localization:Loc Usage_SectionTokenActivity}" Style="{StaticResource SectionTitle}" />
+                        <TextBlock Text="{localization:Loc Usage_SectionTokenActivity}"
+                                   FontFamily="{StaticResource UiFont}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimary}" />
                         <TextBlock Grid.Column="1"
                                    Text="{localization:Loc Usage_NotQuotaConsumption}"
-                                   Style="{StaticResource SupportingText}"
-                                   FontSize="10.5"
-                                   Foreground="{DynamicResource TextTertiary}" />
+                                   FontFamily="{StaticResource UiFont}"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextSecondary}" />
                     </Grid>
-
-                    <ItemsControl Height="48"
-                                  Margin="0,0,0,9"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Bottom"
-                                  ItemsSource="{Binding TokenActivity.DailyBars}">
+                    <Grid Height="108"
+                          Margin="0,0,0,8"
+                          ClipToBounds="False">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="78" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <ItemsControl Grid.Row="0"
+                                      Height="78"
+                                      HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      ItemsSource="{Binding TokenActivity.DailyBars}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="78"
+                                          HorizontalAlignment="Stretch"
+                                          ClipToBounds="False"
+                                          ToolTipService.InitialShowDelay="150"
+                                          ToolTipService.BetweenShowDelay="0"
+                                          ToolTipService.ShowDuration="15000"
+                                          ToolTipService.Placement="Top"
+                                          ToolTipService.HorizontalOffset="0"
+                                          ToolTipService.VerticalOffset="-8">
+                                        <Grid.ToolTip>
+                                            <ToolTip DataContext="{Binding PlacementTarget.DataContext,
+                                                                           RelativeSource={RelativeSource Self}}">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding DateText}"
+                                                               FontFamily="{StaticResource UiFont}"
+                                                               FontSize="11"
+                                                               Foreground="{DynamicResource TextSecondary}" />
+                                                    <TextBlock Margin="0,3,0,0"
+                                                               Text="{Binding TokensText}"
+                                                               FontFamily="{StaticResource UiFont}"
+                                                               FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{DynamicResource TokenActivityBrush}" />
+                                                    <TextBlock Margin="0,2,0,0"
+                                                               Text="{Binding PeakComparisonText}"
+                                                               FontFamily="{StaticResource UiFont}"
+                                                               FontSize="10"
+                                                               Foreground="{DynamicResource TextTertiary}" />
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </Grid.ToolTip>
+                                        <Border Width="8"
+                                                Height="{Binding Height}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Bottom"
+                                                Background="{DynamicResource TokenActivityBrush}"
+                                                CornerRadius="2,2,0,0" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl Grid.Row="1"
+                                      Height="28"
+                                      Margin="8,2,8,0"
+                                      HorizontalAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      ItemsSource="{Binding TokenActivity.AxisLabels}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Height="23"
+                                                VerticalAlignment="Top">
+                                        <StackPanel.Resources>
+                                            <Style x:Key="AxisDateTextStyle" TargetType="TextBlock">
+                                                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                                <Setter Property="TextAlignment" Value="Center" />
+                                                <Setter Property="TextWrapping" Value="NoWrap" />
+                                                <Setter Property="TextTrimming" Value="None" />
+                                                <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+                                                <Setter Property="FontSize" Value="8" />
+                                                <Setter Property="LineHeight" Value="9" />
+                                                <Setter Property="LineStackingStrategy" Value="BlockLineHeight" />
+                                                <Setter Property="Height" Value="9" />
+                                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsFirst}" Value="True">
+                                                        <Setter Property="TextAlignment" Value="Left" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsLast}" Value="True">
+                                                        <Setter Property="TextAlignment" Value="Right" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsFirst}" Value="True">
+                                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsLast}" Value="True">
+                                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <TextBlock Text="{Binding DayText}"
+                                                   Style="{StaticResource AxisDateTextStyle}" />
+                                        <Ellipse Width="3"
+                                                 Height="3"
+                                                 HorizontalAlignment="Center"
+                                                 Fill="{DynamicResource TextSecondary}"
+                                                 Margin="0,1" />
+                                        <TextBlock Text="{Binding MonthText}"
+                                                   Style="{StaticResource AxisDateTextStyle}"
+                                                   Foreground="{DynamicResource TokenActivityBrush}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                    <ItemsControl HorizontalContentAlignment="Stretch"
+                                  ItemsSource="{Binding TokenActivity.Metrics}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
+                                <UniformGrid Columns="4" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="10"
-                                      Height="48"
-                                      ToolTipService.InitialShowDelay="150"
-                                      ToolTipService.BetweenShowDelay="0"
-                                      ToolTipService.ShowDuration="15000"
-                                      ToolTipService.Placement="MousePoint"
-                                      ToolTipService.HorizontalOffset="10"
-                                      ToolTipService.VerticalOffset="10">
-                                    <Grid.ToolTip>
-                                        <ToolTip DataContext="{Binding PlacementTarget.DataContext,
-                                                                       RelativeSource={RelativeSource Self}}">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding DateText}"
-                                                           FontSize="10.5"
-                                                           Foreground="{DynamicResource TextSecondary}" />
-                                                <TextBlock Margin="0,3,0,0"
-                                                           Text="{Binding TokensText}"
-                                                           FontSize="13"
-                                                           FontWeight="SemiBold"
-                                                           Foreground="{DynamicResource AccentDataBrush}" />
-                                                <TextBlock Margin="0,2,0,0"
-                                                           Text="{Binding PeakComparisonText}"
-                                                           FontSize="10"
-                                                           Foreground="{DynamicResource TextTertiary}" />
-                                            </StackPanel>
-                                        </ToolTip>
-                                    </Grid.ToolTip>
-                                    <Border Width="8"
-                                            Height="{Binding Height}"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Bottom"
-                                            Background="{DynamicResource AccentDataBrush}"
-                                            CornerRadius="2,2,0,0" />
+                                <Grid Margin="0,2,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="1" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0"
+                                                Margin="0,0,8,0"
+                                                HorizontalAlignment="Center">
+                                        <TextBlock Text="{Binding Label}"
+                                                   TextAlignment="Center"
+                                                   FontFamily="{StaticResource UiFont}"
+                                                   FontSize="10"
+                                                   TextWrapping="NoWrap"
+                                                   TextTrimming="None"
+                                                   Foreground="{DynamicResource TextTertiary}" />
+                                        <TextBlock Text="{Binding Value}"
+                                                   Margin="0,2,0,0"
+                                                   TextAlignment="Center"
+                                                   FontFamily="{StaticResource UiFont}"
+                                                   FontSize="12"
+                                                   FontWeight="SemiBold"
+                                                   TextWrapping="NoWrap"
+                                                   TextTrimming="None"
+                                                   Foreground="{DynamicResource TextPrimary}" />
+                                    </StackPanel>
+                                    <Border Grid.Column="1"
+                                            Width="1"
+                                            Height="28"
+                                            VerticalAlignment="Center"
+                                            Background="{DynamicResource DividerBrush}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLast}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
                                 </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <ItemsControl ItemsSource="{Binding TokenActivity.Metrics}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,3,10,5">
-                                    <TextBlock Text="{Binding Label}"
-                                               Style="{StaticResource SupportingText}"
-                                               FontSize="10.5"
-                                               Foreground="{DynamicResource TextTertiary}" />
-                                    <TextBlock Text="{Binding Value}"
-                                               FontFamily="{StaticResource UiFont}"
-                                               FontSize="12"
-                                               FontWeight="Medium"
-                                               Foreground="{DynamicResource TextPrimary}" />
-                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

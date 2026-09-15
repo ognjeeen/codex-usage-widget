@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
         xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization"
-        Width="102"
+        Width="112"
         Height="40"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -28,11 +28,13 @@
     <Border x:Name="LabelSurface"
             CornerRadius="6"
             Cursor="Hand"
-            Padding="8,0,0,0"
+            Padding="8,0"
             ContextMenuService.Placement="Top"
             ContextMenuService.VerticalOffset="-2"
             ToolTipService.Placement="Top"
             ToolTipService.VerticalOffset="-8"
+            MouseEnter="LabelSurface_OnMouseEnter"
+            MouseLeave="LabelSurface_OnMouseLeave"
             MouseLeftButtonUp="LabelSurface_OnMouseLeftButtonUp">
         <Border.Style>
             <Style TargetType="Border">
@@ -108,7 +110,7 @@
         </Border.ContextMenu>
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontFamily="Segoe UI Variable Text, Segoe UI"
+                   FontFamily="{StaticResource UiFont}"
                    FontSize="12"
                    TextOptions.TextFormattingMode="Ideal">
             <InlineUIContainer BaselineAlignment="Center">
@@ -117,13 +119,10 @@
                                                 DotVerticalOffset="1.625"
                                                 ShowIdleDot="True" />
             </InlineUIContainer><Run
-                Text="Codex"
-                FontWeight="Medium"
-                Foreground="{DynamicResource TaskbarTextPrimaryBrush}" /><Run
-                Text=" " /><Run
                 x:Name="UsageText"
-                Text="--%"
+                Text="--% 丨 --%"
                 FontWeight="SemiBold"
+                FontFamily="{StaticResource NumericFont}"
                 Typography.NumeralAlignment="Tabular"
                 Foreground="{DynamicResource TaskbarTextSecondaryBrush}" />
         </TextBlock>

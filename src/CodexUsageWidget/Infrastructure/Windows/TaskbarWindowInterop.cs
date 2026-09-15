@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Forms = System.Windows.Forms;
 
 namespace CodexUsageWidget.Infrastructure.Windows;
 
@@ -34,6 +35,7 @@ public static class TaskbarWindowInterop
         var taskbar = FindWindow("Shell_TrayWnd", null);
         if (taskbar == IntPtr.Zero || !GetWindowRect(taskbar, out var taskbarRect))
         {
+            PositionAtWorkAreaEdge(windowHandle, logicalWidth, logicalHeight);
             return;
         }
 
@@ -50,6 +52,31 @@ public static class TaskbarWindowInterop
         var height = (int)Math.Round(logicalHeight * scale);
         var left = trayLeft - width;
         var top = taskbarRect.Top + Math.Max(0, (taskbarRect.Bottom - taskbarRect.Top - height) / 2);
+
+        SetWindowPos(
+            windowHandle,
+            HwndTopmost,
+            left,
+            top,
+            width,
+            height,
+            SwpNoActivate);
+    }
+
+    private static void PositionAtWorkAreaEdge(
+        IntPtr windowHandle,
+        double logicalWidth,
+        double logicalHeight)
+    {
+        var workingArea = Forms.Screen.FromHandle(windowHandle).WorkingArea;
+        var dpi = GetDpiForWindow(windowHandle);
+        var scale = dpi > 0 ? dpi / 96d : 1d;
+        var width = (int)Math.Round(logicalWidth * scale);
+        var height = (int)Math.Round(logicalHeight * scale);
+        var edgePadding = Math.Max(4, (int)Math.Round(12d * scale));
+        var bottomPadding = Math.Max(4, (int)Math.Round(8d * scale));
+        var left = workingArea.Right - width - edgePadding;
+        var top = workingArea.Bottom - height - bottomPadding;
 
         SetWindowPos(
             windowHandle,

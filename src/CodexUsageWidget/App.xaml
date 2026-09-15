@@ -7,7 +7,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Views/Resources/WidgetTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <FontFamily x:Key="UiFont">Segoe UI Variable Text, Segoe UI</FontFamily>
+            <FontFamily x:Key="UiFont">pack://application:,,,/CodexUsageWidget;component/Assets/Fonts/#Source Han Sans CN</FontFamily>
+            <FontFamily x:Key="NumericFont">pack://application:,,,/CodexUsageWidget;component/Assets/Fonts/#Helvetica Neue LT Std</FontFamily>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>

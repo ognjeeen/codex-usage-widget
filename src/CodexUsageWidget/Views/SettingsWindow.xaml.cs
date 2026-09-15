@@ -21,7 +21,6 @@ public partial class SettingsWindow : Window
         bool startWithWindowsEnabled,
         IActivityHookSetupService activityHookSetupService,
         ICodexLauncher codexLauncher,
-        AccentPalette accentPalette = AccentPalette.Blue,
         LanguagePreference languagePreference = LanguagePreference.System,
         TimeFormatPreference timeFormatPreference = TimeFormatPreference.Automatic,
         IWindowWorkAreaProvider? workAreaProvider = null)
@@ -33,7 +32,6 @@ public partial class SettingsWindow : Window
             codexLauncher);
         _suppressChangeEvents = true;
         SetSelectedTheme(themePreference);
-        SetSelectedAccentPalette(accentPalette);
         SetWidgetDensity(widgetDensity);
         SetDisplayedLimitPreference(displayedLimitPreference);
         SetFiveHourLimitAvailability(fiveHourLimitAvailable);
@@ -44,8 +42,6 @@ public partial class SettingsWindow : Window
     }
 
     public event Action<ThemePreference>? ThemePreferenceChanged;
-
-    public event Action<AccentPalette>? AccentPaletteChanged;
 
     public event Action<WidgetDensity>? WidgetDensityChanged;
 
@@ -63,17 +59,6 @@ public partial class SettingsWindow : Window
             : DarkThemeOption.IsChecked == true
                 ? ThemePreference.Dark
                 : ThemePreference.System;
-
-    public AccentPalette SelectedAccentPalette =>
-        VioletAccentOption.IsChecked == true
-            ? AccentPalette.Violet
-            : TealAccentOption.IsChecked == true
-                ? AccentPalette.Teal
-                : EmeraldAccentOption.IsChecked == true
-                    ? AccentPalette.Emerald
-                    : PinkAccentOption.IsChecked == true
-                        ? AccentPalette.Pink
-                        : AccentPalette.Blue;
 
     public DisplayedLimitPreference SelectedDisplayedLimit =>
         WeeklyLimitOption.IsChecked == true
@@ -179,15 +164,6 @@ public partial class SettingsWindow : Window
         DarkThemeOption.IsChecked = preference == ThemePreference.Dark;
     }
 
-    private void SetSelectedAccentPalette(AccentPalette palette)
-    {
-        BlueAccentOption.IsChecked = palette == AccentPalette.Blue;
-        VioletAccentOption.IsChecked = palette == AccentPalette.Violet;
-        TealAccentOption.IsChecked = palette == AccentPalette.Teal;
-        EmeraldAccentOption.IsChecked = palette == AccentPalette.Emerald;
-        PinkAccentOption.IsChecked = palette == AccentPalette.Pink;
-    }
-
     private void Header_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ButtonState == MouseButtonState.Pressed)
@@ -201,14 +177,6 @@ public partial class SettingsWindow : Window
         if (!_suppressChangeEvents)
         {
             ThemePreferenceChanged?.Invoke(SelectedTheme);
-        }
-    }
-
-    private void AccentPaletteOption_OnChecked(object sender, RoutedEventArgs e)
-    {
-        if (!_suppressChangeEvents)
-        {
-            AccentPaletteChanged?.Invoke(SelectedAccentPalette);
         }
     }
 

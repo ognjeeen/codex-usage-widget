@@ -52,6 +52,7 @@
   <data name="Usage_SecondaryLimit" xml:space="preserve"><value>Secondary limit</value></data>
   <data name="Usage_UsedPercent" xml:space="preserve"><value>{0}% used</value></data>
   <data name="Usage_RemainingPercent" xml:space="preserve"><value>{0}% remaining</value></data>
+  <data name="Usage_RemainingShort" xml:space="preserve"><value>remaining</value></data>
   <data name="Usage_ResetUnavailable" xml:space="preserve"><value>Reset time unavailable</value></data>
   <data name="Usage_ResetsNow" xml:space="preserve"><value>Resets now</value></data>
   <data name="Usage_ResetsInHours" xml:space="preserve"><value>Resets in {0}h · {1}</value></data>
@@ -90,6 +91,7 @@
   <data name="Token_Days" xml:space="preserve"><value>{0} days</value></data>
   <data name="Token_Count" xml:space="preserve"><value>{0} tokens</value></data>
   <data name="Token_ChartPeak" xml:space="preserve"><value>{0}% of chart peak</value></data>
+  <data name="Token_Today" xml:space="preserve"><value>Today</value></data>
   <data name="Token_DurationHoursMinutes" xml:space="preserve"><value>{0}h {1}m</value></data>
   <data name="Token_DurationMinutes" xml:space="preserve"><value>{0}m</value></data>
   <data name="Settings_Description" xml:space="preserve"><value>Choose how Codex Usage Widget looks and behaves.</value></data>

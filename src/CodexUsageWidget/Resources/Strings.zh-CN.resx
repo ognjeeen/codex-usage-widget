@@ -52,6 +52,7 @@
   <data name="Usage_SecondaryLimit" xml:space="preserve"><value>次要限制</value></data>
   <data name="Usage_UsedPercent" xml:space="preserve"><value>已用 {0}%</value></data>
   <data name="Usage_RemainingPercent" xml:space="preserve"><value>剩余 {0}%</value></data>
+  <data name="Usage_RemainingShort" xml:space="preserve"><value>剩余</value></data>
   <data name="Usage_ResetUnavailable" xml:space="preserve"><value>暂无重置时间</value></data>
   <data name="Usage_ResetsNow" xml:space="preserve"><value>现在重置</value></data>
   <data name="Usage_ResetsInHours" xml:space="preserve"><value>{0} 小时后重置 · {1}</value></data>
@@ -90,6 +91,7 @@
   <data name="Token_Days" xml:space="preserve"><value>{0} 天</value></data>
   <data name="Token_Count" xml:space="preserve"><value>{0} Token</value></data>
   <data name="Token_ChartPeak" xml:space="preserve"><value>图表峰值的 {0}%</value></data>
+  <data name="Token_Today" xml:space="preserve"><value>今天</value></data>
   <data name="Token_DurationHoursMinutes" xml:space="preserve"><value>{0} 小时 {1} 分钟</value></data>
   <data name="Token_DurationMinutes" xml:space="preserve"><value>{0} 分钟</value></data>
   <data name="Settings_Description" xml:space="preserve"><value>选择 Codex 用量小组件的外观和行为。</value></data>

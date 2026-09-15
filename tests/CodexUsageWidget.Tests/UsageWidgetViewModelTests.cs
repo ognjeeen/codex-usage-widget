@@ -59,6 +59,12 @@ public sealed class UsageWidgetViewModelTests
         Assert.Equal("5h limit remaining", viewModel.HeadlineLabel);
         Assert.Equal(80, viewModel.HeadlineRemainingPercent);
         Assert.Equal(reset, viewModel.HeadlineResetsAt);
+        Assert.Equal("5h limit", viewModel.PrimaryLimitLabel);
+        Assert.Equal(20, viewModel.PrimaryUsedPercent);
+        Assert.StartsWith("Resets in 2h", viewModel.PrimaryResetText, StringComparison.Ordinal);
+        Assert.True(viewModel.HasWeeklySummary);
+        Assert.Equal("15% remaining", viewModel.WeeklyRemainingText);
+        Assert.Equal(85, viewModel.WeeklyUsedPercent);
     }
 
     [Fact]
@@ -113,7 +119,11 @@ public sealed class UsageWidgetViewModelTests
             window,
             TimeFormatPreference.TwelveHour);
 
-        Assert.Equal("Local only · updated 2:05:09 PM", viewModel.UpdatedText);
+        var expectedTime = TimeTextFormatter.FormatTimeWithSeconds(
+            snapshot.FetchedAt,
+            TimeFormatPreference.TwelveHour);
+
+        Assert.Equal($"Local only · updated {expectedTime}", viewModel.UpdatedText);
     }
 
     [Fact]

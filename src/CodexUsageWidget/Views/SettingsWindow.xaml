@@ -494,52 +494,6 @@
                     </Grid>
                 </RadioButton>
 
-                <Grid Margin="12,4,8,8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock VerticalAlignment="Center"
-                               Text="{localization:Loc Settings_Accent_Title}"
-                               Style="{StaticResource SupportingText}" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <RadioButton x:Name="BlueAccentOption"
-                                     GroupName="AccentPalette"
-                                     Background="#3B78D8"
-                                     ToolTip="{localization:Loc Settings_Accent_Blue}"
-                                     AutomationProperties.Name="{localization:Loc Settings_Accent_BlueAutomation}"
-                                     Checked="AccentPaletteOption_OnChecked"
-                                     Style="{StaticResource AccentSwatchOption}" />
-                        <RadioButton x:Name="VioletAccentOption"
-                                     GroupName="AccentPalette"
-                                     Background="#7C3AED"
-                                     ToolTip="{localization:Loc Settings_Accent_Violet}"
-                                     AutomationProperties.Name="{localization:Loc Settings_Accent_VioletAutomation}"
-                                     Checked="AccentPaletteOption_OnChecked"
-                                     Style="{StaticResource AccentSwatchOption}" />
-                        <RadioButton x:Name="TealAccentOption"
-                                     GroupName="AccentPalette"
-                                     Background="#0F8F83"
-                                     ToolTip="{localization:Loc Settings_Accent_Teal}"
-                                     AutomationProperties.Name="{localization:Loc Settings_Accent_TealAutomation}"
-                                     Checked="AccentPaletteOption_OnChecked"
-                                     Style="{StaticResource AccentSwatchOption}" />
-                        <RadioButton x:Name="EmeraldAccentOption"
-                                     GroupName="AccentPalette"
-                                     Background="#1D9148"
-                                     ToolTip="{localization:Loc Settings_Accent_Emerald}"
-                                     AutomationProperties.Name="{localization:Loc Settings_Accent_EmeraldAutomation}"
-                                     Checked="AccentPaletteOption_OnChecked"
-                                     Style="{StaticResource AccentSwatchOption}" />
-                        <RadioButton x:Name="PinkAccentOption"
-                                     GroupName="AccentPalette"
-                                     Background="#C72F75"
-                                     ToolTip="{localization:Loc Settings_Accent_Pink}"
-                                     AutomationProperties.Name="{localization:Loc Settings_Accent_PinkAutomation}"
-                                     Checked="AccentPaletteOption_OnChecked"
-                                     Style="{StaticResource AccentSwatchOption}" />
-                    </StackPanel>
-                </Grid>
               </StackPanel>
 
               <StackPanel Margin="0,10,0,14">

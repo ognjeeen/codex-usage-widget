@@ -17,20 +17,21 @@ public sealed class AccentPaletteStore
         {
             return File.ReadAllText(_path).Trim().ToLowerInvariant() switch
             {
+                "blue" => AccentPalette.Blue,
                 "violet" => AccentPalette.Violet,
                 "teal" => AccentPalette.Teal,
                 "emerald" => AccentPalette.Emerald,
                 "pink" => AccentPalette.Pink,
-                _ => AccentPalette.Blue
+                _ => AccentPalette.Emerald
             };
         }
         catch (IOException)
         {
-            return AccentPalette.Blue;
+            return AccentPalette.Emerald;
         }
         catch (UnauthorizedAccessException)
         {
-            return AccentPalette.Blue;
+            return AccentPalette.Emerald;
         }
     }
 

@@ -14,7 +14,9 @@ public sealed class UsageLimitViewModel
     {
         Label = label;
         UsedPercent = window.UsedPercent;
+        RemainingPercent = window.RemainingPercent;
         IsNormal = window.RemainingPercent > 25;
+        IsCritical = UsageTextFormatter.IsCritical(window.RemainingPercent);
         UsedText = Strings.Format("Usage_UsedPercent", Math.Round(window.UsedPercent));
         RemainingText = Strings.Format(
             "Usage_RemainingPercent",
@@ -33,7 +35,11 @@ public sealed class UsageLimitViewModel
 
     public double UsedPercent { get; }
 
+    public double RemainingPercent { get; }
+
     public bool IsNormal { get; }
+
+    public bool IsCritical { get; }
 
     public string UsedText { get; }
 

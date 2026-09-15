@@ -49,8 +49,10 @@ public static class UsageTextFormatter
 
     public static string ColorForRemaining(double remainingPercent) => remainingPercent switch
     {
-        <= 10 => "#E16D76",
-        <= 25 => "#DDA56D",
-        _ => "#E7E7E7"
+        <= 5 => "#FF5A5F",
+        <= 25 => "#F6C453",
+        _ => "#4ADE80"
     };
+
+    public static bool IsCritical(double remainingPercent) => remainingPercent <= 5;
 }

@@ -54,10 +54,35 @@ public sealed class TaskbarSettingsMenuTests
                 window.UpdateUsage(
                     "Weekly limit",
                     15,
+                    52,
                     new DateTimeOffset(2030, 8, 31, 14, 5, 0, TimeSpan.Zero));
+                var usageText = Assert.IsType<System.Windows.Documents.Run>(
+                    window.FindName("UsageText"));
+                Assert.Equal("15% 丨 52%", usageText.Text);
                 var labelSurface = Assert.IsType<Border>(
                     window.FindName("LabelSurface"));
                 Assert.Contains("Sat 14:05", Assert.IsType<string>(labelSurface.ToolTip));
+                Assert.Equal(
+                    Color.FromRgb(74, 222, 128),
+                    Assert.IsType<SolidColorBrush>(activityDots.DotBrush).Color);
+
+                window.UpdateUsage(
+                    "Weekly limit",
+                    15,
+                    25,
+                    new DateTimeOffset(2030, 8, 31, 14, 5, 0, TimeSpan.Zero));
+                Assert.Equal(
+                    Color.FromRgb(246, 196, 83),
+                    Assert.IsType<SolidColorBrush>(activityDots.DotBrush).Color);
+
+                window.UpdateUsage(
+                    "Weekly limit",
+                    15,
+                    5,
+                    new DateTimeOffset(2030, 8, 31, 14, 5, 0, TimeSpan.Zero));
+                Assert.Equal(
+                    Color.FromRgb(255, 90, 95),
+                    Assert.IsType<SolidColorBrush>(activityDots.DotBrush).Color);
 
                 Assert.Contains(
                     menu.Items.OfType<MenuItem>(),
@@ -123,6 +148,8 @@ public sealed class TaskbarSettingsMenuTests
                 ThemePreference? changedPreference = null;
                 liveSettings.ThemePreferenceChanged += preference =>
                     changedPreference = preference;
+                Assert.Null(liveSettings.FindName("BlueAccentOption"));
+                Assert.Null(liveSettings.FindName("VioletAccentOption"));
 
                 var lightOption = Assert.IsType<RadioButton>(
                     liveSettings.FindName("LightThemeOption"));
@@ -139,7 +166,6 @@ public sealed class TaskbarSettingsMenuTests
                     startWithWindowsEnabled: true,
                     activityHookSetupService: new StubActivityHookSetupService(),
                     codexLauncher: new StubCodexLauncher(),
-                    accentPalette: AccentPalette.Violet,
                     timeFormatPreference: TimeFormatPreference.TwentyFourHour);
                 Assert.NotNull(usageSettings.FindName("ActivityDotsSection"));
                 var systemLanguageOption = Assert.IsType<RadioButton>(
@@ -165,21 +191,11 @@ public sealed class TaskbarSettingsMenuTests
                 var activityDotsHost = Assert.IsType<ContentControl>(
                     usageSettings.FindName("ActivityDotsHost"));
                 Assert.IsType<ActivityHookSetupControl>(activityDotsHost.Content);
-                Assert.NotNull(usageSettings.FindName("BlueAccentOption"));
-                var violetAccentOption = Assert.IsType<RadioButton>(
-                    usageSettings.FindName("VioletAccentOption"));
-                Assert.True(violetAccentOption.IsChecked);
-                Assert.NotNull(usageSettings.FindName("TealAccentOption"));
-                Assert.NotNull(usageSettings.FindName("EmeraldAccentOption"));
-                Assert.NotNull(usageSettings.FindName("PinkAccentOption"));
-                AccentPalette? changedAccentPalette = null;
-                usageSettings.AccentPaletteChanged += palette =>
-                    changedAccentPalette = palette;
-                var emeraldAccentOption = Assert.IsType<RadioButton>(
-                    usageSettings.FindName("EmeraldAccentOption"));
-                emeraldAccentOption.IsChecked = true;
-
-                Assert.Equal(AccentPalette.Emerald, changedAccentPalette);
+                Assert.Null(usageSettings.FindName("BlueAccentOption"));
+                Assert.Null(usageSettings.FindName("VioletAccentOption"));
+                Assert.Null(usageSettings.FindName("TealAccentOption"));
+                Assert.Null(usageSettings.FindName("EmeraldAccentOption"));
+                Assert.Null(usageSettings.FindName("PinkAccentOption"));
                 var weeklyOption = Assert.IsType<RadioButton>(
                     usageSettings.FindName("WeeklyLimitOption"));
                 var fiveHourOption = Assert.IsType<RadioButton>(

@@ -20,9 +20,41 @@ public sealed class UsageWidgetViewModel
 
     public string HeadlineLabel { get; private init; } = Strings.Get("Status_WaitingForCodex");
 
+    public string PrimaryLimitLabel { get; private init; } = Strings.Get("Status_WaitingForCodex");
+
+    public string PrimaryRemainingPercentText { get; private init; } = "--%";
+
+    public string PrimaryRemainingNumberText { get; private init; } = "--";
+
+    public System.Windows.Media.Brush PrimaryProgressBrush { get; private init; } = BrushFromHex("#4ADE80");
+
+    public System.Windows.Media.Brush PrimaryRemainingBrush { get; private init; } = BrushFromHex("#F2F2F2");
+
+    public double PrimaryRemainingPercent { get; private init; }
+
+    public double PrimaryUsedPercent { get; private init; }
+
+    public string PrimaryResetText { get; private init; } = Strings.Get("Usage_ResetUnavailable");
+
     public string UpdatedText { get; private init; } = Strings.Get("Status_LocalWaiting");
 
     public string? WarningText { get; private init; }
+
+    public string? WeeklyRemainingText { get; private init; }
+
+    public string? WeeklyRemainingPercentText { get; private init; }
+
+    public string? WeeklyRemainingNumberText { get; private init; }
+
+    public System.Windows.Media.Brush WeeklyProgressBrush { get; private init; } = BrushFromHex("#4ADE80");
+
+    public System.Windows.Media.Brush WeeklyRemainingBrush { get; private init; } = BrushFromHex("#F2F2F2");
+
+    public double WeeklyRemainingPercent { get; private init; }
+
+    public double WeeklyUsedPercent { get; private init; }
+
+    public string WeeklyResetText { get; private init; } = Strings.Get("Usage_ResetUnavailable");
 
     public IReadOnlyList<UsageLimitViewModel> GeneralLimits { get; private init; } =
         Array.Empty<UsageLimitViewModel>();
@@ -38,6 +70,10 @@ public sealed class UsageWidgetViewModel
     public TokenActivityViewModel? TokenActivity { get; private init; }
 
     public bool HasWarning => WarningText is not null;
+
+    public bool HasWeeklySummary => WeeklyRemainingText is not null;
+
+    public bool HasWeeklyLimit => WeeklyRemainingPercentText is not null;
 
     public bool HasModelLimits => ModelLimits.Count > 0;
 
@@ -70,8 +106,24 @@ public sealed class UsageWidgetViewModel
         StatusBrush = BrushFromHex("#D6A15F"),
         HeadlineRemainingText = HeadlineRemainingText,
         HeadlineLabel = HeadlineLabel,
+        PrimaryLimitLabel = PrimaryLimitLabel,
+        PrimaryRemainingPercentText = PrimaryRemainingPercentText,
+        PrimaryRemainingNumberText = PrimaryRemainingNumberText,
+        PrimaryProgressBrush = PrimaryProgressBrush,
+        PrimaryRemainingBrush = PrimaryRemainingBrush,
+        PrimaryRemainingPercent = PrimaryRemainingPercent,
+        PrimaryUsedPercent = PrimaryUsedPercent,
+        PrimaryResetText = PrimaryResetText,
         UpdatedText = UpdatedText,
         WarningText = WarningText,
+        WeeklyRemainingText = WeeklyRemainingText,
+        WeeklyRemainingPercentText = WeeklyRemainingPercentText,
+        WeeklyRemainingNumberText = WeeklyRemainingNumberText,
+        WeeklyProgressBrush = WeeklyProgressBrush,
+        WeeklyRemainingBrush = WeeklyRemainingBrush,
+        WeeklyRemainingPercent = WeeklyRemainingPercent,
+        WeeklyUsedPercent = WeeklyUsedPercent,
+        WeeklyResetText = WeeklyResetText,
         GeneralLimits = GeneralLimits,
         ModelLimits = ModelLimits,
         AccountMetrics = AccountMetrics,
@@ -99,24 +151,73 @@ public sealed class UsageWidgetViewModel
             snapshot.RateLimits.Limits.Where(limit => !limit.IsGeneral),
             includeBucketLabel: true,
             timeFormatPreference);
+        var weeklyWindow = DisplayedUsageSelector.IsAvailable(
+            snapshot,
+            DisplayedLimitPreference.Weekly)
+            ? DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.Weekly)
+            : null;
+        var primaryWindow = (
+            DisplayedUsageSelector.IsAvailable(
+                snapshot,
+                DisplayedLimitPreference.FiveHour)
+                ? DisplayedUsageSelector.Select(snapshot, DisplayedLimitPreference.FiveHour)
+                : null)
+            ?? displayed;
+        var primaryLimit = new UsageLimitViewModel(
+            UsageLabelLocalizer.Localize(primaryWindow.Label),
+            primaryWindow,
+            timeFormatPreference);
+        var weeklyLimit = weeklyWindow is null
+            ? null
+            : new UsageLimitViewModel(
+                UsageLabelLocalizer.Localize(weeklyWindow.Label),
+                weeklyWindow,
+                timeFormatPreference);
         var plan = FormatPlan(snapshot.RateLimits.PlanType);
 
         return new UsageWidgetViewModel
         {
             StatusText = Strings.Format("Status_LivePlan", plan ?? "ChatGPT"),
-            StatusBrush = BrushFromHex("#68B88A"),
+            StatusBrush = BrushFromHex("#4ADE80"),
             HeadlineRemainingText = $"{Math.Round(displayed.RemainingPercent):0}%",
             HeadlineLabel = Strings.Format(
                 "Status_HeadlineRemaining",
                 UsageLabelLocalizer.Localize(displayed.Label)),
             HeadlineRemainingPercent = displayed.RemainingPercent,
             HeadlineResetsAt = displayed.ResetsAt,
+            PrimaryLimitLabel = primaryLimit.Label,
+            PrimaryRemainingPercentText = $"{Math.Round(primaryWindow.RemainingPercent):0}%",
+            PrimaryRemainingNumberText = $"{Math.Round(primaryWindow.RemainingPercent):0}",
+            PrimaryProgressBrush = BrushFromHex(
+                UsageTextFormatter.ColorForRemaining(primaryWindow.RemainingPercent)),
+            PrimaryRemainingBrush = RemainingEmphasisBrush(primaryWindow.RemainingPercent),
+            PrimaryRemainingPercent = primaryWindow.RemainingPercent,
+            PrimaryUsedPercent = primaryLimit.UsedPercent,
+            PrimaryResetText = primaryLimit.ResetText,
             UpdatedText = Strings.Format(
                 "Status_LocalUpdated",
                 TimeTextFormatter.FormatTimeWithSeconds(
                     snapshot.FetchedAt,
                     timeFormatPreference)),
             WarningText = BuildWarning(snapshot.RateLimits.Limits),
+            WeeklyRemainingText = weeklyLimit is null
+                ? null
+                : weeklyLimit.RemainingText,
+            WeeklyRemainingPercentText = weeklyLimit is null
+                ? null
+                : $"{Math.Round(weeklyWindow!.RemainingPercent):0}%",
+            WeeklyRemainingNumberText = weeklyLimit is null
+                ? null
+                : $"{Math.Round(weeklyWindow!.RemainingPercent):0}",
+            WeeklyProgressBrush = weeklyWindow is null
+                ? BrushFromHex("#4ADE80")
+                : BrushFromHex(UsageTextFormatter.ColorForRemaining(weeklyWindow.RemainingPercent)),
+            WeeklyRemainingBrush = weeklyWindow is null
+                ? BrushFromHex("#F2F2F2")
+                : RemainingEmphasisBrush(weeklyWindow.RemainingPercent),
+            WeeklyRemainingPercent = weeklyWindow?.RemainingPercent ?? 0d,
+            WeeklyUsedPercent = weeklyLimit?.UsedPercent ?? 0d,
+            WeeklyResetText = weeklyLimit?.ResetText ?? Strings.Get("Usage_ResetUnavailable"),
             GeneralLimits = generalLimits,
             ModelLimits = modelLimits,
             AccountMetrics = BuildAccountMetrics(snapshot.RateLimits, timeFormatPreference),
@@ -271,4 +372,9 @@ public sealed class UsageWidgetViewModel
 
     private static SolidColorBrush BrushFromHex(string color) =>
         new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(color));
+
+    private static SolidColorBrush RemainingEmphasisBrush(double remainingPercent) =>
+        UsageTextFormatter.IsCritical(remainingPercent)
+            ? BrushFromHex(UsageTextFormatter.ColorForRemaining(remainingPercent))
+            : BrushFromHex("#F2F2F2");
 }

@@ -24,6 +24,14 @@ public sealed class AccentPaletteStoreTests : IDisposable
         Assert.Equal(palette, store.Load());
     }
 
+    [Fact]
+    public void MissingPaletteDefaultsToEmerald()
+    {
+        var store = new AccentPaletteStore(Path.Combine(_directory, "accent-palette.txt"));
+
+        Assert.Equal(AccentPalette.Emerald, store.Load());
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))

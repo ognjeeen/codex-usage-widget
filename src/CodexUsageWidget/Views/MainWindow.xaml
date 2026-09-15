@@ -4,10 +4,10 @@
         xmlns:controls="clr-namespace:CodexUsageWidget.Views.Controls"
         xmlns:localization="clr-namespace:CodexUsageWidget.Views.Localization"
         Title="{localization:Loc App_MainTitle}"
-        Width="390"
-        Height="290"
+        Width="420"
+        Height="198"
         MinWidth="390"
-        MinHeight="290"
+        MinHeight="186"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
@@ -16,103 +16,75 @@
         ShowInTaskbar="False"
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
-        TextOptions.TextFormattingMode="Ideal">
+        TextOptions.TextFormattingMode="Ideal"
+        MouseEnter="MainWindow_OnMouseEnter"
+        MouseLeave="MainWindow_OnMouseLeave">
     <Border x:Name="WidgetSurface"
-            Margin="12"
-            CornerRadius="16"
+            Margin="7.5"
+            CornerRadius="16.5"
             Background="{DynamicResource WidgetSurfaceBrush}"
             BorderBrush="{DynamicResource WidgetBorderBrush}"
             BorderThickness="1"
             MouseLeftButtonDown="Widget_OnMouseLeftButtonDown">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="18"
+            <DropShadowEffect x:Name="WidgetShadow"
+                              BlurRadius="22"
                               ShadowDepth="4"
-                              Opacity="0.38"
+                              Opacity="0.28"
                               Color="#000000" />
         </Border.Effect>
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="44" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="34" />
+                <RowDefinition x:Name="HeaderRow" Height="48" />
+                <RowDefinition x:Name="ContentRow" Height="Auto" />
+                <RowDefinition x:Name="FooterRow" Height="40" />
             </Grid.RowDefinitions>
 
-            <Grid Margin="16,6,8,0">
+            <Grid x:Name="HeaderLayout" Margin="18,0,12,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Codex"
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="HeaderTitle" Text="Codex"
+                               FontFamily="{StaticResource UiFont}"
+                               FontSize="24"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource TextPrimary}" />
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Margin="13,3,0,0">
+                        <Ellipse x:Name="HeaderStatusDot"
+                                 Width="5"
+                                 Height="5"
+                                 Fill="{Binding StatusBrush}"
+                                 Margin="0,1,7,0" />
+                        <TextBlock x:Name="HeaderStatusText" Text="{Binding StatusText}"
                                    FontFamily="{StaticResource UiFont}"
-                                   FontSize="13.5"
-                                   FontWeight="SemiBold"
-                                   Foreground="{DynamicResource TextPrimary}" />
+                                   FontSize="12"
+                                   Foreground="{DynamicResource TextSecondary}" />
                         <controls:ActivityDotsIndicator x:Name="WidgetActivityDots"
-                                                        Margin="18,0,0,0"
+                                                        Margin="16,0,0,0"
                                                         VerticalAlignment="Center"
                                                         ToolTip="{localization:Loc Main_ActivityRunning}"
                                                         AutomationProperties.Name="{localization:Loc Main_ActivityRunning}"
-                                                        DotBrush="{DynamicResource AccentDataBrush}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,1,0,0">
-                        <Ellipse Width="5"
-                                 Height="5"
-                                 Fill="{Binding StatusBrush}"
-                                 Margin="0,1,6,0" />
-                        <TextBlock Text="{Binding StatusText}"
-                                   Style="{StaticResource SupportingText}" />
+                                                        DotBrush="{DynamicResource PrimaryUsageBrush}" />
                     </StackPanel>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
-                    <Button ToolTip="{localization:Loc Main_RefreshUsage}"
-                            Style="{StaticResource IconButton}"
-                            Click="RefreshButton_OnClick">
-                        <Viewbox Width="16" Height="16">
-                            <Canvas Width="16" Height="16">
-                                <Path Data="M12.5,5.5 A5,5 0 1 0 13,10 M12.5,2.5 L12.5,5.5 L9.5,5.5"
-                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                                      StrokeThickness="1.4"
-                                      StrokeStartLineCap="Round"
-                                      StrokeEndLineCap="Round"
-                                      StrokeLineJoin="Round" />
-                            </Canvas>
-                        </Viewbox>
-                    </Button>
-                    <Button x:Name="DensityButton"
-                            ToolTip="{localization:Loc Main_ShowDetails}"
-                            AutomationProperties.Name="{localization:Loc Main_ToggleLayout}"
-                            Style="{StaticResource IconButton}"
-                            Click="DensityButton_OnClick">
-                        <Viewbox Width="16" Height="16">
-                            <Canvas Width="16" Height="16">
-                                <Path Data="M4.5,7 L8,10 L11.5,7"
-                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
-                                      StrokeThickness="1.4"
-                                      StrokeStartLineCap="Round"
-                                      StrokeEndLineCap="Round"
-                                      StrokeLineJoin="Round">
-                                    <Path.RenderTransform>
-                                        <RotateTransform x:Name="DensityGlyphRotation"
-                                                         CenterX="8"
-                                                         CenterY="8" />
-                                    </Path.RenderTransform>
-                                </Path>
-                            </Canvas>
-                        </Viewbox>
-                    </Button>
-                    <Button ToolTip="{localization:Loc Main_UseTaskbarLabel}"
+                    <Button Width="28"
+                            Height="28"
+                            ToolTip="{localization:Loc Main_UseTaskbarLabel}"
                             Style="{StaticResource IconButton}"
                             Click="HideButton_OnClick">
                         <Viewbox Width="16" Height="16">
                             <Canvas Width="16" Height="16">
-                                <Path Data="M5,8 L11,8"
+                                <Path Data="M4,8 L12,8"
                                       Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
                                       StrokeThickness="1.4"
                                       StrokeStartLineCap="Round"
@@ -120,10 +92,20 @@
                             </Canvas>
                         </Viewbox>
                     </Button>
-                    <Button ToolTip="{localization:Loc Common_Exit}"
+                    <Button Width="28"
+                            Height="28"
+                            ToolTip="{localization:Loc Common_Exit}"
                             Style="{StaticResource IconButton}"
                             Click="CloseButton_OnClick">
-                        <Path Style="{StaticResource CloseGlyph}" />
+                        <Viewbox Width="16" Height="16">
+                            <Canvas Width="16" Height="16">
+                                <Path Data="M4,4 L12,12 M12,4 L4,12"
+                                      Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                      StrokeThickness="1.4"
+                                      StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round" />
+                            </Canvas>
+                        </Viewbox>
                     </Button>
                 </StackPanel>
             </Grid>
@@ -133,20 +115,85 @@
                                         Grid.Row="1"
                                         Visibility="Collapsed" />
 
-            <Border Grid.Row="2"
-                    Margin="16,0,16,0"
+            <Border x:Name="FooterLayout"
+                    Grid.Row="2"
+                    Margin="20,0,20,0"
                     BorderBrush="{DynamicResource DividerBrush}"
                     BorderThickness="0,1,0,0">
                 <Grid>
-                    <TextBlock Text="{Binding UpdatedText}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding UpdatedText}"
+                               Margin="0,0,12,0"
                                VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
                                Style="{StaticResource SupportingText}"
-                               FontSize="10.5"
+                               FontSize="10"
                                Foreground="{DynamicResource TextTertiary}" />
-                    <StackPanel HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Orientation="Horizontal">
+                    <Border Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="{DynamicResource SubtleSurfaceBrush}"
+                            CornerRadius="10"
+                            Padding="3,0">
+                        <StackPanel Orientation="Horizontal">
+                        <Button x:Name="RefreshButton"
+                                Width="28"
+                                Height="28"
+                                ToolTip="{localization:Loc Main_RefreshUsage}"
+                                Style="{StaticResource IconButton}"
+                                Click="RefreshButton_OnClick">
+                            <Viewbox Width="17" Height="17">
+                                <Canvas Width="17" Height="17">
+                                    <Path Data="M13.5,6 A5.5,5.5 0 1 0 14,10.5 M13.5,2.8 V6 H10.3"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.5"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round" />
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
+                        <Border Width="1"
+                                Height="18"
+                                Margin="1,0"
+                                Background="{DynamicResource DividerBrush}"
+                                Opacity="0.75" />
+                        <Button x:Name="DensityButton"
+                                Width="28"
+                                Height="28"
+                                ToolTip="{localization:Loc Main_ShowDetails}"
+                                AutomationProperties.Name="{localization:Loc Main_ToggleLayout}"
+                                Style="{StaticResource IconButton}"
+                                Click="DensityButton_OnClick">
+                            <Viewbox Width="17" Height="17">
+                                <Canvas Width="17" Height="17">
+                                    <Path Data="M4.5,6.8 L8.5,10.7 L12.5,6.8"
+                                          Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                          StrokeThickness="1.6"
+                                          StrokeStartLineCap="Round"
+                                          StrokeEndLineCap="Round"
+                                          StrokeLineJoin="Round">
+                                        <Path.RenderTransform>
+                                            <RotateTransform x:Name="DensityGlyphRotation"
+                                                             CenterX="8.5"
+                                                             CenterY="8.5" />
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Canvas>
+                            </Viewbox>
+                        </Button>
+                        <Border Width="1"
+                                Height="18"
+                                Margin="1,0"
+                                Background="{DynamicResource DividerBrush}"
+                                Opacity="0.75" />
                         <Button x:Name="SettingsButton"
+                                Width="28"
+                                Height="28"
                                 ToolTip="{localization:Loc Common_Settings}"
                                 AutomationProperties.Name="{localization:Loc Common_Settings}"
                                 Style="{StaticResource IconButton}"
@@ -158,7 +205,8 @@
                                 </Canvas>
                             </Viewbox>
                         </Button>
-                    </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Border>
         </Grid>

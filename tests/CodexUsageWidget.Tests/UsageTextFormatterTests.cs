@@ -20,7 +20,10 @@ public sealed class UsageTextFormatterTests : IDisposable
         var now = new DateTimeOffset(2030, 1, 1, 12, 0, 0, TimeSpan.Zero);
         var reset = now.AddHours(2).AddMinutes(10);
 
-        var result = UsageTextFormatter.FormatReset(reset, now);
+        var result = UsageTextFormatter.FormatReset(
+            reset,
+            now,
+            TimeFormatPreference.TwelveHour);
 
         Assert.Equal("Resets in 3h · 2:10 PM", result);
     }
@@ -40,9 +43,11 @@ public sealed class UsageTextFormatterTests : IDisposable
     }
 
     [Theory]
-    [InlineData(10, "#E16D76")]
-    [InlineData(25, "#DDA56D")]
-    [InlineData(26, "#E7E7E7")]
+    [InlineData(0, "#FF5A5F")]
+    [InlineData(5, "#FF5A5F")]
+    [InlineData(6, "#F6C453")]
+    [InlineData(25, "#F6C453")]
+    [InlineData(26, "#4ADE80")]
     public void ColorForRemainingUsesThresholds(double remaining, string expected) =>
         Assert.Equal(expected, UsageTextFormatter.ColorForRemaining(remaining));
 

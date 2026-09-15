@@ -11,12 +11,16 @@ public sealed class TokenActivityViewModel
     public TokenActivityViewModel(TokenActivitySummary activity)
     {
         Metrics = BuildMetrics(activity);
-        DailyBars = BuildDailyBars(activity.DailyUsage);
+        var recent = activity.DailyUsage.TakeLast(MaximumChartDays).ToArray();
+        DailyBars = BuildDailyBars(recent);
+        AxisLabels = BuildAxisLabels(recent);
     }
 
     public IReadOnlyList<DetailMetricViewModel> Metrics { get; }
 
     public IReadOnlyList<DailyUsageBarViewModel> DailyBars { get; }
+
+    public IReadOnlyList<TokenAxisLabelViewModel> AxisLabels { get; }
 
     public bool HasDailyUsage => DailyBars.Count > 0;
 
@@ -37,34 +41,73 @@ public sealed class TokenActivityViewModel
             activity.CurrentStreakDays is { } currentStreak
                 ? Strings.Format("Token_Days", currentStreak.ToString("N0", CultureInfo.CurrentCulture))
                 : null);
-        AddMetric(
-            metrics,
-            Strings.Get("Token_LongestStreak"),
-            activity.LongestStreakDays is { } longestStreak
-                ? Strings.Format("Token_Days", longestStreak.ToString("N0", CultureInfo.CurrentCulture))
-                : null);
-        return metrics;
+        return metrics
+            .Select((metric, index) => metric with { IsLast = index == metrics.Count - 1 })
+            .ToList();
     }
 
     private static DailyUsageBarViewModel[] BuildDailyBars(
-        IReadOnlyList<DailyTokenUsage> dailyUsage)
+        DailyTokenUsage[] recent)
     {
-        var recent = dailyUsage.TakeLast(MaximumChartDays).ToArray();
         if (recent.Length == 0)
         {
             return Array.Empty<DailyUsageBarViewModel>();
         }
 
         var maximum = Math.Max(1L, recent.Max(item => item.Tokens));
+        var lastIndex = recent.Length - 1;
         return recent
-            .Select(item => new DailyUsageBarViewModel(
-                Math.Max(3d, 44d * item.Tokens / maximum),
+            .Select((item, index) => new DailyUsageBarViewModel(
+                Math.Max(3d, 76d * item.Tokens / maximum),
                 item.Date.ToString("dddd, MMMM d", CultureInfo.CurrentCulture),
+                BuildAxisLabel(item.Date, index, lastIndex),
+                index == 0,
+                index == lastIndex,
                 Strings.Format(
                     "Token_Count",
                     item.Tokens.ToString("N0", CultureInfo.CurrentCulture)),
                 Strings.Format("Token_ChartPeak", Math.Round(100d * item.Tokens / maximum))))
             .ToArray();
+    }
+
+    private static TokenAxisLabelViewModel[] BuildAxisLabels(
+        DailyTokenUsage[] recent)
+    {
+        if (recent.Length == 0)
+        {
+            return Array.Empty<TokenAxisLabelViewModel>();
+        }
+
+        var lastIndex = recent.Length - 1;
+        return Enumerable.Range(0, recent.Length)
+            .Where(index => index == 0 || index % 5 == 0 || index == lastIndex)
+            .Select(index => new TokenAxisLabelViewModel(
+                BuildAxisLabel(recent[index].Date, index, lastIndex)!,
+                BuildVerticalAxisLabel(BuildAxisLabel(recent[index].Date, index, lastIndex)!),
+                lastIndex == 0 ? 0d : index / (double)lastIndex,
+                IsFirst: index == 0,
+                IsLast: index == lastIndex))
+            .ToArray();
+    }
+
+    private static string BuildVerticalAxisLabel(string text)
+    {
+        var separator = text.IndexOf('/');
+        return separator > 0
+            ? $"{text[(separator + 1)..]}\n·\n{text[..separator]}"
+            : text;
+    }
+
+    private static string? BuildAxisLabel(DateOnly date, int index, int lastIndex)
+    {
+        if (index == lastIndex)
+        {
+            return date.ToString("MM/dd", CultureInfo.InvariantCulture);
+        }
+
+        return index == 0 || index % 5 == 0
+            ? date.ToString("MM/dd", CultureInfo.InvariantCulture)
+            : null;
     }
 
     private static void AddMetric(

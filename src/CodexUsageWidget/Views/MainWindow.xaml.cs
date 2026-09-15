@@ -14,10 +14,15 @@ namespace CodexUsageWidget.Views;
 
 public partial class MainWindow : Window
 {
-    private const double CompactBaseHeight = 236d;
-    private const double CompactLimitRowHeight = 56d;
-    private const double CompactMaximumHeight = 292d;
-    private const double DetailedHeight = 620d;
+    private const double CompactWidth = 420d;
+    private const double CompactMinimumWidth = 390d;
+    private const double DetailedWidth = 504d;
+    private const double DetailedMinimumWidth = 468d;
+    private const double CompactBaseHeight = 198d;
+    private const double CompactWarningHeight = 36d;
+    private const double CompactLimitRowHeight = 0d;
+    private const double CompactMaximumHeight = 234d;
+    private const double DetailedHeight = 585d;
 
     private readonly UsageMonitor _usageMonitor;
     private readonly RateLimitResetUseCase _resetUseCase;
@@ -34,6 +39,7 @@ public partial class MainWindow : Window
     private readonly AppLanguageController _languageController;
     private readonly TaskbarLabelWindow _taskbarLabel = new();
     private readonly WidgetVisibilityController _widgetVisibility;
+    private readonly DispatcherTimer _taskbarHoverHideTimer;
     private readonly MainWindowCloseState _closeState = new();
     private SettingsWindow? _settingsWindow;
     private WidgetDisplayMode _displayMode;
@@ -46,6 +52,7 @@ public partial class MainWindow : Window
     private bool _isActivityPreviewEnabled;
     private bool _isSettingsOpen;
     private bool _isResetDialogOpen;
+    private bool _isTaskbarHoverPreview;
     private bool _resetUsePending;
     private bool _shutdownStarted;
 
@@ -81,9 +88,17 @@ public partial class MainWindow : Window
         _density = densityStore.Load();
         _displayedLimitPreference = displayedLimitPreferenceStore.Load();
         _timeFormatPreference = timeFormatPreferenceStore.Load();
-        _widgetVisibility = new WidgetVisibilityController(() => IsVisible, ShowWidget, Hide);
+        _widgetVisibility = new WidgetVisibilityController(
+            () => IsVisible,
+            () => ShowWidget(),
+            Hide);
 
         InitializeComponent();
+        _taskbarHoverHideTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(220)
+        };
+        _taskbarHoverHideTimer.Tick += (_, _) => HideTaskbarHoverPreviewIfPointerLeft();
         _taskbarLabel.SetTimeFormatPreference(_timeFormatPreference);
         DataContext = _viewModel;
         ApplyDensity(repositionBottomEdge: false);
@@ -105,7 +120,15 @@ public partial class MainWindow : Window
         _activityMonitor.ActivityChanged += ActivityMonitorOnActivityChanged;
         _taskbarLabel.OpenRequested += (_, _) =>
             Dispatcher.BeginInvoke(_widgetVisibility.Show, DispatcherPriority.ApplicationIdle);
-        _taskbarLabel.ToggleRequested += (_, _) => _widgetVisibility.Toggle();
+        _taskbarLabel.HoverEntered += (_, _) =>
+            Dispatcher.BeginInvoke(ShowTaskbarHoverPreview, DispatcherPriority.Input);
+        _taskbarLabel.HoverExited += (_, _) =>
+            Dispatcher.BeginInvoke(ScheduleHideTaskbarHoverPreview, DispatcherPriority.Input);
+        _taskbarLabel.ToggleRequested += (_, _) =>
+        {
+            CancelTaskbarHoverPreview();
+            _widgetVisibility.Toggle();
+        };
         _taskbarLabel.RefreshRequested += (_, _) =>
             Dispatcher.BeginInvoke(() => _ = _usageMonitor.RefreshAsync());
         _taskbarLabel.SettingsRequested += (_, _) => Dispatcher.BeginInvoke(ShowSettings);
@@ -199,6 +222,9 @@ public partial class MainWindow : Window
         _taskbarLabel.UpdateUsage(
             displayedWindow?.Label,
             displayedWindow?.RemainingPercent,
+            nextViewModel.HasWeeklyLimit
+                ? nextViewModel.WeeklyRemainingPercent
+                : null,
             displayedWindow?.ResetsAt);
     }
 
@@ -206,8 +232,12 @@ public partial class MainWindow : Window
     {
         _latestSnapshot = null;
         SetViewModel(UsageWidgetViewModel.Error(message));
+        if (_density == WidgetDensity.Compact)
+        {
+            ApplyDensity(repositionBottomEdge: true);
+        }
         _trayIcon.UpdateUsage(null);
-        _taskbarLabel.UpdateUsage(null, null, null);
+        _taskbarLabel.UpdateUsage(null, null, null, null);
     }
 
     private void SetDisplayedLimitPreference(DisplayedLimitPreference preference)
@@ -256,21 +286,43 @@ public partial class MainWindow : Window
     private void ApplyDensity(bool repositionBottomEdge)
     {
         var previousBottom = IsLoaded ? Top + ActualHeight : 0d;
+        var previousRight = IsLoaded ? Left + ActualWidth : 0d;
         var workArea = SystemParameters.WorkArea;
-        var desiredHeight = _density == WidgetDensity.Detailed
+        var isDetailed = _density == WidgetDensity.Detailed;
+        var desiredWidth = isDetailed ? DetailedWidth : CompactWidth;
+        var desiredHeight = isDetailed
             ? Math.Min(DetailedHeight, Math.Max(CompactMaximumHeight, workArea.Height - 40d))
             : CalculateCompactHeight();
 
+        MinWidth = isDetailed ? DetailedMinimumWidth : CompactMinimumWidth;
+        Width = desiredWidth;
+        HeaderRow.Height = new GridLength(isDetailed ? 43d : 36d);
+        FooterRow.Height = new GridLength(isDetailed ? 36d : 27d);
+        HeaderLayout.LayoutTransform = isDetailed
+            ? new ScaleTransform(0.9d, 0.9d)
+            : new ScaleTransform(0.75d, 0.75d);
+        FooterLayout.LayoutTransform = isDetailed
+            ? new ScaleTransform(0.9d, 0.9d)
+            : new ScaleTransform(0.75d, 0.75d);
+        WidgetSurface.Margin = isDetailed
+            ? new Thickness(9d)
+            : new Thickness(7.5d);
+        WidgetSurface.CornerRadius = new CornerRadius(isDetailed ? 20d : 16.5d);
+        WidgetShadow.BlurRadius = isDetailed ? 20d : 16.5d;
+        WidgetShadow.ShadowDepth = isDetailed ? 3.5d : 3d;
         MinHeight = desiredHeight;
         Height = desiredHeight;
-        CompactView.Visibility = _density == WidgetDensity.Compact
+        ContentRow.Height = isDetailed
+            ? new GridLength(1, GridUnitType.Star)
+            : GridLength.Auto;
+        CompactView.Visibility = !isDetailed
             ? Visibility.Visible
             : Visibility.Collapsed;
-        DetailedView.Visibility = _density == WidgetDensity.Detailed
+        DetailedView.Visibility = isDetailed
             ? Visibility.Visible
             : Visibility.Collapsed;
-        DensityGlyphRotation.Angle = _density == WidgetDensity.Detailed ? 180d : 0d;
-        DensityButton.ToolTip = _density == WidgetDensity.Detailed
+        DensityGlyphRotation.Angle = isDetailed ? 180d : 0d;
+        DensityButton.ToolTip = isDetailed
             ? Strings.Get("Main_ShowCompact")
             : Strings.Get("Main_ShowDetails");
 
@@ -281,6 +333,7 @@ public partial class MainWindow : Window
 
         if (repositionBottomEdge && IsLoaded)
         {
+            Left = Math.Clamp(previousRight - desiredWidth, workArea.Left, workArea.Right - desiredWidth);
             Top = Math.Clamp(previousBottom - desiredHeight, workArea.Top, workArea.Bottom - desiredHeight);
         }
     }
@@ -288,9 +341,10 @@ public partial class MainWindow : Window
     private double CalculateCompactHeight()
     {
         var additionalRows = Math.Max(0, _viewModel.GeneralLimits.Count - 1);
+        var warningHeight = _viewModel.HasWarning ? CompactWarningHeight : 0d;
         return Math.Min(
             CompactMaximumHeight,
-            CompactBaseHeight + additionalRows * CompactLimitRowHeight);
+            CompactBaseHeight + warningHeight + additionalRows * CompactLimitRowHeight);
     }
 
     private void SetDensity(WidgetDensity density)
@@ -312,15 +366,75 @@ public partial class MainWindow : Window
         Top = workArea.Bottom - Height - 20 + WidgetSurface.Margin.Bottom;
     }
 
-    private void ShowWidget()
+    private void ShowWidget(bool activate = true)
     {
-        Show();
+        if (!IsVisible)
+        {
+            ShowActivated = activate;
+            Show();
+        }
+
         WindowState = WindowState.Normal;
-        Activate();
+        if (activate)
+        {
+            Activate();
+        }
+
         if (_density == WidgetDensity.Detailed)
         {
             DetailedView.ScrollToTop();
         }
+    }
+
+    private void ShowTaskbarHoverPreview()
+    {
+        if (_displayMode != WidgetDisplayMode.TaskbarIndicator ||
+            _isSettingsOpen ||
+            _isResetDialogOpen ||
+            _shutdownStarted)
+        {
+            return;
+        }
+
+        _isTaskbarHoverPreview = true;
+        _taskbarHoverHideTimer.Stop();
+        ShowWidget(activate: false);
+    }
+
+    private void ScheduleHideTaskbarHoverPreview()
+    {
+        if (!_isTaskbarHoverPreview)
+        {
+            return;
+        }
+
+        _taskbarHoverHideTimer.Stop();
+        _taskbarHoverHideTimer.Start();
+    }
+
+    private void HideTaskbarHoverPreviewIfPointerLeft()
+    {
+        _taskbarHoverHideTimer.Stop();
+        if (!_isTaskbarHoverPreview ||
+            _taskbarLabel.IsPointerOver ||
+            IsMouseOver ||
+            _isSettingsOpen ||
+            _isResetDialogOpen)
+        {
+            return;
+        }
+
+        _isTaskbarHoverPreview = false;
+        if (_displayMode == WidgetDisplayMode.TaskbarIndicator && IsVisible)
+        {
+            Hide();
+        }
+    }
+
+    private void CancelTaskbarHoverPreview()
+    {
+        _taskbarHoverHideTimer.Stop();
+        _isTaskbarHoverPreview = false;
     }
 
     private void ShowSettings()
@@ -356,7 +470,6 @@ public partial class MainWindow : Window
                 _startupRegistration.IsEnabled,
                 _activityHookSetupService,
                 _codexLauncher,
-                _themeController.AccentPalette,
                 _languageController.Preference,
                 _timeFormatPreference)
             {
@@ -364,7 +477,6 @@ public partial class MainWindow : Window
             };
             _settingsWindow = window;
             window.ThemePreferenceChanged += _themeController.SetPreference;
-            window.AccentPaletteChanged += _themeController.SetAccentPalette;
             window.WidgetDensityChanged += SetDensity;
             window.DisplayedLimitPreferenceChanged += SetDisplayedLimitPreference;
             window.StartWithWindowsChanged += SetStartupRegistration;
@@ -385,6 +497,7 @@ public partial class MainWindow : Window
 
     private void SetDisplayMode(WidgetDisplayMode mode)
     {
+        CancelTaskbarHoverPreview();
         _displayMode = mode;
         _displayModeStore.Save(mode);
         _trayIcon.SetDisplayMode(mode);
@@ -570,6 +683,12 @@ public partial class MainWindow : Window
         DragMove();
     }
 
+    private void MainWindow_OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e) =>
+        _taskbarHoverHideTimer.Stop();
+
+    private void MainWindow_OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e) =>
+        ScheduleHideTaskbarHoverPreview();
+
     private static T? FindAncestor<T>(DependencyObject source) where T : DependencyObject
     {
         for (var current = source; current is not null; current = VisualTreeHelper.GetParent(current))
@@ -604,7 +723,7 @@ public partial class MainWindow : Window
         if (_displayMode == WidgetDisplayMode.TaskbarIndicator)
         {
             _widgetVisibility.HideOnDeactivated(
-                _taskbarLabel.IsPointerOver,
+                _taskbarLabel.IsPointerOver || _isTaskbarHoverPreview || IsMouseOver,
                 ownedDialogOpen: _isSettingsOpen || _isResetDialogOpen);
         }
     }
@@ -633,6 +752,7 @@ public partial class MainWindow : Window
         }
 
         _shutdownStarted = true;
+        CancelTaskbarHoverPreview();
         _taskbarLabel.HideLabel();
         _taskbarLabel.CloseLabel();
         _trayIcon.Dispose();

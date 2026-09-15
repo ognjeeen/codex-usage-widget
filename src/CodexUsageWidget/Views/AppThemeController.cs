@@ -112,7 +112,7 @@ public sealed class AppThemeController : IDisposable
                 ["WidgetBorderBrush"] = Parse("#343434"),
                 ["DialogSurfaceBrush"] = Parse("#1F1F1F"),
                 ["DialogBorderBrush"] = Parse("#424242"),
-                ["CardBackground"] = Parse("#292929"),
+                ["CardBackground"] = Parse("#222222"),
                 ["CardBorder"] = Parse("#343434"),
                 ["SubtleSurfaceBrush"] = Parse("#252525"),
                 ["CodeSurfaceBrush"] = Parse("#171717"),
@@ -125,7 +125,9 @@ public sealed class AppThemeController : IDisposable
                 ["IconHoverBrush"] = Parse("#2C2C2C"),
                 ["IconPressedBrush"] = Parse("#363636"),
                 ["ProgressTrackBrush"] = Parse("#3A3A3A"),
-                ["UsageNormalBrush"] = Parse("#E7E7E7"),
+                ["PrimaryUsageBrush"] = Parse("#4ADE80"),
+                ["PrimaryUsageTrackBrush"] = Parse("#293630"),
+                ["UsageNormalBrush"] = Parse("#4ADE80"),
                 ["ScrollThumbBrush"] = Parse("#646464"),
                 ["ScrollThumbHoverBrush"] = Parse("#858585"),
                 ["TooltipBackgroundBrush"] = Parse("#F5232323"),
@@ -164,7 +166,9 @@ public sealed class AppThemeController : IDisposable
                 ["IconHoverBrush"] = Parse("#ECEEF1"),
                 ["IconPressedBrush"] = Parse("#E0E2E6"),
                 ["ProgressTrackBrush"] = Parse("#DADDE2"),
-                ["UsageNormalBrush"] = Parse("#3B78D8"),
+                ["PrimaryUsageBrush"] = Parse("#4ADE80"),
+                ["PrimaryUsageTrackBrush"] = Parse("#D7E8DC"),
+                ["UsageNormalBrush"] = Parse("#4ADE80"),
                 ["ScrollThumbBrush"] = Parse("#B1B4BA"),
                 ["ScrollThumbHoverBrush"] = Parse("#8C9097"),
                 ["TooltipBackgroundBrush"] = Parse("#FCFFFFFF"),
@@ -209,7 +213,6 @@ public sealed class AppThemeController : IDisposable
             SetBrushColor(resources, "AccentPrimaryBrush", colors.Primary);
             SetBrushColor(resources, "AccentPrimaryBorderBrush", colors.Border);
             SetBrushColor(resources, "AccentDataBrush", colors.Data);
-            SetBrushColor(resources, "UsageNormalBrush", colors.Data);
 
             AccentButton.ApplyPalette(
                 colors.Primary,
@@ -244,7 +247,7 @@ public sealed class AppThemeController : IDisposable
             AccentPalette.Teal => Colors("#0F766E", "#0D6B64", "#0D6B64", "#0B5D57", "#0B5D57", "#0F766E"),
             AccentPalette.Emerald => Colors("#15803D", "#137337", "#137337", "#116530", "#116530", "#15803D"),
             AccentPalette.Pink => Colors("#BE185D", "#A91552", "#A91552", "#941047", "#941047", "#BE185D"),
-            _ => Colors("#3B78D8", "#326BC3", "#326BC3", "#2859A6", "#2859A6", "#3B78D8")
+            _ => Colors("#15803D", "#137337", "#137337", "#116530", "#116530", "#15803D")
         };
 
         private static AccentColors ResolveDark(AccentPalette palette) => palette switch
@@ -253,7 +256,7 @@ public sealed class AppThemeController : IDisposable
             AccentPalette.Teal => Colors("#0F8F83", "#32B8AA", "#14A89A", "#5EEAD4", "#0D766C", "#5EEAD4"),
             AccentPalette.Emerald => Colors("#1D9148", "#42B968", "#26A957", "#6EE7B7", "#18783C", "#6EE7B7"),
             AccentPalette.Pink => Colors("#C72F75", "#E25998", "#D9468A", "#F9A8D4", "#A92363", "#F9A8D4"),
-            _ => Colors("#3B78D8", "#5B91E5", "#4A88E8", "#76ADF2", "#2E63B5", "#75A7F0")
+            _ => Colors("#1D9148", "#42B968", "#26A957", "#6EE7B7", "#18783C", "#6EE7B7")
         };
 
         private static AccentColors Colors(

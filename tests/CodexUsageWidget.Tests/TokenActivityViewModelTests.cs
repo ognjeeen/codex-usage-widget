@@ -26,6 +26,10 @@ public sealed class TokenActivityViewModelTests
 
         var bar = viewModel.DailyBars[0];
         Assert.Equal(date.ToString("dddd, MMMM d", CultureInfo.CurrentCulture), bar.DateText);
+        Assert.Equal(date.ToString("MM/dd", CultureInfo.InvariantCulture), bar.AxisLabel);
+        Assert.Equal("11\n·\n08", viewModel.AxisLabels[0].VerticalText);
+        Assert.Equal("11", viewModel.AxisLabels[0].DayText);
+        Assert.Equal("08", viewModel.AxisLabels[0].MonthText);
         Assert.Equal($"{50_000.ToString("N0", CultureInfo.CurrentCulture)} tokens", bar.TokensText);
         Assert.Equal("50% of chart peak", bar.PeakComparisonText);
     }

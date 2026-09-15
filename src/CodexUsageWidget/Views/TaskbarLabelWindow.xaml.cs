@@ -22,8 +22,10 @@ public partial class TaskbarLabelWindow : Window
     private IntPtr _windowHandle;
     private string? _limitLabel;
     private double? _remainingPercent;
+    private double? _weeklyRemainingPercent;
     private DateTimeOffset? _resetsAt;
     private TimeFormatPreference _timeFormatPreference;
+    private EffectiveTheme _systemTheme = EffectiveTheme.Dark;
     private bool _labelRequested;
     private bool _isTaskActive;
     private bool _isClosed;
@@ -66,6 +68,10 @@ public partial class TaskbarLabelWindow : Window
     }
 
     public event EventHandler? OpenRequested;
+
+    public event EventHandler? HoverEntered;
+
+    public event EventHandler? HoverExited;
 
     public event EventHandler? ToggleRequested;
 
@@ -148,13 +154,13 @@ public partial class TaskbarLabelWindow : Window
 
     public void SetSystemTheme(EffectiveTheme theme)
     {
+        _systemTheme = theme;
         var light = theme == EffectiveTheme.Light;
         var primaryBrush = new System.Windows.Media.SolidColorBrush(
             light
                 ? System.Windows.Media.Color.FromRgb(32, 33, 36)
                 : System.Windows.Media.Color.FromRgb(242, 242, 242));
         Resources["TaskbarTextPrimaryBrush"] = primaryBrush;
-        ActivityDots.DotBrush = primaryBrush;
         Resources["TaskbarTextSecondaryBrush"] = new System.Windows.Media.SolidColorBrush(
             light
                 ? System.Windows.Media.Color.FromRgb(72, 73, 78)
@@ -163,31 +169,39 @@ public partial class TaskbarLabelWindow : Window
             light
                 ? System.Windows.Media.Color.FromArgb(18, 0, 0, 0)
                 : System.Windows.Media.Color.FromArgb(24, 255, 255, 255));
+        ApplyUsageDotBrush();
     }
 
     public void SetTimeFormatPreference(TimeFormatPreference preference)
     {
         _timeFormatPreference = preference;
-        UpdateUsage(_limitLabel, _remainingPercent, _resetsAt);
+        UpdateUsage(
+            _limitLabel,
+            _remainingPercent,
+            _weeklyRemainingPercent,
+            _resetsAt);
     }
 
     public void UpdateUsage(
         string? limitLabel,
         double? remainingPercent,
+        double? weeklyRemainingPercent,
         DateTimeOffset? resetsAt)
     {
         _limitLabel = limitLabel;
         _remainingPercent = remainingPercent;
+        _weeklyRemainingPercent = weeklyRemainingPercent;
         _resetsAt = resetsAt;
+        ApplyUsageDotBrush();
         if (remainingPercent is null)
         {
-            UsageText.Text = "--%";
+            UsageText.Text = $"--% 丨 {FormatRemainingPercent(weeklyRemainingPercent)}";
             LabelSurface.ToolTip = Strings.Get("Taskbar_UsageUnavailable");
             return;
         }
 
         var value = Math.Round(Math.Clamp(remainingPercent.Value, 0d, 100d));
-        UsageText.Text = $"{value:0}%";
+        UsageText.Text = $"{value:0}% 丨 {FormatRemainingPercent(weeklyRemainingPercent)}";
         var label = string.IsNullOrWhiteSpace(limitLabel)
             ? "Codex"
             : UsageLabelLocalizer.Localize(limitLabel);
@@ -206,8 +220,30 @@ public partial class TaskbarLabelWindow : Window
     {
         if (e.PropertyName == "Item[]" && !_isClosed)
         {
-            UpdateUsage(_limitLabel, _remainingPercent, _resetsAt);
+            UpdateUsage(
+                _limitLabel,
+                _remainingPercent,
+                _weeklyRemainingPercent,
+                _resetsAt);
         }
+    }
+
+    private static string FormatRemainingPercent(double? percent) =>
+        percent is null
+            ? "--%"
+            : $"{Math.Round(Math.Clamp(percent.Value, 0d, 100d)):0}%";
+
+    private void ApplyUsageDotBrush()
+    {
+        var color = _weeklyRemainingPercent is not { } weekly
+            ? (_systemTheme == EffectiveTheme.Light
+                ? System.Windows.Media.Color.FromRgb(32, 33, 36)
+                : System.Windows.Media.Color.FromRgb(242, 242, 242))
+            : (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(
+                UsageTextFormatter.ColorForRemaining(weekly));
+        var brush = new System.Windows.Media.SolidColorBrush(color);
+        brush.Freeze();
+        ActivityDots.DotBrush = brush;
     }
 
     private void Reposition()
@@ -260,6 +296,12 @@ public partial class TaskbarLabelWindow : Window
             },
             System.Windows.Threading.DispatcherPriority.Send);
     }
+
+    private void LabelSurface_OnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e) =>
+        HoverEntered?.Invoke(this, EventArgs.Empty);
+
+    private void LabelSurface_OnMouseLeave(object sender, System.Windows.Input.MouseEventArgs e) =>
+        HoverExited?.Invoke(this, EventArgs.Empty);
 
     private void LabelSurface_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e) =>
         ToggleRequested?.Invoke(this, EventArgs.Empty);
