@@ -43,8 +43,9 @@ public sealed class CodexActivityPipeTests
         await process.StandardInput.WriteAsync(payload);
         process.StandardInput.Close();
         var outputTask = process.StandardOutput.ReadToEndAsync();
-        await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(
-            CodexActivityHookBridge.HookTimeoutSeconds));
+        // This checks signal delivery, not the hook's runtime deadline. Allow for
+        // Windows PowerShell cold startup on shared CI runners.
+        await process.WaitForExitAsync().WaitAsync(TimeSpan.FromSeconds(30));
         var signal = await received.Task.WaitAsync(TimeSpan.FromSeconds(1));
 
         Assert.Equal(0, process.ExitCode);
