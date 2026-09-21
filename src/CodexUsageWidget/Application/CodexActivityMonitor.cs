@@ -138,7 +138,9 @@ public sealed class CodexActivityMonitor : IAsyncDisposable
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
         }
-        catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+        // Disposal marks the monitor before cancelling the timer. A tick in that
+        // interval is normal shutdown, even if cancellation is not visible yet.
+        catch (ObjectDisposedException) when (Volatile.Read(ref _disposed) != 0)
         {
         }
     }

@@ -5,6 +5,28 @@ namespace CodexUsageWidget.Tests;
 public sealed class CodexActivityMonitorTests
 {
     [Fact]
+    public async Task DisposalDuringTimerTickStillDisposesSignalSource()
+    {
+        var source = new FakeSignalSource();
+        var checkedTurn = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var reader = new FakeCompletionReader((_, _, _) =>
+        {
+            checkedTurn.TrySetResult();
+            return Task.FromResult(false);
+        });
+        var monitor = new CodexActivityMonitor(source, reader, TimeSpan.FromMilliseconds(1));
+        await monitor.StartAsync();
+        source.Publish(new(CodexActivitySignalKind.TurnStarted, "session", "turn"));
+        await checkedTurn.Task.WaitAsync(TimeSpan.FromSeconds(2));
+
+        // Hold unsubscription open so timer ticks overlap shutdown before source cleanup.
+        source.OnUnsubscribe = () => Task.Delay(200).GetAwaiter().GetResult();
+        await monitor.DisposeAsync().AsTask().WaitAsync(TimeSpan.FromSeconds(2));
+
+        Assert.True(source.IsDisposed);
+    }
+
+    [Fact]
     public async Task CompletionOfOneSessionDoesNotHideAnotherUnconfirmedSession()
     {
         await using var source = new FakeSignalSource();
@@ -378,12 +400,28 @@ public sealed class CodexActivityMonitorTests
 
     private sealed class FakeSignalSource : ICodexActivitySignalSource
     {
-        public event Action<CodexActivitySignal>? SignalReceived;
+        private Action<CodexActivitySignal>? _signalReceived;
+        public Action? OnUnsubscribe { get; set; }
+        public bool IsDisposed { get; private set; }
+
+        public event Action<CodexActivitySignal>? SignalReceived
+        {
+            add => _signalReceived += value;
+            remove
+            {
+                OnUnsubscribe?.Invoke();
+                _signalReceived -= value;
+            }
+        }
 
         public Task StartAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
-        public void Publish(CodexActivitySignal signal) => SignalReceived?.Invoke(signal);
+        public void Publish(CodexActivitySignal signal) => _signalReceived?.Invoke(signal);
 
-        public ValueTask DisposeAsync() => ValueTask.CompletedTask;
+        public ValueTask DisposeAsync()
+        {
+            IsDisposed = true;
+            return ValueTask.CompletedTask;
+        }
     }
 }
