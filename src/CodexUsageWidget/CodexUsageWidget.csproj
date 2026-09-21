@@ -10,7 +10,7 @@
     <RootNamespace>CodexUsageWidget</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\CodexUsageWidget.ico</ApplicationIcon>
-    <Version>1.7.0</Version>
+    <Version>1.7.1</Version>
     <Authors>Ognjen Marinković</Authors>
     <Company>ognjeeen</Company>
     <Description>Local Windows widget for Codex subscription usage.</Description>
