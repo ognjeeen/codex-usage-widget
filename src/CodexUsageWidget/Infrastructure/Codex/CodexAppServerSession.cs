@@ -88,6 +88,7 @@ public sealed class CodexAppServerSession : ICodexAppServerSession
                     },
                     capabilities = new
                     {
+                        experimentalApi = true,
                         optOutNotificationMethods = Array.Empty<string>()
                     }
                 },

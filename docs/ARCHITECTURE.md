@@ -87,8 +87,12 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
   Codex remains the owner of hook trust; the widget only reads trust state and opens the
   interactive CLI for the user's explicit `/hooks` approval.
 - Activity state is not persisted or reconstructed with private transcript/database polling.
-  A later turn in the same session recovers missing cleanup; a hard Codex termination with no
-  later lifecycle event is cleared by restarting the widget.
+  While active, the monitor checks tracked turns every 15 seconds through
+  `CodexTurnCompletionReader`, using official `thread/turns/list` metadata with items omitted.
+  Only an exact turn match with a terminal status and completion timestamp clears activity;
+  missing or unavailable evidence preserves it. Each check is bounded to five seconds and
+  shutdown cancels pending checks before disposing the shared app-server session. A hard
+  termination with no recorded completion still requires a later lifecycle event or restart.
 - Unhandled exceptions and CLI diagnostics are recorded locally for support.
 - Publish trimming is disabled because WPF is not a safe trimming boundary.
 
