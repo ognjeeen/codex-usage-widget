@@ -1,6 +1,6 @@
 # Codex Usage Widget
 
-English | [简体中文](README.zh-CN.md)
+English | [简体中文](README.zh-CN.md) | [Русский](README.ru-RU.md)
 
 See the Codex limits available to your account, including 5-hour and weekly windows,
 without opening a browser. Codex Usage Widget runs locally on Windows and reads usage
@@ -41,8 +41,8 @@ of `codex.cmd` or `codex.exe`.
   including credits, spend controls, earned-reset expiration and redemption, token activity,
   and model-specific limits when Codex returns them
 - System, light, and dark themes with five preset accent colors selected from Settings
-- Automatic Windows-language selection with English fallback, plus English and Simplified
-  Chinese overrides in Settings
+- Automatic Windows-language selection with English fallback, plus English, Simplified
+  Chinese, and Russian overrides in Settings
 - Windows regional, 24-hour, and 12-hour time formats selected from Settings
 - A movable, always-on-top desktop widget and a compact label beside the notification area
 - Live task activity dots based on official local Codex lifecycle hooks
@@ -110,7 +110,7 @@ The application writes only under `%LOCALAPPDATA%\CodexUsageWidget`:
 - `displayed-limit.txt`: selected summary limit
 - `theme.txt`: system, light, or dark theme preference
 - `accent-palette.txt`: selected preset accent color
-- `language.txt`: system, English, or Simplified Chinese language preference
+- `language.txt`: system, English, Simplified Chinese, or Russian language preference
 - `time-format.txt`: Windows regional, 24-hour, or 12-hour time preference
 - `pending-rate-limit-reset.json`: an unfinished reset attempt kept until Codex returns a
   definitive outcome, so a retry cannot consume another reset

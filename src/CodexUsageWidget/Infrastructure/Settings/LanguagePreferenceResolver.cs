@@ -10,9 +10,10 @@ public static class LanguagePreferenceResolver
         {
             LanguagePreference.English => LanguagePreference.English,
             LanguagePreference.SimplifiedChinese => LanguagePreference.SimplifiedChinese,
-            _ => IsSimplifiedChinese(uiCulture)
-                ? LanguagePreference.SimplifiedChinese
-                : LanguagePreference.English
+            LanguagePreference.Russian => LanguagePreference.Russian,
+            _ when uiCulture.TwoLetterISOLanguageName == "ru" => LanguagePreference.Russian,
+            _ when IsSimplifiedChinese(uiCulture) => LanguagePreference.SimplifiedChinese,
+            _ => LanguagePreference.English
         };
 
     private static bool IsSimplifiedChinese(CultureInfo culture)

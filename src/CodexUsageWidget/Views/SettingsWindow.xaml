@@ -334,6 +334,18 @@
                                        Style="{StaticResource SupportingText}" />
                         </StackPanel>
                     </RadioButton>
+                    <RadioButton x:Name="RussianLanguageOption"
+                                 GroupName="Language"
+                                 AutomationProperties.Name="{localization:Loc Settings_Language_RussianAutomation}"
+                                 Checked="LanguageOption_OnChecked"
+                                 Style="{StaticResource SettingsOptionCard}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{localization:Loc Settings_Language_Russian}" FontWeight="SemiBold" />
+                            <TextBlock Text="{localization:Loc Settings_Language_RussianDescription}"
+                                       Margin="0,3,0,0"
+                                       Style="{StaticResource SupportingText}" />
+                        </StackPanel>
+                    </RadioButton>
                 </StackPanel>
 
                 <StackPanel Margin="0,18,0,14">

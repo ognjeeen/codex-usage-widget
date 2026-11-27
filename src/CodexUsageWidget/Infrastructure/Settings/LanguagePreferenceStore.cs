@@ -19,6 +19,7 @@ public sealed class LanguagePreferenceStore
             {
                 "english" => LanguagePreference.English,
                 "simplified-chinese" => LanguagePreference.SimplifiedChinese,
+                "russian" => LanguagePreference.Russian,
                 _ => LanguagePreference.System
             };
         }
@@ -43,6 +44,7 @@ public sealed class LanguagePreferenceStore
                 {
                     LanguagePreference.English => "english",
                     LanguagePreference.SimplifiedChinese => "simplified-chinese",
+                    LanguagePreference.Russian => "russian",
                     _ => "system"
                 });
         }

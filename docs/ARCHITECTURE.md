@@ -47,7 +47,7 @@ tests/CodexUsageWidget.Tests/ Unit tests for parsing, formatting and persistence
 13. `AppThemeController` applies the saved system, light, or dark theme plus the selected
     accent palette, and observes Windows theme changes without leaking registry access into
     view code.
-14. `AppLanguageController` resolves the saved system, English, or Simplified Chinese
+14. `AppLanguageController` resolves the saved system, English, Simplified Chinese, or Russian
     preference, while standard .NET resources and a notifying WPF binding refresh existing UI.
 15. `TimeTextFormatter` applies the saved Windows regional, 24-hour, or 12-hour clock
     preference to user-visible times while protocol and diagnostic timestamps remain unchanged.

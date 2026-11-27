@@ -7,6 +7,9 @@ namespace CodexUsageWidget.Tests;
 [Collection("Localization")]
 public sealed class UsageTextFormatterTests : IDisposable
 {
+    private readonly CultureInfo _originalWindowsRegionalCulture =
+        Strings.Current.WindowsRegionalCulture;
+
     [Theory]
     [InlineData("codex executable not found", "Codex CLI was not found on PATH.")]
     [InlineData("unauthorized: login required", "Run codex login, then refresh.")]
@@ -16,7 +19,8 @@ public sealed class UsageTextFormatterTests : IDisposable
     [Fact]
     public void FormatResetUsesCeilingForRemainingHours()
     {
-        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+        var english = CultureInfo.GetCultureInfo("en-US");
+        Strings.Current.SetCulture(english, english);
         var now = new DateTimeOffset(2030, 1, 1, 12, 0, 0, TimeSpan.Zero);
         var reset = now.AddHours(2).AddMinutes(10);
 
@@ -47,5 +51,5 @@ public sealed class UsageTextFormatterTests : IDisposable
         Assert.Equal(expected, UsageTextFormatter.ColorForRemaining(remaining));
 
     public void Dispose() =>
-        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+        Strings.Current.SetCulture(CultureInfo.GetCultureInfo("en-US"), _originalWindowsRegionalCulture);
 }

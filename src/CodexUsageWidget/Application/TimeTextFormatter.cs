@@ -59,6 +59,14 @@ public static class TimeTextFormatter
     {
         var effectiveCulture = culture ?? CultureInfo.CurrentCulture;
         var timePattern = includeSeconds ? "h:mm:ss" : "h:mm";
+        var designator = value.Hour < 12
+            ? effectiveCulture.DateTimeFormat.AMDesignator
+            : effectiveCulture.DateTimeFormat.PMDesignator;
+        if (string.IsNullOrWhiteSpace(designator))
+        {
+            return $"{value.ToString(timePattern, effectiveCulture)} {(value.Hour < 12 ? "AM" : "PM")}";
+        }
+
         var format = effectiveCulture.TwoLetterISOLanguageName == "zh"
             ? $"tt {timePattern}"
             : $"{timePattern} tt";
