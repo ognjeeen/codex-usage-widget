@@ -22,5 +22,6 @@
   <ItemGroup>
     <None Include="..\..\LICENSE" Link="LICENSE" CopyToPublishDirectory="PreserveNewest" />
     <None Include="..\..\README.md" Link="README.md" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\README.ru-RU.md" Link="README.ru-RU.md" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -12,18 +12,21 @@ public sealed partial class LocalizationResourceTests
         "CodexUsageWidget.Resources.Strings",
         typeof(Strings).Assembly);
 
-    [Fact]
-    public void EnglishAndSimplifiedChineseHaveMatchingKeysAndPlaceholders()
+    [Theory]
+    [InlineData("zh-CN")]
+    [InlineData("ru-RU")]
+    public void TranslationsHaveTheSameKeysAndPlaceholdersAsEnglish(string cultureName)
     {
         var english = ReadResources(CultureInfo.InvariantCulture);
-        var chinese = ReadResources(CultureInfo.GetCultureInfo("zh-CN"));
+        var translation = ReadResources(CultureInfo.GetCultureInfo(cultureName));
 
-        Assert.Equal(english.Keys.Order(), chinese.Keys.Order());
+        Assert.Equal(english.Keys.Order(), translation.Keys.Order());
         foreach (var key in english.Keys)
         {
+            Assert.False(string.IsNullOrWhiteSpace(translation[key]), key);
             Assert.Equal(
                 ReadPlaceholders(english[key]),
-                ReadPlaceholders(chinese[key]));
+                ReadPlaceholders(translation[key]));
         }
     }
 
@@ -34,6 +37,9 @@ public sealed partial class LocalizationResourceTests
             "设置",
             Resources.GetString("Common_Settings", CultureInfo.GetCultureInfo("zh-CN")));
         Assert.Equal(
+            "Настройки",
+            Resources.GetString("Common_Settings", CultureInfo.GetCultureInfo("ru-RU")));
+        Assert.Equal(
             "Settings",
             Resources.GetString("Common_Settings", CultureInfo.GetCultureInfo("fr-FR")));
     }
@@ -43,7 +49,8 @@ public sealed partial class LocalizationResourceTests
         var resourceSet = Resources.GetResourceSet(
             culture,
             createIfNotExists: true,
-            tryParents: false)!;
+            tryParents: false);
+        Assert.NotNull(resourceSet);
         return resourceSet.Cast<DictionaryEntry>().ToDictionary(
             entry => (string)entry.Key,
             entry => (string)entry.Value!);

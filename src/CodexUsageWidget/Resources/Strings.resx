@@ -140,9 +140,9 @@
   <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>Display most constrained limit</value></data>
   <data name="Settings_SectionFeatures" xml:space="preserve"><value>FEATURES</value></data>
   <data name="Settings_Language_Title" xml:space="preserve"><value>Language</value></data>
-  <data name="Settings_Language_Description" xml:space="preserve"><value>Choose English or Simplified Chinese, or let Windows decide.</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Choose the widget language or follow Windows.</value></data>
   <data name="Settings_Language_System" xml:space="preserve"><value>Use Windows setting</value></data>
-  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Uses Simplified Chinese when Windows does. Otherwise, uses English.</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Uses the Windows language when supported, or English.</value></data>
   <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>Use Windows language</value></data>
   <data name="Settings_Language_English" xml:space="preserve"><value>English</value></data>
   <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>Always use English</value></data>
@@ -150,6 +150,9 @@
   <data name="Settings_Language_Chinese" xml:space="preserve"><value>简体中文</value></data>
   <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>Always use Simplified Chinese</value></data>
   <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>Use Simplified Chinese</value></data>
+  <data name="Settings_Language_Russian" xml:space="preserve"><value>Русский</value></data>
+  <data name="Settings_Language_RussianDescription" xml:space="preserve"><value>Always use Russian</value></data>
+  <data name="Settings_Language_RussianAutomation" xml:space="preserve"><value>Use Russian</value></data>
   <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>Time format</value></data>
   <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>Choose how times are shown throughout the widget.</value></data>
   <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>Use Windows setting</value></data>

@@ -4,5 +4,6 @@ public enum LanguagePreference
 {
     System,
     English,
-    SimplifiedChinese
+    SimplifiedChinese,
+    Russian
 }

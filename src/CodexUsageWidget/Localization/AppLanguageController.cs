@@ -47,9 +47,12 @@ public sealed class AppLanguageController
 
     private void ApplyPreference()
     {
-        var cultureName = EffectiveLanguage == LanguagePreference.SimplifiedChinese
-            ? "zh-CN"
-            : "en-US";
+        var cultureName = EffectiveLanguage switch
+        {
+            LanguagePreference.SimplifiedChinese => "zh-CN",
+            LanguagePreference.Russian => "ru-RU",
+            _ => "en-US"
+        };
         Strings.Current.SetCulture(
             CultureInfo.GetCultureInfo(cultureName),
             _windowsRegionalCulture);

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
+  <data name="App_Name" xml:space="preserve"><value>Виджет лимитов Codex</value></data>
+  <data name="App_MainTitle" xml:space="preserve"><value>Лимиты Codex</value></data>
+  <data name="App_InstallFailure" xml:space="preserve"><value>Не удалось установить виджет для текущего пользователя. {0}</value></data>
+  <data name="App_StartupFailure" xml:space="preserve"><value>Не удалось запустить виджет. Журнал находится в папке {0}</value></data>
+  <data name="Common_Available" xml:space="preserve"><value>Доступно</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>Отмена</value></data>
+  <data name="Common_CheckAgain" xml:space="preserve"><value>Проверить снова</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>Закрыть</value></data>
+  <data name="Common_Exit" xml:space="preserve"><value>Выход</value></data>
+  <data name="Common_NoneAvailable" xml:space="preserve"><value>Нет доступных</value></data>
+  <data name="Common_Refresh" xml:space="preserve"><value>Обновить</value></data>
+  <data name="Common_Settings" xml:space="preserve"><value>Настройки</value></data>
+  <data name="Common_Unlimited" xml:space="preserve"><value>Без ограничений</value></data>
+  <data name="Main_ActivityRunning" xml:space="preserve"><value>Codex выполняет задачу</value></data>
+  <data name="Main_RefreshUsage" xml:space="preserve"><value>Обновить данные о лимитах</value></data>
+  <data name="Main_ShowCompact" xml:space="preserve"><value>Свернуть подробности</value></data>
+  <data name="Main_ShowDetails" xml:space="preserve"><value>Показать подробности</value></data>
+  <data name="Main_ToggleLayout" xml:space="preserve"><value>Переключить вид виджета</value></data>
+  <data name="Main_UseTaskbarLabel" xml:space="preserve"><value>Перенести на панель задач</value></data>
+  <data name="Main_StartupPreferenceError" xml:space="preserve"><value>Не удалось изменить автозапуск в Windows.</value></data>
+  <data name="Main_UpdateOpenError" xml:space="preserve"><value>Не удалось открыть страницу релизов виджета.</value></data>
+  <data name="Status_Connecting" xml:space="preserve"><value>Подключение…</value></data>
+  <data name="Status_WaitingForCodex" xml:space="preserve"><value>Ожидание Codex</value></data>
+  <data name="Status_LocalWaiting" xml:space="preserve"><value>Локально · ожидание синхронизации</value></data>
+  <data name="Status_Offline" xml:space="preserve"><value>Нет связи</value></data>
+  <data name="Status_LocalRetry" xml:space="preserve"><value>Локально · нажмите «Обновить»</value></data>
+  <data name="Status_Syncing" xml:space="preserve"><value>Синхронизация…</value></data>
+  <data name="Status_LivePlan" xml:space="preserve"><value>На связи · {0}</value></data>
+  <data name="Status_HeadlineRemaining" xml:space="preserve"><value>Остаток · {0}</value></data>
+  <data name="Status_LocalUpdated" xml:space="preserve"><value>Локально · обновлено в {0}</value></data>
+  <data name="Status_NoLimits" xml:space="preserve"><value>Codex не вернул лимиты подписки. Выполните codex login.</value></data>
+  <data name="Error_CliNotFound" xml:space="preserve"><value>Команда Codex CLI не найдена в PATH.</value></data>
+  <data name="Error_LoginRequired" xml:space="preserve"><value>Выполните codex login и обновите данные.</value></data>
+  <data name="Error_ResponseTimeout" xml:space="preserve"><value>Codex не ответил вовремя.</value></data>
+  <data name="Error_Unexpected" xml:space="preserve"><value>Не удалось получить данные о лимитах Codex. {0}</value></data>
+  <data name="Warning_WorkspaceCreditsDepleted" xml:space="preserve"><value>Кредиты рабочей области исчерпаны.</value></data>
+  <data name="Warning_WorkspaceUsageLimitReached" xml:space="preserve"><value>Достигнут лимит рабочей области.</value></data>
+  <data name="Warning_UsageLimitReached" xml:space="preserve"><value>Достигнут лимит Codex.</value></data>
+  <data name="Warning_SpendControlReached" xml:space="preserve"><value>Достигнут личный лимит расходов.</value></data>
+  <data name="Usage_FiveHourLimit" xml:space="preserve"><value>Лимит на 5 ч</value></data>
+  <data name="Usage_WeeklyLimit" xml:space="preserve"><value>Недельный лимит</value></data>
+  <data name="Usage_DayLimit" xml:space="preserve"><value>Лимит на {0} дн.</value></data>
+  <data name="Usage_HourLimit" xml:space="preserve"><value>Лимит на {0} ч</value></data>
+  <data name="Usage_MinuteLimit" xml:space="preserve"><value>Лимит на {0} мин</value></data>
+  <data name="Usage_PrimaryLimit" xml:space="preserve"><value>Основной лимит</value></data>
+  <data name="Usage_SecondaryLimit" xml:space="preserve"><value>Дополнительный лимит</value></data>
+  <data name="Usage_UsedPercent" xml:space="preserve"><value>Израсходовано {0}%</value></data>
+  <data name="Usage_RemainingPercent" xml:space="preserve"><value>Осталось {0}%</value></data>
+  <data name="Usage_ResetUnavailable" xml:space="preserve"><value>Время сброса неизвестно</value></data>
+  <data name="Usage_ResetsNow" xml:space="preserve"><value>Сброс сейчас</value></data>
+  <data name="Usage_ResetsInHours" xml:space="preserve"><value>Сброс через {0} ч · {1}</value></data>
+  <data name="Usage_ResetsAt" xml:space="preserve"><value>Сброс {0}</value></data>
+  <data name="Usage_CreditsRemaining" xml:space="preserve"><value>Осталось {0}</value></data>
+  <data name="Usage_ChatGptCredits" xml:space="preserve"><value>Кредиты ChatGPT</value></data>
+  <data name="Usage_IndividualSpendLimit" xml:space="preserve"><value>Личный лимит расходов</value></data>
+  <data name="Usage_SpendLimitValue" xml:space="preserve"><value>{0} из {1} · осталось {2}%</value></data>
+  <data name="Usage_SpendLimitResets" xml:space="preserve"><value>Сброс лимита расходов</value></data>
+  <data name="Usage_RateLimitResets" xml:space="preserve"><value>Сбросы лимитов</value></data>
+  <data name="Usage_CountAvailable" xml:space="preserve"><value>Доступно: {0}</value></data>
+  <data name="Usage_ResetNextExpires" xml:space="preserve"><value>Ближайший сброс доступен до {0:d MMM} в {1}</value></data>
+  <data name="Usage_ResetExpires" xml:space="preserve"><value>Доступен до {0:d MMM} в {1}</value></data>
+  <data name="Usage_ResetExpirationUnavailable" xml:space="preserve"><value>Срок действия неизвестен</value></data>
+  <data name="Usage_UseReset" xml:space="preserve"><value>Использовать сброс</value></data>
+  <data name="Usage_UseNextReset" xml:space="preserve"><value>Использовать следующий сброс</value></data>
+  <data name="Usage_ResetExpandTooltip" xml:space="preserve"><value>Показать доступные сбросы</value></data>
+  <data name="Usage_ResetCollapseTooltip" xml:space="preserve"><value>Скрыть доступные сбросы</value></data>
+  <data name="Usage_ResetConfirmTitle" xml:space="preserve"><value>Использовать этот сброс лимита?</value></data>
+  <data name="Usage_ResetConfirmKnown" xml:space="preserve"><value>Сброс доступен до {0:d MMM} в {1}. Codex применит его к подходящему лимиту. Вернуть использованный сброс нельзя.</value></data>
+  <data name="Usage_ResetConfirmUnknownExpiration" xml:space="preserve"><value>Codex применит сброс к подходящему лимиту. Вернуть использованный сброс нельзя.</value></data>
+  <data name="Usage_ResetConfirmNext" xml:space="preserve"><value>Codex выберет следующий доступный сброс и применит его к подходящему лимиту. Вернуть использованный сброс нельзя.</value></data>
+  <data name="Usage_ResetNothingToReset" xml:space="preserve"><value>Сейчас нет подходящего лимита для сброса. Сброс остался доступен.</value></data>
+  <data name="Usage_ResetNoCredit" xml:space="preserve"><value>Этот сброс лимита больше недоступен.</value></data>
+  <data name="Usage_ResetFailure" xml:space="preserve"><value>Не удалось использовать сброс лимита. {0}</value></data>
+  <data name="Usage_SectionOverview" xml:space="preserve"><value>ОБЗОР</value></data>
+  <data name="Usage_SectionCreditsLimits" xml:space="preserve"><value>КРЕДИТЫ И ЛИМИТЫ</value></data>
+  <data name="Usage_SectionTokenActivity" xml:space="preserve"><value>СТАТИСТИКА ТОКЕНОВ</value></data>
+  <data name="Usage_NotQuotaConsumption" xml:space="preserve"><value>Справочная статистика</value></data>
+  <data name="Usage_SectionModelLimits" xml:space="preserve"><value>ЛИМИТЫ ПО МОДЕЛЯМ</value></data>
+  <data name="Token_Lifetime" xml:space="preserve"><value>Всего токенов</value></data>
+  <data name="Token_PeakDaily" xml:space="preserve"><value>Рекорд за день</value></data>
+  <data name="Token_LongestTurn" xml:space="preserve"><value>Самая долгая задача</value></data>
+  <data name="Token_CurrentStreak" xml:space="preserve"><value>Текущая серия</value></data>
+  <data name="Token_LongestStreak" xml:space="preserve"><value>Самая длинная серия</value></data>
+  <data name="Token_Days" xml:space="preserve"><value>{0} дн.</value></data>
+  <data name="Token_Count" xml:space="preserve"><value>Токенов: {0}</value></data>
+  <data name="Token_ChartPeak" xml:space="preserve"><value>{0}% от пика на графике</value></data>
+  <data name="Token_DurationHoursMinutes" xml:space="preserve"><value>{0} ч {1} мин</value></data>
+  <data name="Token_DurationMinutes" xml:space="preserve"><value>{0} мин</value></data>
+  <data name="Settings_Description" xml:space="preserve"><value>Выберите внешний вид и поведение виджета.</value></data>
+  <data name="Settings_SectionGeneral" xml:space="preserve"><value>ОБЩИЕ</value></data>
+  <data name="Settings_StartWithWindows" xml:space="preserve"><value>Запускать вместе с Windows</value></data>
+  <data name="Settings_StartWithWindowsDescription" xml:space="preserve"><value>Открывать виджет при входе в систему</value></data>
+  <data name="Settings_Theme_Title" xml:space="preserve"><value>Тема</value></data>
+  <data name="Settings_Theme_Description" xml:space="preserve"><value>Выберите тему виджета или используйте тему Windows.</value></data>
+  <data name="Settings_Theme_System" xml:space="preserve"><value>Как в Windows</value></data>
+  <data name="Settings_Theme_SystemDescription" xml:space="preserve"><value>Меняется вместе с темой приложений Windows</value></data>
+  <data name="Settings_Theme_SystemAutomation" xml:space="preserve"><value>Использовать тему Windows</value></data>
+  <data name="Settings_Theme_Light" xml:space="preserve"><value>Светлая</value></data>
+  <data name="Settings_Theme_LightDescription" xml:space="preserve"><value>Светлый фон и тёмный текст</value></data>
+  <data name="Settings_Theme_LightAutomation" xml:space="preserve"><value>Использовать светлую тему</value></data>
+  <data name="Settings_Theme_Dark" xml:space="preserve"><value>Тёмная</value></data>
+  <data name="Settings_Theme_DarkDescription" xml:space="preserve"><value>Тёмный фон и светлый текст</value></data>
+  <data name="Settings_Theme_DarkAutomation" xml:space="preserve"><value>Использовать тёмную тему</value></data>
+  <data name="Settings_Accent_Title" xml:space="preserve"><value>Акцентный цвет</value></data>
+  <data name="Settings_Accent_Blue" xml:space="preserve"><value>Синий</value></data>
+  <data name="Settings_Accent_Violet" xml:space="preserve"><value>Фиолетовый</value></data>
+  <data name="Settings_Accent_Teal" xml:space="preserve"><value>Бирюзовый</value></data>
+  <data name="Settings_Accent_Emerald" xml:space="preserve"><value>Изумрудный</value></data>
+  <data name="Settings_Accent_Pink" xml:space="preserve"><value>Розовый</value></data>
+  <data name="Settings_Accent_Automation" xml:space="preserve"><value>Акцентный цвет: {0}</value></data>
+  <data name="Settings_Accent_BlueAutomation" xml:space="preserve"><value>Использовать синий цвет</value></data>
+  <data name="Settings_Accent_VioletAutomation" xml:space="preserve"><value>Использовать фиолетовый цвет</value></data>
+  <data name="Settings_Accent_TealAutomation" xml:space="preserve"><value>Использовать бирюзовый цвет</value></data>
+  <data name="Settings_Accent_EmeraldAutomation" xml:space="preserve"><value>Использовать изумрудный цвет</value></data>
+  <data name="Settings_Accent_PinkAutomation" xml:space="preserve"><value>Использовать розовый цвет</value></data>
+  <data name="Settings_Layout_Title" xml:space="preserve"><value>Вид виджета</value></data>
+  <data name="Settings_Layout_Description" xml:space="preserve"><value>Выберите, сколько данных показывать на рабочем столе.</value></data>
+  <data name="Settings_Layout_Compact" xml:space="preserve"><value>Компактный</value></data>
+  <data name="Settings_Layout_CompactDescription" xml:space="preserve"><value>Основные данные о лимитах</value></data>
+  <data name="Settings_Layout_CompactAutomation" xml:space="preserve"><value>Использовать компактный вид</value></data>
+  <data name="Settings_Layout_Detailed" xml:space="preserve"><value>Подробный</value></data>
+  <data name="Settings_Layout_DetailedDescription" xml:space="preserve"><value>Лимиты, кредиты и статистика</value></data>
+  <data name="Settings_Layout_DetailedAutomation" xml:space="preserve"><value>Использовать подробный вид</value></data>
+  <data name="Settings_SectionUsage" xml:space="preserve"><value>ЛИМИТЫ</value></data>
+  <data name="Settings_DisplayedLimit_Title" xml:space="preserve"><value>Отображаемый лимит</value></data>
+  <data name="Settings_DisplayedLimit_Description" xml:space="preserve"><value>Выберите лимит для виджета, панели задач и значка в трее.</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourDescription" xml:space="preserve"><value>Показывать общий лимит на 5 часов</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourAutomation" xml:space="preserve"><value>Показывать лимит на 5 часов</value></data>
+  <data name="Settings_DisplayedLimit_FiveHourUnavailable" xml:space="preserve"><value>Codex не вернул 5-часовой лимит для этого аккаунта.</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyDescription" xml:space="preserve"><value>Показывать общий недельный лимит</value></data>
+  <data name="Settings_DisplayedLimit_WeeklyAutomation" xml:space="preserve"><value>Показывать недельный лимит</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrained" xml:space="preserve"><value>С наименьшим остатком</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedDescription" xml:space="preserve"><value>Показывать лимит с наименьшим процентом остатка</value></data>
+  <data name="Settings_DisplayedLimit_MostConstrainedAutomation" xml:space="preserve"><value>Показывать лимит с наименьшим остатком</value></data>
+  <data name="Settings_SectionFeatures" xml:space="preserve"><value>ФУНКЦИИ</value></data>
+  <data name="Settings_Language_Title" xml:space="preserve"><value>Язык</value></data>
+  <data name="Settings_Language_Description" xml:space="preserve"><value>Выберите язык интерфейса или используйте язык Windows.</value></data>
+  <data name="Settings_Language_System" xml:space="preserve"><value>Как в Windows</value></data>
+  <data name="Settings_Language_SystemDescription" xml:space="preserve"><value>Язык Windows, если доступен. Иначе английский.</value></data>
+  <data name="Settings_Language_SystemAutomation" xml:space="preserve"><value>Использовать язык Windows</value></data>
+  <data name="Settings_Language_English" xml:space="preserve"><value>Английский</value></data>
+  <data name="Settings_Language_EnglishDescription" xml:space="preserve"><value>Всегда использовать английский</value></data>
+  <data name="Settings_Language_EnglishAutomation" xml:space="preserve"><value>Использовать английский язык</value></data>
+  <data name="Settings_Language_Chinese" xml:space="preserve"><value>Китайский (упрощённый)</value></data>
+  <data name="Settings_Language_ChineseDescription" xml:space="preserve"><value>Всегда использовать упрощённый китайский</value></data>
+  <data name="Settings_Language_ChineseAutomation" xml:space="preserve"><value>Использовать упрощённый китайский язык</value></data>
+  <data name="Settings_Language_Russian" xml:space="preserve"><value>Русский</value></data>
+  <data name="Settings_Language_RussianDescription" xml:space="preserve"><value>Всегда использовать русский</value></data>
+  <data name="Settings_Language_RussianAutomation" xml:space="preserve"><value>Использовать русский язык</value></data>
+  <data name="Settings_TimeFormat_Title" xml:space="preserve"><value>Формат времени</value></data>
+  <data name="Settings_TimeFormat_Description" xml:space="preserve"><value>Выберите, как показывать время в виджете.</value></data>
+  <data name="Settings_TimeFormat_Automatic" xml:space="preserve"><value>Как в Windows</value></data>
+  <data name="Settings_TimeFormat_AutomaticDescription" xml:space="preserve"><value>По региональным настройкам Windows</value></data>
+  <data name="Settings_TimeFormat_AutomaticAutomation" xml:space="preserve"><value>Использовать формат времени Windows</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHour" xml:space="preserve"><value>24-часовой</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourDescription" xml:space="preserve"><value>Например, 14:05</value></data>
+  <data name="Settings_TimeFormat_TwentyFourHourAutomation" xml:space="preserve"><value>Использовать 24-часовой формат</value></data>
+  <data name="Settings_TimeFormat_TwelveHour" xml:space="preserve"><value>12-часовой</value></data>
+  <data name="Settings_TimeFormat_TwelveHourDescription" xml:space="preserve"><value>Например, 2:05 PM</value></data>
+  <data name="Settings_TimeFormat_TwelveHourAutomation" xml:space="preserve"><value>Использовать 12-часовой формат</value></data>
+  <data name="Activity_Title" xml:space="preserve"><value>Активность Codex</value></data>
+  <data name="Activity_Description" xml:space="preserve"><value>Показывать, когда Codex выполняет локальную задачу</value></data>
+  <data name="Activity_Privacy" xml:space="preserve"><value>Локальный канал передаёт только тип события, идентификаторы сеанса и задачи. Доступ есть только у текущего пользователя. Запросы и ответы остаются в Codex.</value></data>
+  <data name="Activity_RemoveHooks" xml:space="preserve"><value>Удалить обработчики</value></data>
+  <data name="Activity_CopyHooksTooltip" xml:space="preserve"><value>Копирует /hooks и открывает Codex</value></data>
+  <data name="Activity_Checking" xml:space="preserve"><value>Проверка Codex…</value></data>
+  <data name="Activity_CheckingDescription" xml:space="preserve"><value>Проверяем настройки и разрешения для обработчиков Codex.</value></data>
+  <data name="Activity_OpenInCodex" xml:space="preserve"><value>Открыть в Codex</value></data>
+  <data name="Activity_ReviewHooks" xml:space="preserve"><value>Проверить обработчики</value></data>
+  <data name="Activity_SetupRequired" xml:space="preserve"><value>Требуется настройка</value></data>
+  <data name="Activity_SetupRequiredDescription" xml:space="preserve"><value>Установите три локальных обработчика событий. Они запускают анимацию точек, пока Codex работает. Перед записью можно проверить изменения в hooks.json.</value></data>
+  <data name="Activity_UpdateAvailable" xml:space="preserve"><value>Доступно обновление</value></data>
+  <data name="Activity_UpdateDescription" xml:space="preserve"><value>Установлены обработчики старой версии. Проверьте изменения и обновите их до версии, которая работает быстрее и не зависит от пути к виджету.</value></data>
+  <data name="Activity_ReviewUpdate" xml:space="preserve"><value>Проверить обновление</value></data>
+  <data name="Activity_OneStepLeft" xml:space="preserve"><value>Остался один шаг</value></data>
+  <data name="Activity_ApprovalDescription" xml:space="preserve"><value>Обработчики установлены. Подтвердите их определения в Codex, чтобы разрешить выполнение.</value></data>
+  <data name="Activity_ApproveInCodex" xml:space="preserve"><value>Подтвердить в Codex</value></data>
+  <data name="Activity_Ready" xml:space="preserve"><value>Индикатор активности настроен</value></data>
+  <data name="Activity_ReadyDescription" xml:space="preserve"><value>Все три обработчика установлены и разрешены.</value></data>
+  <data name="Activity_ReviewRequired" xml:space="preserve"><value>Требуется проверка</value></data>
+  <data name="Activity_ModifiedDescription" xml:space="preserve"><value>Codex приостановил изменённые обработчики. Проверьте их снова, чтобы восстановить индикацию активности.</value></data>
+  <data name="Activity_ReviewInCodex" xml:space="preserve"><value>Проверить в Codex</value></data>
+  <data name="Activity_HooksDisabled" xml:space="preserve"><value>Обработчики отключены в Codex</value></data>
+  <data name="Activity_HooksDisabledDescription" xml:space="preserve"><value>Перед установкой задайте hooks = true в разделе [features] настроек Codex.</value></data>
+  <data name="Activity_StatusUnavailable" xml:space="preserve"><value>Установлены · статус неизвестен</value></data>
+  <data name="Activity_StatusUnavailableDescription" xml:space="preserve"><value>Обработчики установлены. Проверить, разрешены ли они, не удалось.</value></data>
+  <data name="Activity_StatusUnavailableWithDetail" xml:space="preserve"><value>Обработчики установлены. Codex не смог проверить разрешения. {0}</value></data>
+  <data name="Activity_OpenHooksInCodex" xml:space="preserve"><value>Открыть обработчики в Codex</value></data>
+  <data name="Activity_SetupUnavailable" xml:space="preserve"><value>Настройка недоступна</value></data>
+  <data name="Activity_SetupUnavailableDescription" xml:space="preserve"><value>Не удалось прочитать настройки обработчиков.</value></data>
+  <data name="Activity_SetupErrorDetail" xml:space="preserve"><value>Не удалось настроить обработчики активности. {0}</value></data>
+  <data name="Activity_StatusTimeout" xml:space="preserve"><value>Codex не ответил вовремя. Проверьте доступность CLI и повторите попытку.</value></data>
+  <data name="Activity_CodexOpenCopied" xml:space="preserve"><value>Codex открыт. Вставьте /hooks и подтвердите три определения. При возвращении сюда статус обновится.</value></data>
+  <data name="Activity_CodexOpenType" xml:space="preserve"><value>Codex открыт. Введите /hooks и подтвердите три определения. При возвращении сюда статус обновится.</value></data>
+  <data name="Activity_ReviewTitle" xml:space="preserve"><value>Проверка обработчиков Codex</value></data>
+  <data name="Activity_ReviewInstallHeading" xml:space="preserve"><value>Проверка перед установкой</value></data>
+  <data name="Activity_ReviewRemoveHeading" xml:space="preserve"><value>Проверка перед удалением</value></data>
+  <data name="Activity_ReviewInstallDescription" xml:space="preserve"><value>Виджет запишет в ~/.codex/hooks.json содержимое, показанное ниже. Существующие обработчики и дополнительные поля сохранятся.</value></data>
+  <data name="Activity_ReviewRemoveDescription" xml:space="preserve"><value>Виджет удалит только обработчики, которые совпадают с его определениями. Остальные обработчики сохранятся.</value></data>
+  <data name="Activity_InstallHooks" xml:space="preserve"><value>Установить обработчики</value></data>
+  <data name="Activity_CommandAlreadyInstalled" xml:space="preserve"><value>Обработчики активности уже установлены.</value></data>
+  <data name="Activity_CommandNoMatching" xml:space="preserve"><value>Подходящие обработчики не найдены.</value></data>
+  <data name="Activity_CommandProposed" xml:space="preserve"><value>Предлагаемое содержимое ~/.codex/hooks.json:</value></data>
+  <data name="Activity_CommandApplyPrompt" xml:space="preserve"><value>Применить изменения? [y — да / N — нет] </value></data>
+  <data name="Activity_CommandNoChanges" xml:space="preserve"><value>Изменений нет.</value></data>
+  <data name="Activity_CommandInstalled" xml:space="preserve"><value>Обработчики установлены. Откройте /hooks, проверьте и разрешите их.</value></data>
+  <data name="Activity_CommandRemoved" xml:space="preserve"><value>Обработчики виджета удалены.</value></data>
+  <data name="Activity_CommandFailure" xml:space="preserve"><value>Не удалось настроить обработчики: {0}</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>Открыть</value></data>
+  <data name="Tray_Settings" xml:space="preserve"><value>Настройки…</value></data>
+  <data name="Tray_DisplayMode" xml:space="preserve"><value>Режим отображения</value></data>
+  <data name="Tray_DesktopWidget" xml:space="preserve"><value>Виджет на рабочем столе</value></data>
+  <data name="Tray_TaskbarLabel" xml:space="preserve"><value>Индикатор на панели задач</value></data>
+  <data name="Tray_CheckUpdates" xml:space="preserve"><value>Проверить обновления…</value></data>
+  <data name="Tray_Unavailable" xml:space="preserve"><value>Лимиты Codex · нет данных</value></data>
+  <data name="Tray_Remaining" xml:space="preserve"><value>Codex · осталось {0}%</value></data>
+  <data name="Taskbar_OpenWidget" xml:space="preserve"><value>Открыть виджет</value></data>
+  <data name="Taskbar_PreviewActivity" xml:space="preserve"><value>Показать анимацию активности</value></data>
+  <data name="Taskbar_UseDesktopWidget" xml:space="preserve"><value>Перенести на рабочий стол</value></data>
+  <data name="Taskbar_UsageUnavailable" xml:space="preserve"><value>Данные о лимитах Codex пока недоступны.</value></data>
+  <data name="Taskbar_Remaining" xml:space="preserve"><value>{0}: осталось {1}%</value></data>
+  <data name="Taskbar_RemainingWithReset" xml:space="preserve"><value>{0}: осталось {1}% · сброс {2}</value></data>
+</root>
